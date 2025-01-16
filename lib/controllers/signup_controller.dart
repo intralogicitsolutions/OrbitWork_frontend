@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../routes/app_routes.dart';
+
 class SignUpController extends GetxController{
   var firstName = ''.obs;
   var lastName = ''.obs;
@@ -15,6 +17,7 @@ class SignUpController extends GetxController{
         lastName.isEmpty ||
         email.isEmpty ||
         password.isEmpty) {
+      Get.offNamed(AppRoutes.homeScreen);
       Get.snackbar('Error', 'Please fill in all fields.');
       return;
     }
@@ -22,8 +25,13 @@ class SignUpController extends GetxController{
       Get.snackbar('Error', 'You must agree to the terms.');
       return;
     }
-
     Get.snackbar('Success', 'Form submitted successfully.');
+    if (AppRoutes.homeScreen.isEmpty) {
+      Get.snackbar('Error', 'Home screen route is not defined.');
+      return;
+    }
+    //Get.offNamed(AppRoutes.homeScreen);
+    Get.toNamed(AppRoutes.homeScreen);
     print("First Name: $firstName");
     print("Last Name: $lastName");
     print("Email: $email");

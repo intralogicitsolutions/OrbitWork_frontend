@@ -2,18 +2,36 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orbitwork/widgets/custom_textfeild.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../controllers/signup_controller.dart';
 import '../routes/app_routes.dart';
+import '../widgets/custom_dropdown.dart';
 
 class SignUpPage extends StatelessWidget {
   final SignUpController controller = Get.put(SignUpController());
 
+  Future<void> _launch(Uri  urlString) async {
+    if (await canLaunchUrl(urlString)) { // Check if the URL can be launched
+      await launchUrl(urlString);
+    } else {
+      throw 'Could not launch $urlString'; // throw could be used to handle erroneous situations
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //backgroundColor: Color(0xFFFDF6F0),
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Orbitwork'),
+        title: Text(
+          'Orbitwork',
+          style: TextStyle(color: Colors.black),
+        ),
         centerTitle: true,
+       // backgroundColor: Color(0xFFFDF6F0),
+        backgroundColor: Colors.white,
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -24,102 +42,129 @@ class SignUpPage extends StatelessWidget {
               Center(
                 child: Text(
                   "Sign up to find work you love",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
               ),
               SizedBox(height: 20),
-              ElevatedButton.icon(
+              ElevatedButton(
                 onPressed: () {
                   // Handle Google Sign-In
                   Get.snackbar('Google Sign-In', 'Google Sign-In clicked!');
                 },
-                icon: Container(
-                  height: 35,
-                  width: 35,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.asset(
-                      'assets/icon/google.png',
-                      height: 20,
-                      width: 20,
-                    ),
-                  ),
-                ),
-                label: Text("Continue with Google",style: TextStyle(color: Colors.white),),
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(double.infinity, 50),
                   backgroundColor: Colors.blue.shade700,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        height: 35,
+                        width: 35,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.asset(
+                            'assets/icon/google.png',
+                            height: 20,
+                            width: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Text(
+                      "Continue with Google",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 20),
               Row(
                 children: [
-                  Expanded(child: Divider()),
+                  Expanded(child: Divider(color: Colors.grey.shade400)),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Text("or"),
                   ),
-                  Expanded(child: Divider()),
+                  Expanded(child: Divider(color: Colors.grey.shade400)),
                 ],
               ),
               SizedBox(height: 20),
-              // CustomTextField(hintText: "First Name",onChanged: (value) => controller.firstName.value = value,),
-              TextField(
-                onChanged: (value) => controller.firstName.value = value,
-                decoration: InputDecoration(labelText: "First Name"),
-              ),
+              CustomTextField(label: "First Name", onChanged: (value) => controller.firstName.value = value,),
+
               SizedBox(height: 10),
-              TextField(
-                onChanged: (value) => controller.lastName.value = value,
-                decoration: InputDecoration(labelText: "Last Name"),
-              ),
+              CustomTextField(label: "Last Name", onChanged: (value) => controller.lastName.value = value,),
+
               SizedBox(height: 10),
-              TextField(
-                onChanged: (value) => controller.email.value = value,
-                decoration: InputDecoration(labelText: "Email"),
-                keyboardType: TextInputType.emailAddress,
-              ),
+              CustomTextField(label:  "Email", onChanged: (value) => controller.email.value = value,),
+
               SizedBox(height: 10),
-              Obx(() => TextField(
-                onChanged: (value) => controller.password.value = value,
-                decoration: InputDecoration(
-                  labelText: "Password (8 or more characters)",
+              Obx(
+                    () => _buildTextField(
+                  label: "Password (8 or more characters)",
+                  obscureText: true,
                   suffixIcon: IconButton(
                     icon: Icon(
-                      controller.password.isEmpty ? Icons.visibility_off : Icons.visibility,
+                      controller.password.isEmpty
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                      color: Colors.grey.shade600,
                     ),
                     onPressed: () {
-                      // Handle password visibility toggle
+                      // Toggle password visibility
                     },
                   ),
+                  onChanged: (value) => controller.password.value = value,
                 ),
-                obscureText: true,
-              )),
-              SizedBox(height: 10),
-              DropdownButtonFormField<String>(
-                value: controller.country.value,
-                onChanged: (value) => controller.country.value = value!,
-                items: ["India", "USA", "UK", "Australia", "Canada"]
-                    .map((country) => DropdownMenuItem(
-                  value: country,
-                  child: Text(country),
-                ))
-                    .toList(),
-                decoration: InputDecoration(labelText: "Country"),
               ),
+              SizedBox(height: 10),
+              CustomDropdown(),
+              // DropdownButtonFormField<String>(
+              //   value: controller.country.value,
+              //   onChanged: (value) => controller.country.value = value!,
+              //   items: ["India", "USA", "UK", "Australia", "Canada"]
+              //       .map((country) => DropdownMenuItem(
+              //     value: country,
+              //     child: Text(country),
+              //   ))
+              //       .toList(),
+              //   decoration: InputDecoration(
+              //     labelText: "Country",
+              //     filled: true,
+              //     fillColor: Colors.white,
+              //     border: OutlineInputBorder(
+              //       borderRadius: BorderRadius.circular(12),
+              //     ),
+              //   ),
+              // ),
               SizedBox(height: 10),
               Obx(() => CheckboxListTile(
                 value: controller.sendEmails.value,
                 onChanged: (value) => controller.sendEmails.value = value!,
-                title: Text("Send me helpful emails to find rewarding work and job leads."),
+                title: Text(
+                  "Send me helpful emails to find rewarding work and job leads.",
+                  style: TextStyle(fontSize: 14, color: Colors.black),
+                ),
+                controlAffinity: ListTileControlAffinity.leading,
+                activeColor: Colors.green,
               )),
               Obx(() => CheckboxListTile(
                 value: controller.agreeToTerms.value,
-                onChanged: (value) => controller.agreeToTerms.value = value!,
+                onChanged: (value) =>
+                controller.agreeToTerms.value = value!,
                 title: RichText(
                   text: TextSpan(
                     text: "Yes, I understand and agree to the ",
@@ -128,21 +173,35 @@ class SignUpPage extends StatelessWidget {
                       TextSpan(
                         text: "Terms of Service",
                         style: TextStyle(color: Colors.blue),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () async {
+                            var url = Uri.parse('https://www.google.com');
+                            await _launch(url);
+                          },
                       ),
                       TextSpan(
-                        text: " including the User Agreement and Privacy Policy.",
+                        text:
+                        " including the User Agreement and Privacy Policy.",
                       ),
                     ],
                   ),
                 ),
+                controlAffinity: ListTileControlAffinity.leading,
+                activeColor: Colors.green,
               )),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: controller.submitForm,
-                child: Text("Sign Up"),
+                child: Text(
+                  "Sign Up",
+                  style: TextStyle(color: Colors.white),
+                ),
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(double.infinity, 50),
                   backgroundColor: Colors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
                 ),
               ),
               SizedBox(height: 20),
@@ -154,21 +213,46 @@ class SignUpPage extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: "Log In",
-                        style: TextStyle(color: Colors.green, fontSize: 14, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            color: Colors.green,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            // Navigate to login page
-                            Get.toNamed(AppRoutes.login); // Ensure '/login' is defined in your GetX routes
+                            Get.toNamed(AppRoutes.login,
+                                arguments: {'fromSignUp': true});
                           },
                       ),
                     ],
                   ),
                 ),
               ),
-
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required String label,
+    TextInputType keyboardType = TextInputType.text,
+    bool obscureText = false,
+    Widget? suffixIcon,
+    required Function(String) onChanged,
+  }) {
+    return TextField(
+      onChanged: onChanged,
+      keyboardType: keyboardType,
+      obscureText: obscureText,
+      decoration: InputDecoration(
+        labelText: label,
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        suffixIcon: suffixIcon,
       ),
     );
   }
