@@ -49,7 +49,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               controller: _pageController,
               count: 3,
               effect: ExpandingDotsEffect(
-                activeDotColor: Colors.deepPurple,
+                activeDotColor: Colors.green,
                 dotColor: Colors.grey,
                 dotHeight: 8,
                 dotWidth: 8,
@@ -87,7 +87,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     TextSpan(
                       text: 'Sign Up',
                       style: const TextStyle(
-                        color: Colors.deepPurple,
+                        color: Colors.green,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

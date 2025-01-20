@@ -2,17 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/drawer_controller.dart';
 import '../controllers/jobs_controller.dart';
+import '../controllers/theme_controller.dart';
+import '../models/job_model.dart';
 import '../widgets/custom_drawer.dart';
 import '../widgets/job_card.dart';
 
 class HomeScreen extends StatelessWidget {
   final JobsController controller = Get.put(JobsController());
   final Drawercontroller drawerController = Get.put(Drawercontroller());
+  final ThemeController themeController = Get.find<ThemeController>();
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+     // backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         toolbarHeight: 80,
@@ -20,15 +25,6 @@ class HomeScreen extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                // Open Custom Drawer
-                // Get.bottomSheet(
-                //   const CustomDrawer(), // Show custom drawer
-                //   isScrollControlled: true,
-                //   backgroundColor: Colors.transparent,
-                //   shape: const RoundedRectangleBorder(
-                //     borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                //   ),
-                // );
                 Get.dialog(
                   GestureDetector(
                     onTap: () {
@@ -38,11 +34,13 @@ class HomeScreen extends StatelessWidget {
                     },
                     child: Stack(
                       children: [
-                        Container(color: Colors.black.withOpacity(0.5)), // Dim background
+                        Container(color: Colors.black.withOpacity(0.5)),
+                        // Dim background
                         Align(
                           alignment: Alignment.centerLeft,
                           child: FractionallySizedBox(
-                            widthFactor: 0.8, // Drawer width as 80% of the screen
+                            widthFactor: 0.8,
+                            // Drawer width as 80% of the screen
                             child: SlideTransition(
                               position: drawerController.slideAnimation,
                               child: const CustomDrawer(),
@@ -59,52 +57,175 @@ class HomeScreen extends StatelessWidget {
               },
               child: CircleAvatar(
                 radius: 24,
-                backgroundImage: NetworkImage("https://via.placeholder.com/150"),
+                // backgroundImage: NetworkImage("https://via.placeholder.com/150"),
                 child: const Icon(Icons.account_circle, size: 48),
               ),
             ),
             const SizedBox(width: 16),
-            const Text("Jobs", style: TextStyle(fontSize: 20)),
+            Text("Jobs",
+              style: theme.textTheme.bodyLarge,
+             //   style: TextStyle(fontSize: 20)
+            ),
           ],
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: theme.appBarTheme.backgroundColor,
+        //backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: false,
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Align(
-            //     alignment: Alignment.centerLeft,
-            //     child: Padding(
-            //       padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            //       child: const Text("Jobs", style: TextStyle(fontSize: 20)),
-            //     )),
-            //const SizedBox(height: 10),
-            // Sliding Tabs (My Feed, Best Matches, Most Recent)
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextField(
-                    decoration: InputDecoration(
-                      hintText: "Search for jobs",
-                      prefixIcon: const Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                  Wrap(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              decoration: InputDecoration(
+                                hintText: "Search for jobs",
+                                prefixIcon: const Icon(Icons.search),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              onChanged: (value) {
+
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Obx(() {
+                            bool isAnyJobFavorite =
+                                controller.favoriteJobs.isNotEmpty;
+                            return Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: theme.dividerColor,
+                                 // color: Colors.black, // Border color around the circle
+                                  width: 1, // Border thickness
+                                ),
+                              ),
+                              child: IconButton(
+                                icon: Icon(
+                                  isAnyJobFavorite
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  color: theme.iconTheme.color,
+                                 // color: Colors.black,
+                                ),
+                                onPressed: () {
+                                  // Optionally open a bottom sheet or perform other actions
+                                  Get.bottomSheet(
+                                   // backgroundColor: Colors.white,
+                                    backgroundColor:  theme.scaffoldBackgroundColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20),
+                                        topRight: Radius.circular(20),
+                                      ),
+                                    ),
+                                    isScrollControlled: true,
+                                    elevation: 10,
+                                    Container(
+                                      height: MediaQuery.of(context).size.height*0.8,
+                                      child: SingleChildScrollView(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            children: [
+                                              Align(
+                                                alignment: Alignment.topCenter,
+                                                child: Container(
+                                                  width: 30,
+                                                  height: 4,
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                    theme.dividerColor,
+                                                    //color: Colors.grey.shade400,
+                                                    borderRadius: BorderRadius.circular(10),
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(height: 10,),
+                                              controller.favoriteJobs.isEmpty?
+                                                  Card(
+                                                    //color: Colors.white,
+                                                    color: theme.scaffoldBackgroundColor,
+                                                    child: Column(
+                                                      children: [
+                                                        Padding(
+                                                          padding: const EdgeInsets.all(20.0),
+                                                          child: Center(
+                                                            child: Image.asset(
+                                                              'assets/icon/touch.png',
+                                                              height: 60,
+                                                              width: 60,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.all(20.0),
+                                                          child: Text("Keep track of jobs you're interested in. Select the heart icon on the job post to save it for later.",
+                                                           textAlign: TextAlign.center,
+                                                            // style: TextStyle(
+                                                            //   fontSize: 16,
+                                                            //   fontWeight: FontWeight.w400,
+                                                            //   color: Colors.grey.shade600
+                                                            // ),
+                                                            style: Theme.of(context).textTheme.titleMedium?.copyWith(),
+                                                            //style: theme.textTheme.bodyMedium,
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ):
+                                              Column(
+                                                children:
+                                                controller.favoriteJobs.map((job) => JobCard(job: job)).toList(),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    enableDrag: true,
+
+                                    // ListView.builder(
+                                    //   itemCount: controller.favoriteJobs.length,
+                                    //   itemBuilder: (context, index) {
+                                    //     Job job = controller.favoriteJobs[index];
+                                    //     return ListTile(
+                                    //       title: Text(job.title),
+                                    //       subtitle: Text(job.location),
+                                    //     );
+                                    //   },
+                                    // ),
+                                  );
+                                },
+                              ),
+                            );
+                          }),
+                        ],
                       ),
-                    ),
-                    onChanged: (value) {
-                      // Optionally implement search functionality here
-                    },
+                    ],
                   ),
                   const SizedBox(height: 16),
-                  // "Be the 1st to Apply" Text
                   Text(
                     "Be the 1st to apply with instant job alerts",
-                    style: TextStyle(color: Colors.grey[700]),
+                    style: theme.textTheme.bodyMedium,
+                    //style: TextStyle(color: Colors.grey[700]),
                   ),
                   const SizedBox(height: 8),
 
@@ -113,7 +234,8 @@ class HomeScreen extends StatelessWidget {
                       // Button action
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
+                      backgroundColor: theme.primaryColor,
+                     // backgroundColor: Colors.green,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -132,9 +254,12 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 children: [
                   TabBar(
-                    labelColor: Colors.green,
-                    unselectedLabelColor: Colors.grey,
-                    indicatorColor: Colors.green,
+                    labelColor: theme.primaryColor,
+                    unselectedLabelColor: theme.unselectedWidgetColor,
+                    indicatorColor: theme.primaryColor,
+                    // labelColor: Colors.green,
+                    // unselectedLabelColor: Colors.grey,
+                    // indicatorColor: Colors.green,
                     tabs: const [
                       Tab(text: "My Feed"),
                       Tab(text: "Best Matches"),
@@ -153,15 +278,9 @@ class HomeScreen extends StatelessWidget {
                 return const Center(child: Text("No jobs available"));
               }
               return Column(
-                children: controller.jobs.map((job) => JobCard(job: job)).toList(),
+                children:
+                    controller.jobs.map((job) => JobCard(job: job)).toList(),
               );
-              // return ListView.builder(
-              //   padding: EdgeInsets.zero,
-              //   itemCount: controller.jobs.length,
-              //   itemBuilder: (context, index) {
-              //     return JobCard(job: controller.jobs[index]);
-              //   },
-              // );
             }),
           ],
         ),
@@ -172,10 +291,14 @@ class HomeScreen extends StatelessWidget {
         children: [
           Container(
             height: 1,
-            color: Colors.grey.shade400, // Adjust color as needed
+            //color: Colors.grey.shade400,
+            color: Theme.of(context).dividerColor,
           ),
           BottomNavigationBar(
-            backgroundColor: Colors.white,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor, // Dynamic background
+            selectedItemColor: Theme.of(context).primaryColor, // Dynamic selected icon color
+            unselectedItemColor: Theme.of(context).iconTheme.color, // Dynamic unselected icon color
+            //backgroundColor: Colors.white,
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(

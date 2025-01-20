@@ -1,248 +1,274 @@
-// import 'package:flutter/material.dart';
-// import '../models/job_model.dart';
-//
-// class JobCard extends StatelessWidget {
-//   final Job job;
-//
-//   const JobCard({Key? key, required this.job}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Card(
-//       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-//       child: Padding(
-//         padding: const EdgeInsets.all(16),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             // Title with Like/Dislike Icons
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 // Job Title
-//                 Expanded(
-//                   child: Text(
-//                     job.title,
-//                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-//                     overflow: TextOverflow.visible,
-//                   ),
-//                 ),
-//                 // Like and Dislike Buttons
-//                 Row(
-//                   children: [
-//                     Column(
-//                       children: [
-//                         Icon(Icons.thumb_up, color: Colors.grey[600], size: 20),
-//                         // const Text("Like", style: TextStyle(color: Colors.grey, fontSize: 12)),
-//                       ],
-//                     ),
-//                     const SizedBox(width: 16),
-//                     Column(
-//                       children: [
-//                         Icon(Icons.thumb_down, color: Colors.grey[600], size: 20),
-//                         // const Text("Dislike", style: TextStyle(color: Colors.grey, fontSize: 12)),
-//                       ],
-//                     ),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//             const SizedBox(height: 8),
-//             // Job Description
-//             Text(job.description, maxLines: 2, overflow: TextOverflow.ellipsis),
-//             const SizedBox(height: 8),
-//
-//             // Budget and Rating
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 Text("Budget: \$${job.budget}", style: TextStyle(color: Colors.green)),
-//                 Row(
-//                   children: [
-//                     const Icon(Icons.star, color: Colors.yellow, size: 16),
-//                     Text("${job.rating}"),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//             const SizedBox(height: 8),
-//
-//             // Tags
-//             Wrap(
-//               spacing: 8,
-//               children: job.tags.map((tag) => Chip(label: Text(tag))).toList(),
-//             ),
-//             const SizedBox(height: 8),
-//
-//             // Location (Bottom of Card)
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.start,
-//               children: [
-//                 const Icon(Icons.location_on, size: 16, color: Colors.grey),
-//                 Text(job.location, style: const TextStyle(color: Colors.grey)),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../component/select_reason_bottom_sheet.dart';
+import '../controllers/jobs_controller.dart';
 import '../models/job_model.dart';
 
-class JobCard extends StatefulWidget {
+class JobCard extends StatelessWidget {
   final Job job;
+  final JobsController controller = Get.find();
 
-  const JobCard({Key? key, required this.job}) : super(key: key);
+  JobCard({Key? key, required this.job}) : super(key: key);
 
-  @override
-  State<JobCard> createState() => _JobCardState();
-}
-
-class _JobCardState extends State<JobCard> {
-  bool isHeartSelected = false;
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.white,
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+    final theme = Theme.of(context);
+    return Obx(() {
+      bool isExpanded = controller.expandedJob.value == job ?? false;
+      bool hasFeedback = controller.selectedReasons.containsKey(job);
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+      return Card(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        //color: Colors.white,
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Posted ${job.postedTimeAgo} ago",
+                    style: TextStyle(
+                      //color: Theme.of(context).textTheme.bodySmall?.color,
+                      color: Colors.grey[600],
+                      fontSize: 12,
+                    ),
+                    //style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                  ),
+                ],
+              ),
+              // const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      job.title,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                      // style: const TextStyle(
+                      //     fontSize: 16, fontWeight: FontWeight.bold),
+                      overflow: TextOverflow.visible,
+                    ),
+                  ),
+                  // Display TextButton ("Expand"/"Collapse") when hasFeedback is true
+                  hasFeedback
+                      ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (isExpanded) ...[
+                              Row(
+                                children: [
+                                  // Show these icons when hasFeedback is false
+                                  IconButton(
+                                    icon:  Icon(
+                                      Icons.thumb_down_alt_outlined,
+                                      //color: Colors.black,
+                                      color: theme.iconTheme.color,
+                                      size: 20,
+                                    ),
+                                    onPressed: () {
+                                      print("job data1 ===> ${job}");
+                                      showSelectReasonBottomSheet(context, job);
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: Icon(
+                                      controller.favoriteJobs.contains(job)
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                      //color: Colors.black,
+                                      color: Theme.of(context).iconTheme.color,
+                                      size: 20,
+                                    ),
+                                    onPressed: () {
+                                      controller.toggleFavorite(job);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                            // Show Expand/Collapse button if isExpanded is true
+                            TextButton(
+                              onPressed: () {
+                                controller.toggleExpand(job);
+                              },
+                              child: Text(
+                                isExpanded ? "Collapse" : "Expand",
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                            ),
+                            // Show the icons (thumb_down_alt_outlined, favorite) when isExpanded is true
+                          ],
+                        )
+                      : Row(
+                          children: [
+                            // Show these icons when hasFeedback is false
+                            IconButton(
+                              icon: Icon(
+                                Icons.thumb_down_alt_outlined,
+                                color: theme.iconTheme.color,
+                                // color: Colors.black,
+                                size: 20,
+                              ),
+                              onPressed: () {
+                                print("job data2 ===> ${job}");
+                                showSelectReasonBottomSheet(context, job);
+                              },
+                            ),
+                            IconButton(
+                              icon: Icon(
+                                controller.favoriteJobs.contains(job)
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                color: theme.iconTheme.color,
+                                // color: Colors.black,
+                                size: 20,
+                              ),
+                              onPressed: () {
+                                controller.toggleFavorite(job);
+                              },
+                            ),
+                          ],
+                        ),
+                ],
+              ),
+              if (hasFeedback && !isExpanded) ...[
+                const SizedBox(height: 8),
                 Text(
-                  "Posted ${widget.job.postedTimeAgo} ago",
-                  style: TextStyle(color: Colors.grey[600], fontSize: 12),
-                ),
-
-              ],
-            ),
-            const SizedBox(height: 8),
-            // Row: Title and Like/Dislike Buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Job Title
-                Expanded(
-
-                  child: Text(
-                    widget.job.title,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    overflow: TextOverflow.visible,
+                  "${controller.selectedReasons[job]}",
+                  // Display the selected reason
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
+                    //color: Colors.black87
                   ),
                 ),
-                // Like and Dislike Buttons
+              ],
+              const SizedBox(height: 8),
+              if (isExpanded || !hasFeedback) ...[
+                // const SizedBox(height: 8),
+                job.isFixedPrice
+                    ? Text(
+                        "Fixed Price - ${job.jobType} - Est. Budget: \$${job.budget}",
+                        style: TextStyle(
+                            fontSize: 12,
+                            //color: Theme.of(context).textTheme.bodySmall?.color
+                             color: Colors.grey.shade600
+                            ),
+                      )
+                    : Text(
+                        "Hourly: \$${job.hourlyRateMin} - \$${job.hourlyRateMax} - ${job.jobType} - Est. Time: ${job.estimatedTime}, ${job.hoursPerWeek} hrs/week",
+                        style: TextStyle(
+                          fontSize: 12,
+                          //color: Theme.of(context).textTheme.bodySmall?.color,
+                           color: Colors.grey.shade600
+                        ),
+                      ),
+                const SizedBox(height: 8),
+                Text(
+                  job.description,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  // style: const TextStyle(fontSize: 14, color: Colors.black87),
+                ),
+                const SizedBox(height: 8),
                 Row(
                   children: [
-                    Column(
+                    Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: job.tags
+                              .map((tag) => Container(
+                                    margin: const EdgeInsets.only(right: 8),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 6),
+                                    decoration: BoxDecoration(
+                                       color: Colors.grey[300],
+                                      // color: Theme.of(context)
+                                      //     .chipTheme
+                                      //     .backgroundColor,
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    child: Text(
+                                      tag,
+                                      // style: Theme.of(context)
+                                      //     .chipTheme
+                                      //     .labelStyle
+                                      //     ?.copyWith(fontSize: 12),
+                                      style:  TextStyle(fontSize: 12, color: Colors.black),
+                                    ),
+                                  ))
+                              .toList(),
+                        ),
+                      ),
+                    ),
+                    const Icon(Icons.arrow_forward_ios,
+                        size: 16, color: Colors.grey),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
                       children: [
-                        Icon(Icons.thumb_down, color: Colors.grey[600], size: 20),
-                        // const Text("Dislike", style: TextStyle(color: Colors.grey, fontSize: 12)),
+                        const Icon(Icons.verified,
+                            color: Colors.green, size: 16),
+                        const SizedBox(width: 4),
+                        Text("Payment Verified",
+                            style: TextStyle(
+                                color: theme.primaryColor,
+                                // color: Colors.green,
+                                fontSize: 12)),
                       ],
                     ),
-                    const SizedBox(width: 16),
-
-                    Column(
+                    Row(
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isHeartSelected = !isHeartSelected;
-                            });
-                          },
-                            child: Image.asset(isHeartSelected ? "assets/icon/like.png" : "assets/icon/like2.png",
-                              height: 22,
-                              width: 22,
-                            ))
-                      //  Icon(Icons.thumb_up, color: Colors.grey[600], size: 20),
-                        // const Text("Like", style: TextStyle(color: Colors.grey, fontSize: 12)),
+                        Icon(Icons.star,
+                            color: Colors.yellow.shade700, size: 16),
+                        Text("${job.rating}"),
                       ],
                     ),
                   ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 8),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(Icons.location_on,
+                        size: 16,
+                        color: Colors.grey
+                       // color: theme.iconTheme.color
+                    ),
+                    // color: Colors.grey
 
-            // Row: "Posted X hours ago" and Payment Verified
-
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Budget: \$${widget.job.budget}", style: TextStyle(color: Colors.green)),
+                    Text(job.location,
+                        style:
+                             TextStyle(fontSize: 12,
+                               // color: theme.textTheme.bodySmall?.color,
+                                color: Colors.grey
+                            )),
+                  ],
+                ),
+                const SizedBox(height: 8),
                 Row(
                   children: [
-                    const Icon(Icons.star, color: Colors.yellow, size: 16),
-                    Text("${widget.job.rating}"),
+                    Text("Proposals : 10 to 15"),
                   ],
                 ),
               ],
-            ),
-            const SizedBox(height: 8),
-
-            // Job Description
-            Text(
-              widget.job.description,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 14, color: Colors.black87),
-            ),
-            const SizedBox(height: 8),
-
-            Row(
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: widget.job.tags
-                          .map((tag) => Container(
-                        margin: const EdgeInsets.only(right: 8),
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Text(
-                          tag,
-                          style: const TextStyle(fontSize: 12, color: Colors.black),
-                        ),
-                      ))
-                          .toList(),
-                    ),
-                  ),
-                ),
-                const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                const Icon(Icons.verified, color: Colors.green, size: 16),
-                const SizedBox(width: 4),
-                const Text("Payment Verified", style: TextStyle(color: Colors.green, fontSize: 12)),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const Icon(Icons.location_on, size: 16, color: Colors.grey),
-                Text(widget.job.location, style: const TextStyle(color: Colors.grey, fontSize: 12)),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
