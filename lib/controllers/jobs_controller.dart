@@ -7,6 +7,7 @@ class JobsController extends GetxController {
   var selectedReason = "".obs;
   var selectedReasons = <Job, String>{};
   var expandedJob = Rx<Job?>(null);
+  var expandedJobs = <Job, bool>{}.obs;
 
   @override
   void onInit() {
@@ -49,11 +50,16 @@ class JobsController extends GetxController {
         isFixedPrice: false,
       ),
     ];
+    // Initialize expandedJobs map
+    for (var job in jobs) {
+      expandedJobs[job] = false;
+    }
   }
 
   void toggleFavorite(Job job) {
     if (favoriteJobs.contains(job)) {
       favoriteJobs.remove(job);
+      update();
     } else {
       favoriteJobs.add(job);
     }
@@ -69,19 +75,23 @@ class JobsController extends GetxController {
 
   void removeFeedback(Job job) {
     selectedReasons.remove(job);
-    expandedJob.value = null;
+  //  expandedJob.value = null;
+    expandedJobs[job] = false;
   }
 
   void selectReasons(Job job, String reason) {
     selectedReasons[job] = reason;
     //expandedJob.value = job;
-    expandedJob.value = null;
+    //expandedJob.value = null;
+    expandedJobs[job] = false;
     update();
   }
 
   void toggleExpand(Job job) {
-    print("expanded job ==> ${expandedJob.value},  job ==> ${job}");
-    expandedJob.value = expandedJob.value == job ? null : job;
+    // print("expanded job ==> ${expandedJob.value},  job ==> ${job}");
+    // expandedJob.value = expandedJob.value == job ? null : job;
+    expandedJobs[job] = !(expandedJobs[job] ?? false);
+    update();
   }
 
   // void toggleExpand(Job job) {

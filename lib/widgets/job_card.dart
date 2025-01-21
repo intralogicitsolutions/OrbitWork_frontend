@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../component/select_reason_bottom_sheet.dart';
@@ -15,7 +14,8 @@ class JobCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Obx(() {
-      bool isExpanded = controller.expandedJob.value == job ?? false;
+      bool isExpanded = controller.expandedJobs[job] ?? false;
+     // bool isExpanded = controller.expandedJob.value == job;
       bool hasFeedback = controller.selectedReasons.containsKey(job);
 
       return Card(
@@ -66,13 +66,14 @@ class JobCard extends StatelessWidget {
                                 children: [
                                   // Show these icons when hasFeedback is false
                                   IconButton(
-                                    icon:  Icon(
+                                    icon: Icon(
                                       Icons.thumb_down_alt_outlined,
                                       //color: Colors.black,
                                       color: theme.iconTheme.color,
                                       size: 20,
                                     ),
                                     onPressed: () {
+                                      print('isExpanded3 ===> ${isExpanded}');
                                       print("job data1 ===> ${job}");
                                       showSelectReasonBottomSheet(context, job);
                                     },
@@ -96,6 +97,7 @@ class JobCard extends StatelessWidget {
                             // Show Expand/Collapse button if isExpanded is true
                             TextButton(
                               onPressed: () {
+                                print('isExpanded2 ===> ${isExpanded}');
                                 controller.toggleExpand(job);
                               },
                               child: Text(
@@ -119,6 +121,7 @@ class JobCard extends StatelessWidget {
                                 size: 20,
                               ),
                               onPressed: () {
+                                print('isExpanded ===> ${isExpanded}');
                                 print("job data2 ===> ${job}");
                                 showSelectReasonBottomSheet(context, job);
                               },
@@ -161,16 +164,14 @@ class JobCard extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 12,
                             //color: Theme.of(context).textTheme.bodySmall?.color
-                             color: Colors.grey.shade600
-                            ),
+                            color: Colors.grey.shade600),
                       )
                     : Text(
                         "Hourly: \$${job.hourlyRateMin} - \$${job.hourlyRateMax} - ${job.jobType} - Est. Time: ${job.estimatedTime}, ${job.hoursPerWeek} hrs/week",
                         style: TextStyle(
-                          fontSize: 12,
-                          //color: Theme.of(context).textTheme.bodySmall?.color,
-                           color: Colors.grey.shade600
-                        ),
+                            fontSize: 12,
+                            //color: Theme.of(context).textTheme.bodySmall?.color,
+                            color: Colors.grey.shade600),
                       ),
                 const SizedBox(height: 8),
                 Text(
@@ -191,7 +192,7 @@ class JobCard extends StatelessWidget {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 12, vertical: 6),
                                     decoration: BoxDecoration(
-                                       color: Colors.grey[300],
+                                      color: Colors.grey[300],
                                       // color: Theme.of(context)
                                       //     .chipTheme
                                       //     .backgroundColor,
@@ -203,7 +204,8 @@ class JobCard extends StatelessWidget {
                                       //     .chipTheme
                                       //     .labelStyle
                                       //     ?.copyWith(fontSize: 12),
-                                      style:  TextStyle(fontSize: 12, color: Colors.black),
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.black),
                                     ),
                                   ))
                               .toList(),
@@ -243,19 +245,16 @@ class JobCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Icon(Icons.location_on,
-                        size: 16,
-                        color: Colors.grey
-                       // color: theme.iconTheme.color
-                    ),
+                    Icon(Icons.location_on, size: 16, color: Colors.grey
+                        // color: theme.iconTheme.color
+                        ),
                     // color: Colors.grey
 
                     Text(job.location,
-                        style:
-                             TextStyle(fontSize: 12,
-                               // color: theme.textTheme.bodySmall?.color,
-                                color: Colors.grey
-                            )),
+                        style: TextStyle(
+                            fontSize: 12,
+                            // color: theme.textTheme.bodySmall?.color,
+                            color: Colors.grey)),
                   ],
                 ),
                 const SizedBox(height: 8),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orbitwork/routes/app_routes.dart';
 
 import '../controllers/drawer_controller.dart';
 import '../controllers/theme_controller.dart';
@@ -81,7 +82,7 @@ class CustomDrawer extends StatelessWidget {
                           final options = [
                             {'icon': Icons.person, 'title': 'Profile', 'trailingIcon': Icons.keyboard_arrow_right},
                             {'icon': Icons.bar_chart, 'title': 'My stats', 'trailingIcon': Icons.keyboard_arrow_right},
-                            {'icon': Icons.receipt_long, 'title': 'Reports', 'trailingIcon': Icons.keyboard_arrow_right},
+                            {'icon': Icons.receipt_long, 'title': 'Reports', 'trailingIcon': Icons.keyboard_arrow_right,},
                             {
                               'icon': Icons.request_page,
                               'title': 'My Requests',
@@ -108,9 +109,12 @@ class CustomDrawer extends StatelessWidget {
                               isBold: (option['isBold'] ?? false) as bool,
                               onTap: () {
                                 if (option['title'] == 'Theme: ${_getThemeLabel()}') {
+                                  Get.back();
                                   Get.find<Drawercontroller>().openBottomSheet(context);
-                                } else {
-                                  // Handle other actions
+                                } else if (option['title'] == 'Reports') {
+                                  Get.toNamed(AppRoutes.reports);
+                                }else {
+                                  // Handle other options
                                 }
                               },
                             );

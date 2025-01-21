@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-     // backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -62,9 +62,10 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 16),
-            Text("Jobs",
+            Text(
+              "Jobs",
               style: theme.textTheme.bodyLarge,
-             //   style: TextStyle(fontSize: 20)
+              //   style: TextStyle(fontSize: 20)
             ),
           ],
         ),
@@ -95,9 +96,7 @@ class HomeScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
-                              onChanged: (value) {
-
-                              },
+                              onChanged: (value) {},
                             ),
                           ),
                           SizedBox(
@@ -113,7 +112,7 @@ class HomeScreen extends StatelessWidget {
                                 shape: BoxShape.circle,
                                 border: Border.all(
                                   color: theme.dividerColor,
-                                 // color: Colors.black, // Border color around the circle
+                                  // color: Colors.black, // Border color around the circle
                                   width: 1, // Border thickness
                                 ),
                               ),
@@ -123,13 +122,14 @@ class HomeScreen extends StatelessWidget {
                                       ? Icons.favorite
                                       : Icons.favorite_border,
                                   color: theme.iconTheme.color,
-                                 // color: Colors.black,
+                                  // color: Colors.black,
                                 ),
                                 onPressed: () {
                                   // Optionally open a bottom sheet or perform other actions
                                   Get.bottomSheet(
-                                   // backgroundColor: Colors.white,
-                                    backgroundColor:  theme.scaffoldBackgroundColor,
+                                    // backgroundColor: Colors.white,
+                                    backgroundColor:
+                                        theme.scaffoldBackgroundColor,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(20),
@@ -139,7 +139,9 @@ class HomeScreen extends StatelessWidget {
                                     isScrollControlled: true,
                                     elevation: 10,
                                     Container(
-                                      height: MediaQuery.of(context).size.height*0.8,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.8,
                                       child: SingleChildScrollView(
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
@@ -151,50 +153,78 @@ class HomeScreen extends StatelessWidget {
                                                   width: 30,
                                                   height: 4,
                                                   decoration: BoxDecoration(
-                                                    color:
-                                                    theme.dividerColor,
+                                                    color: theme.dividerColor,
                                                     //color: Colors.grey.shade400,
-                                                    borderRadius: BorderRadius.circular(10),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
                                                   ),
                                                 ),
                                               ),
-                                              SizedBox(height: 10,),
-                                              controller.favoriteJobs.isEmpty?
-                                                  Card(
-                                                    //color: Colors.white,
-                                                    color: theme.scaffoldBackgroundColor,
-                                                    child: Column(
-                                                      children: [
-                                                        Padding(
-                                                          padding: const EdgeInsets.all(20.0),
-                                                          child: Center(
-                                                            child: Image.asset(
-                                                              'assets/icon/touch.png',
-                                                              height: 60,
-                                                              width: 60,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Padding(
-                                                          padding: const EdgeInsets.all(20.0),
-                                                          child: Text("Keep track of jobs you're interested in. Select the heart icon on the job post to save it for later.",
-                                                           textAlign: TextAlign.center,
-                                                            // style: TextStyle(
-                                                            //   fontSize: 16,
-                                                            //   fontWeight: FontWeight.w400,
-                                                            //   color: Colors.grey.shade600
-                                                            // ),
-                                                            style: Theme.of(context).textTheme.titleMedium?.copyWith(),
-                                                            //style: theme.textTheme.bodyMedium,
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ):
-                                              Column(
-                                                children:
-                                                controller.favoriteJobs.map((job) => JobCard(job: job)).toList(),
+                                              SizedBox(
+                                                height: 10,
                                               ),
+                                              controller.favoriteJobs.isEmpty
+                                                  ? Card(
+                                                      //color: Colors.white,
+                                                      color: theme
+                                                          .scaffoldBackgroundColor,
+                                                      child: Column(
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    20.0),
+                                                            child: Center(
+                                                                child: themeController
+                                                                            .themeMode
+                                                                            .value ==
+                                                                        ThemeMode
+                                                                            .dark
+                                                                    ? Image
+                                                                        .asset(
+                                                                        'assets/icon/touch_light.png',
+                                                                        height: 60,
+                                                                        width: 60,
+                                                                      )
+                                                                    : Image.asset(
+                                                                        'assets/icon/touch.png',
+                                                                        height: 60,
+                                                                        width: 60,
+                                                                      )),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(20.0),
+                                                            child: Text(
+                                                              "Keep track of jobs you're interested in. Select the heart icon on the job post to save it for later.",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              // style: TextStyle(
+                                                              //   fontSize: 16,
+                                                              //   fontWeight: FontWeight.w400,
+                                                              //   color: Colors.grey.shade600
+                                                              // ),
+                                                              style: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .titleMedium
+                                                                  ?.copyWith(),
+                                                              //style: theme.textTheme.bodyMedium,
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    )
+                                                  : Column(
+                                                      children: controller
+                                                          .favoriteJobs
+                                                          .map((job) =>
+                                                              JobCard(job: job))
+                                                          .toList(),
+                                                    ),
                                             ],
                                           ),
                                         ),
@@ -228,14 +258,13 @@ class HomeScreen extends StatelessWidget {
                     //style: TextStyle(color: Colors.grey[700]),
                   ),
                   const SizedBox(height: 8),
-
                   ElevatedButton(
                     onPressed: () {
                       // Button action
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: theme.primaryColor,
-                     // backgroundColor: Colors.green,
+                      // backgroundColor: Colors.green,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -295,9 +324,12 @@ class HomeScreen extends StatelessWidget {
             color: Theme.of(context).dividerColor,
           ),
           BottomNavigationBar(
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor, // Dynamic background
-            selectedItemColor: Theme.of(context).primaryColor, // Dynamic selected icon color
-            unselectedItemColor: Theme.of(context).iconTheme.color, // Dynamic unselected icon color
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            // Dynamic background
+            selectedItemColor: Theme.of(context).primaryColor,
+            // Dynamic selected icon color
+            unselectedItemColor: Theme.of(context).iconTheme.color,
+            // Dynamic unselected icon color
             //backgroundColor: Colors.white,
             items: const [
               BottomNavigationBarItem(
