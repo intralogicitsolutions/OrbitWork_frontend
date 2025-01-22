@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:orbitwork/widgets/custom_textfeild.dart';
-
+import 'package:intl/intl.dart';
+import 'package:orbitwork/comms/transaction_type.dart';
 import '../component/select_client_bottomsheet.dart';
 import '../component/select_date_bottom_sheet.dart';
 import '../component/select_transaction_category_bottomsheet.dart';
 import '../controllers/clients_controller.dart';
+import '../controllers/dateselector_controller.dart';
 import '../controllers/transaction_category_controller.dart';
+import '../controllers/transaction_controller.dart';
+import '../models/transaction_model.dart';
 
 class TransactionHistoryTab extends StatelessWidget {
   final clientController = Get.put(SelectClientsController());
-  final controller = Get.put(TransactionCategoryController());
+  final transactioncontroller = Get.put(TransactionCategoryController());
+  final controller = Get.put(TransactionController());
+  final dateSelectController = Get.put(DateSelectorController());
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -24,11 +29,12 @@ class TransactionHistoryTab extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: 'Balance: ',
-                    style: TextStyle(fontSize: 18, color: Colors.black), // Black color for "Balance"
+                    style: theme.textTheme.bodyLarge,
+                    //style: TextStyle(fontSize: 18),
                   ),
                   TextSpan(
                     text: '\$0.00',
-                    style: TextStyle(fontSize: 18, color: Colors.green), // Green color for "$0.00"
+                    style: TextStyle(fontSize: 18, color: Colors.green),
                   ),
                 ],
               ),
@@ -46,34 +52,41 @@ class TransactionHistoryTab extends StatelessWidget {
               ),
               Container(
                 height: 40,
-                child: TextField(
-                  decoration: InputDecoration(
-                    labelText: 'Statement period',
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey.shade400, width: 1), // Set color and width when not focused
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.calendar_today),
-                      onPressed: () {
-                        Get.bottomSheet(
-                          SelectDateBottomSheet(),
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                          ),
-                        );
-                      },
-                    ),
-                    // contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-                  ),
-                  ),
+                child: Obx(() {
+                    return TextField(
+                      readOnly: true,
+                      controller: TextEditingController(
+                        text: dateSelectController.selectedDateRange,
+                      ),
+                      decoration: InputDecoration(
+                        //labelText: 'Statement period',
+                        //filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey.shade400, width: 1), // Set color and width when not focused
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.calendar_today),
+                          onPressed: () {
+                            Get.bottomSheet(
+                              SelectDateBottomSheet(),
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                              ),
+                            );
+                          },
+                        ),
+                        // contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                      ),
+                      );
+                  }
+                ),
               ),
             ],
           ),
@@ -95,12 +108,13 @@ class TransactionHistoryTab extends StatelessWidget {
                       child: TextField(
                         readOnly: true,
                         controller: TextEditingController(
-                          text: controller.selectedCategoryLabel.value,
+                          text: 'All Transactions',
+                          //text: transactioncontroller.selectedCategoryLabel.value,
                         ),
                         decoration: InputDecoration(
                          // labelText: 'All transaction',
                           labelStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-                          filled: true,
+                         // filled: true,
                           fillColor: Colors.white,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -112,7 +126,15 @@ class TransactionHistoryTab extends StatelessWidget {
                           suffixIcon: IconButton(
                             icon: const Icon(Icons.keyboard_arrow_down_outlined),
                             onPressed: () {
-                              Get.bottomSheet(SelectTransactionCategoryBottomSheet());
+                             // Get.bottomSheet(SelectTransactionCategoryBottomSheet());
+                              Get.bottomSheet(
+                                SelectTransactionCategoryBottomSheet(),
+                                //isScrollControlled: true, // Allow full height control
+                                backgroundColor: Colors.transparent,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                                ),
+                              );
                             },
                           ),
                           // contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
@@ -122,40 +144,6 @@ class TransactionHistoryTab extends StatelessWidget {
                     ),
                   ],
                 ),
-                // child: TextField(
-                //   decoration: InputDecoration(
-                //     labelText: 'Statement period',
-                //     suffixIcon: IconButton(
-                //       icon: const Icon(Icons.calendar_today),
-                //       onPressed: () {
-                //         Get.bottomSheet(
-                //             SelectDateBottomSheet(),
-                //           isScrollControlled: true, // Allow full height control
-                //           backgroundColor: Colors.transparent, // Ensure background doesn't limit the sheet
-                //           shape: RoundedRectangleBorder(
-                //             borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                //           ),
-                //         );
-                //       },
-                //     ),
-                //     // IconButton(
-                //     //   icon: const Icon(Icons.calendar_today),
-                //     //   onPressed: () {
-                //     //     Get.bottomSheet(
-                //     //         backgroundColor:  theme.scaffoldBackgroundColor,
-                //     //         // shape: RoundedRectangleBorder(
-                //     //         //   borderRadius: BorderRadius.circular(20),
-                //     //         // ),
-                //     //         isScrollControlled: true,
-                //     //         Container(
-                //     //           height: MediaQuery.of(context).size.height * 0.7,
-                //     //           child: SelectDateBottomSheet(),
-                //     //         ),
-                //     //         );
-                //     //   },
-                //     // ),
-                //   ),
-                // ),
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -176,7 +164,7 @@ class TransactionHistoryTab extends StatelessWidget {
                         decoration: InputDecoration(
                          // labelText: 'All clients',
                           labelStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-                          filled: true,
+                         // filled: true,
                           fillColor: Colors.white,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -205,37 +193,79 @@ class TransactionHistoryTab extends StatelessWidget {
                     ),
                   ],
                 ),
-                // DropdownButtonFormField(
-                //   items: ['All transactions', 'abc', 'def']
-                //       .map((item) => DropdownMenuItem(
-                //     child: Text(item),
-                //     value: item,
-                //   ))
-                //       .toList(),
-                //   onChanged: (value) {},
-                //   decoration: InputDecoration(labelText: 'Transaction category'),
-                // ),
               ),
             ],
           ),
         ),
         Expanded(
-          child: ListView.builder(
-            itemCount: 10,
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  ListTile(
-                    title: Text('Ref ID: #XXXXX'),
-                    subtitle: Text('Service Fee'),
-                    trailing: Text('\$0.00'),
-                  ),
-                ],
-              );
-            },
-          ),
+          child:Obx(() {
+            // Group transactions by date
+            final groupedTransactions = groupTransactionsByDate(controller.transactions);
+
+            return ListView.builder(
+              itemCount: groupedTransactions.keys.length,
+              itemBuilder: (context, index) {
+                final date = groupedTransactions.keys.toList()[index];
+                final transactions = groupedTransactions[date]!;
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        DateFormat('MMM dd, yyyy').format(date),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                    ...transactions.map((transaction) => ListTile(
+                      title: Text(
+                        'Ref ID: ${transaction.refId}',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(transaction.type.displayName),
+                      trailing: Text(
+                        '\$${transaction.amount.toStringAsFixed(2)}',
+                        style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+                      ),
+                    )),
+                  ],
+                );
+              },
+            );
+          }),
+          // ListView.builder(
+          //   itemCount: 10,
+          //   itemBuilder: (context, index) {
+          //     return Column(
+          //       children: [
+          //         ListTile(
+          //           title: Text('Ref ID: #XXXXX'),
+          //           subtitle: Text('Service Fee'),
+          //           trailing: Text('\$0.00'),
+          //         ),
+          //       ],
+          //     );
+          //   },
+          // ),
         ),
       ],
     );
+  }
+
+  Map<DateTime, List<Transaction>> groupTransactionsByDate(List<Transaction> transactions) {
+    final Map<DateTime, List<Transaction>> grouped = {};
+    for (var transaction in transactions) {
+      final date = DateTime(transaction.date.year, transaction.date.month, transaction.date.day);
+      if (!grouped.containsKey(date)) {
+        grouped[date] = [];
+      }
+      grouped[date]!.add(transaction);
+    }
+    return grouped;
   }
 }

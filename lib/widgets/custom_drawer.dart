@@ -113,7 +113,12 @@ class CustomDrawer extends StatelessWidget {
                                   Get.find<Drawercontroller>().openBottomSheet(context);
                                 } else if (option['title'] == 'Reports') {
                                   Get.toNamed(AppRoutes.reports);
-                                }else {
+                                }else if (option['title'] == 'Settings') {
+                                  Get.toNamed(AppRoutes.setting);
+                                }else if (option['title'] == 'Help & Support') {
+                                  Get.toNamed(AppRoutes.heplandsupport);
+                                }
+                                else {
                                   // Handle other options
                                 }
                               },

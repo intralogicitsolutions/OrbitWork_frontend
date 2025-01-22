@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../controllers/clients_controller.dart';
 
 class SelectClientsBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Accessing the controller to manage the state
     final controller = Get.find<SelectClientsController>();
+    final theme = Theme.of(context);
 
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.scaffoldBackgroundColor,
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            'Client',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
           // Search bar
           TextField(
             decoration: InputDecoration(
@@ -26,13 +30,12 @@ class SelectClientsBottomSheet extends StatelessWidget {
               prefixIcon: Icon(Icons.search),
             ),
             onChanged: (query) {
-              controller.updateSearchQuery(query); // Update search query
+              controller.updateSearchQuery(query);
             },
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           // List of clients with checkboxes
           Obx(() {
-            // Get filtered clients based on search query
             final filteredClients = controller.filteredClients;
 
             return Expanded(
@@ -41,16 +44,13 @@ class SelectClientsBottomSheet extends StatelessWidget {
                 itemBuilder: (context, index) {
                   int clientIndex = controller.clients.indexOf(filteredClients[index]);
                   return ListTile(
-                    leading: Checkbox(
+                    leading: Obx(() => Checkbox(
                       value: controller.selectedClients[clientIndex],
                       onChanged: (bool? value) {
-                        controller.toggleClientSelection(clientIndex); // Toggle selection
+                        controller.toggleClientSelection(clientIndex);
                       },
-                    ),
+                    )),
                     title: Text(filteredClients[index]),
-                    onTap: () {
-                      // Optionally handle onTap logic if needed
-                    },
                   );
                 },
               ),

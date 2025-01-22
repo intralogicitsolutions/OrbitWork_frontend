@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SelectClientsController extends GetxController {
+
   RxList<String> clients = RxList<String>([
     'All Clients',
     'abc',
@@ -10,11 +10,19 @@ class SelectClientsController extends GetxController {
     'test',
   ]);
 
-  RxList<bool> selectedClients = RxList<bool>([false, false, false, false, false, false]);
+  // Dynamically initialize selectedClients based on clients list length
+  RxList<bool> selectedClients = RxList<bool>();
 
   RxString searchQuery = ''.obs;
 
   RxBool selectAll = false.obs;
+
+  void _updateSelectedClients() {
+    if (selectedClients.length != clients.length) {
+      selectedClients.assignAll(List.filled(clients.length, false));
+    }
+  }
+
 
   void toggleClientSelection(int index) {
     if (index == 0) {
@@ -26,6 +34,8 @@ class SelectClientsController extends GetxController {
       selectedClients[index] = !selectedClients[index];
       selectAll.value = selectedClients.skip(1).every((element) => element);
     }
+
+    selectedClients[0] = selectAll.value;
   }
 
   void updateSearchQuery(String query) {
@@ -38,5 +48,12 @@ class SelectClientsController extends GetxController {
     } else {
       return clients.where((client) => client.toLowerCase().contains(searchQuery.value.toLowerCase())).toList();
     }
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    _updateSelectedClients();
+    clients.listen((_) => _updateSelectedClients());
   }
 }

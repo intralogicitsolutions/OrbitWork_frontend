@@ -6,6 +6,10 @@ class DateSelectorController extends GetxController {
   final dateRanges = <Map<String, String>>[].obs;
   final isCustomDatePickerOpen = false.obs;
 
+  final customStartDate = Rxn<DateTime>();
+  final customEndDate = Rxn<DateTime>();
+
+
   @override
   void onInit() {
     super.onInit();
@@ -49,6 +53,11 @@ class DateSelectorController extends GetxController {
 
   void selectDateLabel(String label) {
     selectedDateLabel.value = label;
+
+    if (label != 'Custom date range') {
+      customStartDate.value = null;
+      customEndDate.value = null;
+    }
   }
 
   void toggleCustomDatePicker(bool open) {
@@ -57,6 +66,14 @@ class DateSelectorController extends GetxController {
 
   String _formatDate(DateTime date) {
     return DateFormat('MMM dd, yyyy').format(date);
+  }
+
+  String get selectedDateRange {
+    final selectedRange = dateRanges.firstWhere(
+          (range) => range['label'] == selectedDateLabel.value,
+      orElse: () => {'range': ''},
+    );
+    return selectedRange['range'] ?? '';
   }
 }
 
