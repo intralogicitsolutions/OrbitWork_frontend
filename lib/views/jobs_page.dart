@@ -119,7 +119,6 @@ class JobsPage extends StatelessWidget {
                                 shape: BoxShape.circle,
                                 border: Border.all(
                                   color: theme.dividerColor,
-                                  // color: Colors.black, // Border color around the circle
                                   width: 1, // Border thickness
                                 ),
                               ),
@@ -132,9 +131,7 @@ class JobsPage extends StatelessWidget {
                                   // color: Colors.black,
                                 ),
                                 onPressed: () {
-                                  // Optionally open a bottom sheet or perform other actions
                                   Get.bottomSheet(
-                                    // backgroundColor: Colors.white,
                                     backgroundColor:
                                         theme.scaffoldBackgroundColor,
                                     shape: RoundedRectangleBorder(
@@ -145,97 +142,138 @@ class JobsPage extends StatelessWidget {
                                     ),
                                     isScrollControlled: true,
                                     elevation: 10,
-                                    Container(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.8,
-                                      child: SingleChildScrollView(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Column(
-                                            children: [
-                                              Align(
-                                                alignment: Alignment.topCenter,
-                                                child: Container(
-                                                  width: 30,
-                                                  height: 4,
-                                                  decoration: BoxDecoration(
-                                                    color: theme.dividerColor,
-                                                    //color: Colors.grey.shade400,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              controller.favoriteJobs.isEmpty
-                                                  ? Card(
-                                                      //color: Colors.white,
-                                                      color: theme
-                                                          .scaffoldBackgroundColor,
-                                                      child: Column(
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    20.0),
-                                                            child: Center(
-                                                                child: themeController
-                                                                            .themeMode
-                                                                            .value ==
-                                                                        ThemeMode
-                                                                            .dark
-                                                                    ? Image
-                                                                        .asset(
-                                                                        'assets/icon/touch_light.png',
-                                                                        height: 60,
-                                                                        width: 60,
-                                                                      )
-                                                                    : Image.asset(
-                                                                        'assets/icon/touch.png',
-                                                                        height: 60,
-                                                                        width: 60,
-                                                                      )),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(20.0),
-                                                            child: Text(
-                                                              "Keep track of jobs you're interested in. Select the heart icon on the job post to save it for later.",
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              // style: TextStyle(
-                                                              //   fontSize: 16,
-                                                              //   fontWeight: FontWeight.w400,
-                                                              //   color: Colors.grey.shade600
-                                                              // ),
-                                                              style: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .titleMedium
-                                                                  ?.copyWith(),
-                                                              //style: theme.textTheme.bodyMedium,
-                                                            ),
-                                                          )
-                                                        ],
+                                    Obx(
+                                      () {
+                                        return Container(
+                                          height:
+                                              MediaQuery.of(context).size.height *
+                                                  0.8,
+                                          child: SingleChildScrollView(
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Column(
+                                                children: [
+                                                  // Align(
+                                                  //   alignment: Alignment.topCenter,
+                                                  //   child: Container(
+                                                  //     width: 30,
+                                                  //     height: 4,
+                                                  //     decoration: BoxDecoration(
+                                                  //       color: theme.dividerColor,
+                                                  //       borderRadius:
+                                                  //           BorderRadius.circular(
+                                                  //               10),
+                                                  //     ),
+                                                  //   ),
+                                                  // ),
+                                                  // SizedBox(
+                                                  //   height: 10,
+                                                  // ),
+                                                  Stack(
+                                                    children: [
+                                                      Align(
+                                                        alignment: Alignment.topLeft,
+                                                        child: IconButton(
+                                                          onPressed: () {
+                                                            Get.back(); // Close bottom sheet
+                                                          },
+                                                          icon: Icon(Icons.close,
+                                                              size: 20),
+                                                        ),
                                                       ),
-                                                    )
-                                                  : Column(
-                                                      children: controller
-                                                          .favoriteJobs
-                                                          .map((job) =>
-                                                              JobCard(job: job))
-                                                          .toList(),
-                                                    ),
-                                            ],
+                                                      Align(
+                                                        alignment: Alignment.topCenter,
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.only(top: 10.0),
+                                                          child: Text(
+                                                            'Saved jobs',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight.bold),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  controller.favoriteJobs.isEmpty
+                                                      ? Obx(
+                                                         () {
+                                                          return Card(
+                                                              //color: Colors.white,
+                                                              color: theme
+                                                                  .scaffoldBackgroundColor,
+                                                              child: Column(
+                                                                children: [
+                                                                  Padding(
+                                                                    padding:
+                                                                        EdgeInsets.all(
+                                                                            20.0),
+                                                                    child: Center(
+                                                                        child: themeController
+                                                                                    .themeMode
+                                                                                    .value ==
+                                                                                ThemeMode
+                                                                                    .dark
+                                                                            ? Image
+                                                                                .asset(
+                                                                                'assets/icon/touch_light.png',
+                                                                                height:
+                                                                                    60,
+                                                                                width:
+                                                                                    60,
+                                                                              )
+                                                                            : Image
+                                                                                .asset(
+                                                                                'assets/icon/touch.png',
+                                                                                height:
+                                                                                    60,
+                                                                                width:
+                                                                                    60,
+                                                                              )),
+                                                                  ),
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                            .all(20.0),
+                                                                    child: Text(
+                                                                      "Keep track of jobs you're interested in. Select the heart icon on the job post to save it for later.",
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      // style: TextStyle(
+                                                                      //   fontSize: 16,
+                                                                      //   fontWeight: FontWeight.w400,
+                                                                      //   color: Colors.grey.shade600
+                                                                      // ),
+                                                                      style: Theme.of(
+                                                                              context)
+                                                                          .textTheme
+                                                                          .titleMedium
+                                                                          ?.copyWith(),
+                                                                      //style: theme.textTheme.bodyMedium,
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            );
+                                                        }
+                                                      )
+                                                      : Column(
+                                                          children: controller
+                                                              .favoriteJobs
+                                                              .map((job) =>
+                                                                  JobCard(job: job))
+                                                              .toList(),
+                                                        ),
+                                                ],
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
+                                        );
+                                      }
                                     ),
                                     enableDrag: true,
 
@@ -293,9 +331,6 @@ class JobsPage extends StatelessWidget {
                     labelColor: theme.primaryColor,
                     unselectedLabelColor: theme.unselectedWidgetColor,
                     indicatorColor: theme.primaryColor,
-                    // labelColor: Colors.green,
-                    // unselectedLabelColor: Colors.grey,
-                    // indicatorColor: Colors.green,
                     tabs: const [
                       Tab(text: "My Feed"),
                       Tab(text: "Best Matches"),

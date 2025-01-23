@@ -13,14 +13,12 @@ class TransactionCategoryController extends GetxController {
     'Expense'
   ]);
 
-  // Dynamically initialize selectedCategories based on categories list length
   RxList<bool> selectedCategories = RxList<bool>();
 
   RxString searchQuery = ''.obs;
 
   RxBool selectAll = false.obs;
 
-  // Update selectedCategories to match the length of categories
   void _updateSelectedCategories() {
     if (selectedCategories.length != categories.length) {
       selectedCategories.assignAll(List.filled(categories.length, false));
@@ -45,7 +43,6 @@ class TransactionCategoryController extends GetxController {
     searchQuery.value = query;
   }
 
-  // Filter the categories based on the search query
   List<String> get filteredCategories {
     if (searchQuery.value.isEmpty) {
       return categories;

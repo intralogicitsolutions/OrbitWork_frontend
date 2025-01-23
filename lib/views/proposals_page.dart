@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/custom_appbar.dart';
+
 class ProposalsPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Scaffold(
+      appBar: CustomAppBar(
+        title: "Proposals",
+      ),
+      body: Container(),
+    );
   }
 
 }

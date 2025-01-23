@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:orbitwork/widgets/custom_appbar.dart';
 
 class ContractsPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Scaffold(
+      appBar: CustomAppBar(title: 'Contracts'),
+    );
   }
 
 }

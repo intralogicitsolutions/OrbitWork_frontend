@@ -61,6 +61,10 @@ class DateSelectorController extends GetxController {
   }
 
   void toggleCustomDatePicker(bool open) {
+    if (!open) {
+      customStartDate.value = null;
+      customEndDate.value = null;
+    }
     isCustomDatePickerOpen.value = open;
   }
 
@@ -68,12 +72,41 @@ class DateSelectorController extends GetxController {
     return DateFormat('MMM dd, yyyy').format(date);
   }
 
+  // String get selectedDateRange {
+  //   final selectedRange = dateRanges.firstWhere(
+  //         (range) => range['label'] == selectedDateLabel.value,
+  //     orElse: () => {'range': ''},
+  //   );
+  //   return selectedRange['range'] ?? '';
+  // }
+
   String get selectedDateRange {
+    if (selectedDateLabel.value == 'Custom date range') {
+      final formattedStart = customStartDate.value != null
+          ? DateFormat('MMM dd, yyyy').format(customStartDate.value!)
+          : '';
+      final formattedEnd = customEndDate.value != null
+          ? DateFormat('MMM dd, yyyy').format(customEndDate.value!)
+          : '';
+      return '$formattedStart - $formattedEnd';
+    }
+
     final selectedRange = dateRanges.firstWhere(
           (range) => range['label'] == selectedDateLabel.value,
       orElse: () => {'range': ''},
     );
     return selectedRange['range'] ?? '';
+  }
+
+  void updateCustomDateRange() {
+    if (customStartDate.value != null && customEndDate.value != null) {
+      final formattedStart = DateFormat('MMM dd, yyyy').format(customStartDate.value!);
+      final formattedEnd = DateFormat('MMM dd, yyyy').format(customEndDate.value!);
+
+      dateRanges.firstWhere((element) => element['label'] == 'Custom date range')['range'] = '$formattedStart - $formattedEnd';
+
+      update();
+    }
   }
 }
 

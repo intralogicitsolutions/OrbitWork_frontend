@@ -11,7 +11,7 @@ class OverviewTab extends StatelessWidget {
           return ListTile(
             title: Text(
               _getTitle(index),
-              style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+              style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 18),
             ),
             subtitle: Text('\$0.00'),
             trailing: Icon(Icons.keyboard_arrow_right),

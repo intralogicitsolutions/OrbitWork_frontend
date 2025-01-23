@@ -18,12 +18,11 @@ class JobCard extends StatelessWidget {
      // bool isExpanded = controller.expandedJob.value == job;
       bool hasFeedback = controller.selectedReasons.containsKey(job);
 
-      return Card(
+      return Container(
         color: Theme.of(context).scaffoldBackgroundColor,
-        //color: Colors.white,
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+       margin: const EdgeInsets.only(top: 8, left: 16, right: 16),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.only(top: 8, left: 16, right: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -78,18 +77,22 @@ class JobCard extends StatelessWidget {
                                       showSelectReasonBottomSheet(context, job);
                                     },
                                   ),
-                                  IconButton(
-                                    icon: Icon(
-                                      controller.favoriteJobs.contains(job)
-                                          ? Icons.favorite
-                                          : Icons.favorite_border,
-                                      //color: Colors.black,
-                                      color: Theme.of(context).iconTheme.color,
-                                      size: 20,
-                                    ),
-                                    onPressed: () {
-                                      controller.toggleFavorite(job);
-                                    },
+                                  Obx(
+                                    () {
+                                      return IconButton(
+                                        icon: Icon(
+                                          controller.favoriteJobs.contains(job)
+                                              ? Icons.favorite
+                                              : Icons.favorite_border,
+                                          //color: Colors.black,
+                                          color: Theme.of(context).iconTheme.color,
+                                          size: 20,
+                                        ),
+                                        onPressed: () {
+                                          controller.toggleFavorite(job);
+                                        },
+                                      );
+                                    }
                                   ),
                                 ],
                               ),
@@ -126,18 +129,22 @@ class JobCard extends StatelessWidget {
                                 showSelectReasonBottomSheet(context, job);
                               },
                             ),
-                            IconButton(
-                              icon: Icon(
-                                controller.favoriteJobs.contains(job)
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                color: theme.iconTheme.color,
-                                // color: Colors.black,
-                                size: 20,
-                              ),
-                              onPressed: () {
-                                controller.toggleFavorite(job);
-                              },
+                            Obx(
+                              () {
+                                return IconButton(
+                                  icon: Icon(
+                                    controller.favoriteJobs.contains(job)
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
+                                    color: theme.iconTheme.color,
+                                    // color: Colors.black,
+                                    size: 20,
+                                  ),
+                                  onPressed: () {
+                                    controller.toggleFavorite(job);
+                                  },
+                                );
+                              }
                             ),
                           ],
                         ),
@@ -264,6 +271,8 @@ class JobCard extends StatelessWidget {
                   ],
                 ),
               ],
+              const SizedBox(height: 8),
+              Divider()
             ],
           ),
         ),

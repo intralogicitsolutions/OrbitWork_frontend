@@ -10,7 +10,6 @@ class SelectClientsController extends GetxController {
     'test',
   ]);
 
-  // Dynamically initialize selectedClients based on clients list length
   RxList<bool> selectedClients = RxList<bool>();
 
   RxString searchQuery = ''.obs;

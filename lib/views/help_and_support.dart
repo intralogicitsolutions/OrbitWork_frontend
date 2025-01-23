@@ -7,24 +7,27 @@ class HelpAndSupportPage extends StatelessWidget{
      appBar: AppBar(
        title: const Text('Help & Support'),
      ),
-     body: ListView(
-       children: [
-         HelpAndSuooprtTile(
-           icon: Icons.phone_android,
-           title: "App support",
-           onTap: () => {},
-         ),
-         HelpAndSuooprtTile(
-           icon: Icons.help_outline,
-           title: "Orbitwork general support",
-           onTap: () => {},
-         ),
-         HelpAndSuooprtTile(
-           icon: Icons.groups,
-           title: "Community & forums",
-           onTap: () => {},
-         ),
-       ],
+     body: Padding(
+       padding: const EdgeInsets.only(left: 4.0),
+       child: ListView(
+         children: [
+           HelpAndSuooprtTile(
+             icon: Icons.phone_android,
+             title: "App support",
+             onTap: () => {},
+           ),
+           HelpAndSuooprtTile(
+             icon: Icons.help_outline,
+             title: "Orbitwork general support",
+             onTap: () => {},
+           ),
+           HelpAndSuooprtTile(
+             icon: Icons.groups,
+             title: "Community & forums",
+             onTap: () => {},
+           ),
+         ],
+       ),
      )
    );
   }

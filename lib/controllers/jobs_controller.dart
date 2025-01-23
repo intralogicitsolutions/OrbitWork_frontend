@@ -50,7 +50,6 @@ class JobsController extends GetxController {
         isFixedPrice: false,
       ),
     ];
-    // Initialize expandedJobs map
     for (var job in jobs) {
       expandedJobs[job] = false;
     }
@@ -66,47 +65,21 @@ class JobsController extends GetxController {
     update();
   }
 
-  // void removeFeedback(Job job) {
-  //   selectedReasons.remove(job);
-  //   if (expandedJob.value == job) {
-  //     expandedJob.value = null;
-  //   }
-  // }
-
   void removeFeedback(Job job) {
     selectedReasons.remove(job);
-  //  expandedJob.value = null;
     expandedJobs[job] = false;
   }
 
   void selectReasons(Job job, String reason) {
     selectedReasons[job] = reason;
-    //expandedJob.value = job;
-    //expandedJob.value = null;
     expandedJobs[job] = false;
     update();
   }
 
   void toggleExpand(Job job) {
-    // print("expanded job ==> ${expandedJob.value},  job ==> ${job}");
-    // expandedJob.value = expandedJob.value == job ? null : job;
     expandedJobs[job] = !(expandedJobs[job] ?? false);
     update();
   }
-
-  // void toggleExpand(Job job) {
-  //   print("expanded job ==> ${expandedJob.value},  job ==> ${job}");
-  //   if (expandedJob.value == job) {
-  //     expandedJob.value = null; // Collapse
-  //   } else {
-  //     expandedJob.value = job; // Expand
-  //   }
-  // }
-
-  // void selectReason(String reason) {
-  //   selectedReason.value = reason;
-  //   Get.back();
-  // }
 
   bool isReasonSelected(Job job) {
     return selectedReasons.containsKey(job);

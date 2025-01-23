@@ -22,17 +22,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     final theme = Theme.of(context);
 
     return AppBar(
-      automaticallyImplyLeading: false, // Disable default back button
+      automaticallyImplyLeading: false,
       toolbarHeight: 80,
       title: Row(
         children: [
           GestureDetector(
             onTap: () {
               if (isBackButtonEnabled) {
-                // Go back if enabled
                 Get.back();
               } else {
-                // Open drawer
                 Get.dialog(
                   GestureDetector(
                     onTap: () {
@@ -58,7 +56,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ],
                     ),
                   ),
-                  barrierDismissible: false, // Prevent automatic dismissal
+                  barrierDismissible: false,
                   barrierColor: Colors.transparent,
                 );
                 drawerController.openDrawer();
@@ -72,7 +70,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           const SizedBox(width: 16),
           Text(
             title,
-            style: theme.textTheme.bodyLarge,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              fontSize: 20,
+              fontWeight: FontWeight.bold
+            ),
           ),
           const Spacer(),
           if (rightIcon != null) rightIcon!, // Display right icon if provided
@@ -85,6 +86,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  // This is a required getter for PreferredSizeWidget
-  Size get preferredSize => Size.fromHeight(80); // You can adjust the height
+  Size get preferredSize => Size.fromHeight(80);
 }

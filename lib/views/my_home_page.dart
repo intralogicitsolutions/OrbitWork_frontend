@@ -4,8 +4,6 @@ import 'package:orbitwork/controllers/homescreen_controller.dart';
 import 'package:orbitwork/views/proposals_page.dart';
 
 import '../controllers/drawer_controller.dart';
-import '../widgets/custom_appbar.dart';
-import '../widgets/custom_drawer.dart';
 import 'alerts_page.dart';
 import 'contracts_page.dart';
 import 'jobs_page.dart';
@@ -13,7 +11,6 @@ import 'messages_page.dart';
 
 class MyHomePage extends StatelessWidget {
   final HomeScreenController controller = Get.put(HomeScreenController());
-  final Drawercontroller drawerController = Get.put(Drawercontroller());
 
   @override
   Widget build(BuildContext context) {
@@ -40,12 +37,13 @@ class MyHomePage extends StatelessWidget {
         children: [
           Container(
             height: 1,
-            color: Theme.of(context).dividerColor,
+            color: Colors.grey.withOpacity(0.1),
           ),
           Obx(
              () {
               return BottomNavigationBar(
                 backgroundColor: theme.scaffoldBackgroundColor,
+                type: BottomNavigationBarType.fixed,
                 selectedItemColor: Theme.of(context).primaryColor,
                 unselectedItemColor: Theme.of(context).iconTheme.color,
                 currentIndex: controller.selectedIndex.value,
