@@ -5,6 +5,7 @@ import '../controllers/drawer_controller.dart';
 import '../controllers/jobs_controller.dart';
 import '../controllers/theme_controller.dart';
 import '../models/job_model.dart';
+import '../routes/app_routes.dart';
 import '../widgets/custom_appbar.dart';
 import '../widgets/custom_drawer.dart';
 import '../widgets/job_card.dart';
@@ -25,62 +26,6 @@ class JobsPage extends StatelessWidget {
         title: "Jobs",
       ),
 
-      // appBar: AppBar(
-      //   automaticallyImplyLeading: false,
-      //   toolbarHeight: 80,
-      //   title: Row(
-      //     children: [
-      //       GestureDetector(
-      //         onTap: () {
-      //           Get.dialog(
-      //             GestureDetector(
-      //               onTap: () {
-      //                 drawerController.closeDrawer();
-      //                 Future.delayed(
-      //                     const Duration(milliseconds: 300), () => Get.back());
-      //               },
-      //               child: Stack(
-      //                 children: [
-      //                   Container(color: Colors.black.withOpacity(0.5)),
-      //                   // Dim background
-      //                   Align(
-      //                     alignment: Alignment.centerLeft,
-      //                     child: FractionallySizedBox(
-      //                       widthFactor: 0.8,
-      //                       // Drawer width as 80% of the screen
-      //                       child: SlideTransition(
-      //                         position: drawerController.slideAnimation,
-      //                         child: const CustomDrawer(),
-      //                       ),
-      //                     ),
-      //                   ),
-      //                 ],
-      //               ),
-      //             ),
-      //             barrierDismissible: false, // Prevent automatic dismissal
-      //             barrierColor: Colors.transparent,
-      //           );
-      //           drawerController.openDrawer();
-      //         },
-      //         child: CircleAvatar(
-      //           radius: 24,
-      //           // backgroundImage: NetworkImage("https://via.placeholder.com/150"),
-      //           child: const Icon(Icons.account_circle, size: 48),
-      //         ),
-      //       ),
-      //       const SizedBox(width: 16),
-      //       Text(
-      //         "Jobs",
-      //         style: theme.textTheme.bodyLarge,
-      //         //   style: TextStyle(fontSize: 20)
-      //       ),
-      //     ],
-      //   ),
-      //   backgroundColor: theme.appBarTheme.backgroundColor,
-      //   //backgroundColor: Colors.white,
-      //   elevation: 0,
-      //   centerTitle: false,
-      // ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -95,15 +40,19 @@ class JobsPage extends StatelessWidget {
                       Row(
                         children: [
                           Expanded(
-                            child: TextField(
-                              decoration: InputDecoration(
-                                hintText: "Search for jobs",
-                                prefixIcon: const Icon(Icons.search),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
+                            child: SizedBox(
+                              height: 40,
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  hintText: "Search for jobs",
+                                  prefixIcon: const Icon(Icons.search),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 12),
                                 ),
+                                onChanged: (value) {},
                               ),
-                              onChanged: (value) {},
                             ),
                           ),
                           SizedBox(
@@ -113,8 +62,8 @@ class JobsPage extends StatelessWidget {
                             bool isAnyJobFavorite =
                                 controller.favoriteJobs.isNotEmpty;
                             return Container(
-                              width: 50,
-                              height: 50,
+                              width: 40,
+                              height: 40,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
@@ -128,6 +77,7 @@ class JobsPage extends StatelessWidget {
                                       ? Icons.favorite
                                       : Icons.favorite_border,
                                   color: theme.iconTheme.color,
+                                   size: 20,
                                   // color: Colors.black,
                                 ),
                                 onPressed: () {
@@ -349,61 +299,20 @@ class JobsPage extends StatelessWidget {
                 return const Center(child: Text("No jobs available"));
               }
               return Column(
-                children:
-                    controller.jobs.map((job) => JobCard(job: job)).toList(),
+                children: controller.jobs.map((job) {
+                  return GestureDetector(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.jobdetails, arguments: job);
+                    },
+                    child: JobCard(job: job),
+                  );
+                }).toList(),
               );
+
             }),
           ],
         ),
       ),
-      // Bottom Navigation Bar
-      // bottomNavigationBar: Column(
-      //   mainAxisSize: MainAxisSize.min,
-      //   children: [
-      //     Container(
-      //       height: 1,
-      //       //color: Colors.grey.shade400,
-      //       color: Theme.of(context).dividerColor,
-      //     ),
-      //     BottomNavigationBar(
-      //       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      //       // Dynamic background
-      //       selectedItemColor: Theme.of(context).primaryColor,
-      //       // Dynamic selected icon color
-      //       unselectedItemColor: Theme.of(context).iconTheme.color,
-      //       // Dynamic unselected icon color
-      //       //backgroundColor: Colors.white,
-      //       items: const [
-      //         BottomNavigationBarItem(
-      //           icon: Icon(
-      //             Icons.work,
-      //             color: Colors.green,
-      //           ),
-      //           label: "Jobs",
-      //         ),
-      //         BottomNavigationBarItem(
-      //           icon: Icon(Icons.description),
-      //           label: "Proposals",
-      //         ),
-      //         BottomNavigationBarItem(
-      //           icon: Icon(Icons.event_note),
-      //           label: "Contracts",
-      //         ),
-      //         BottomNavigationBarItem(
-      //           icon: Icon(Icons.message_outlined),
-      //           label: "Messages",
-      //         ),
-      //         BottomNavigationBarItem(
-      //           icon: Icon(Icons.notifications_none),
-      //           label: "Alerts",
-      //         ),
-      //       ],
-      //       onTap: (index) {
-      //         // Handle navigation here
-      //       },
-      //     ),
-      //   ],
-      // ),
     );
   }
 }

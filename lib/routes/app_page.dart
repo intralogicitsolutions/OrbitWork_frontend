@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:orbitwork/routes/app_routes.dart';
 import 'package:orbitwork/views/help_and_support.dart';
+import 'package:orbitwork/views/job_details_page.dart';
 import 'package:orbitwork/views/jobs_page.dart';
 import 'package:orbitwork/views/login.dart';
 import 'package:orbitwork/views/my_home_page.dart';
@@ -19,5 +20,6 @@ class AppPages {
     GetPage(name: AppRoutes.reports, page: () => ReportsPage()),
     GetPage(name: AppRoutes.setting, page: () => SettingPage()),
     GetPage(name: AppRoutes.heplandsupport, page: () => HelpAndSupportPage()),
+    GetPage(name: AppRoutes.jobdetails, page: () => JobDetailsView()),
   ];
 }

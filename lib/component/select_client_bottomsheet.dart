@@ -23,15 +23,19 @@ class SelectClientsBottomSheet extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           // Search bar
-          TextField(
-            decoration: InputDecoration(
-              hintText: 'Search clients...',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.search),
+          Container(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Search clients...',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.search),
+                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+              ),
+              onChanged: (query) {
+                controller.updateSearchQuery(query);
+              },
             ),
-            onChanged: (query) {
-              controller.updateSearchQuery(query);
-            },
           ),
           const SizedBox(height: 12),
           // List of clients with checkboxes
@@ -44,6 +48,10 @@ class SelectClientsBottomSheet extends StatelessWidget {
                 itemBuilder: (context, index) {
                   int clientIndex = controller.clients.indexOf(filteredClients[index]);
                   return ListTile(
+                   // dense: true,
+                    minVerticalPadding: 0,
+                    horizontalTitleGap: 8.0,
+                    contentPadding: EdgeInsets.zero,
                     leading: Obx(() => Checkbox(
                       value: controller.selectedClients[clientIndex],
                       onChanged: (bool? value) {

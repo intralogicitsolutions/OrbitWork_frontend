@@ -16,6 +16,7 @@ class TransactionHistoryTab extends StatelessWidget {
   final transactioncontroller = Get.put(TransactionCategoryController());
   final controller = Get.put(TransactionController());
   final dateSelectController = Get.put(DateSelectorController());
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -23,7 +24,7 @@ class TransactionHistoryTab extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: RichText(
               text: TextSpan(
                 children: [
@@ -38,9 +39,7 @@ class TransactionHistoryTab extends StatelessWidget {
                   ),
                 ],
               ),
-            )
-
-        ),
+            )),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0),
           child: Column(
@@ -48,45 +47,51 @@ class TransactionHistoryTab extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
-                child: Text('Statement period',style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),),
+                child: Text(
+                  'Statement period',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                ),
               ),
               Container(
                 height: 40,
                 child: Obx(() {
-                    return TextField(
-                      readOnly: true,
-                      controller: TextEditingController(
-                        text: dateSelectController.selectedDateRange,
+                  return TextField(
+                    readOnly: true,
+                    controller: TextEditingController(
+                      text: dateSelectController.selectedDateRange,
+                    ),
+                    decoration: InputDecoration(
+                      //labelText: 'Statement period',
+                      //filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      decoration: InputDecoration(
-                        //labelText: 'Statement period',
-                        //filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey.shade400, width: 1), // Set color and width when not focused
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.calendar_today),
-                          onPressed: () {
-                            Get.bottomSheet(
-                              SelectDateBottomSheet(),
-                              isScrollControlled: true,
-                              backgroundColor: Colors.transparent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                              ),
-                            );
-                          },
-                        ),
-                        // contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.grey.shade400,
+                            width: 1), // Set color and width when not focused
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      );
-                  }
-                ),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.calendar_today),
+                        onPressed: () {
+                          Get.bottomSheet(
+                            SelectDateBottomSheet(),
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(16)),
+                            ),
+                          );
+                        },
+                      ),
+                      contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+                      // contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                    ),
+                  );
+                }),
               ),
             ],
           ),
@@ -101,38 +106,53 @@ class TransactionHistoryTab extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
-                      child: Text('Transcation category',style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),),
+                      child: Text(
+                        'Transcation category',
+                        style: TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.w500),
+                      ),
                     ),
-                    Container(
+                    SizedBox(
                       height: 40,
                       child: TextField(
                         readOnly: true,
                         controller: TextEditingController(
                           text: 'All Transactions',
-                          //text: transactioncontroller.selectedCategoryLabel.value,
                         ),
                         decoration: InputDecoration(
-                         // labelText: 'All transaction',
-                          labelStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-                         // filled: true,
+                          contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+                          // labelText: 'All transaction',
+                          labelStyle: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.w600),
+                          // filled: true,
                           fillColor: Colors.white,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey, width: 1), // Set color and width when not focused
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 1),
+                            // Set color and width when not focused
                             borderRadius: BorderRadius.circular(12),
                           ),
                           suffixIcon: IconButton(
-                            icon: const Icon(Icons.keyboard_arrow_down_outlined),
+                            icon:
+                                const Icon(Icons.keyboard_arrow_down_outlined),
                             onPressed: () {
-                             // Get.bottomSheet(SelectTransactionCategoryBottomSheet());
+                              final controller = Get.find<TransactionCategoryController>();
+                              controller.updateSearchQuery('');
+                              // Get.bottomSheet(SelectTransactionCategoryBottomSheet());
                               Get.bottomSheet(
-                                SelectTransactionCategoryBottomSheet(),
-                                //isScrollControlled: true, // Allow full height control
+                                Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.9,
+                                    child:
+                                        SelectTransactionCategoryBottomSheet()),
+                                isScrollControlled: true,
                                 backgroundColor: Colors.transparent,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(16)),
                                 ),
                               );
                             },
@@ -152,7 +172,11 @@ class TransactionHistoryTab extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
-                      child: Text('Client',style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),),
+                      child: Text(
+                        'Client',
+                        style: TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.w500),
+                      ),
                     ),
                     Container(
                       height: 40,
@@ -162,26 +186,37 @@ class TransactionHistoryTab extends StatelessWidget {
                           text: 'All Clients',
                         ),
                         decoration: InputDecoration(
-                         // labelText: 'All clients',
-                          labelStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-                         // filled: true,
+                          contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+                          // labelText: 'All clients',
+                          labelStyle: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.w600),
+                          // filled: true,
                           fillColor: Colors.white,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey, width: 1), // Set color and width when not focused
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 1),
+                            // Set color and width when not focused
                             borderRadius: BorderRadius.circular(12),
                           ),
                           suffixIcon: IconButton(
-                            icon: const Icon(Icons.keyboard_arrow_down_outlined),
+                            icon:
+                                const Icon(Icons.keyboard_arrow_down_outlined),
                             onPressed: () {
+                              final controller = Get.find<SelectClientsController>();
+                              controller.updateSearchQuery('');
                               Get.bottomSheet(
-                                SelectClientsBottomSheet(),
-                                //isScrollControlled: true, // Allow full height control
+                                Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.9,
+                                    child: SelectClientsBottomSheet()),
+                               isScrollControlled: true,
                                 backgroundColor: Colors.transparent,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(16)),
                                 ),
                               );
                             },
@@ -198,9 +233,9 @@ class TransactionHistoryTab extends StatelessWidget {
           ),
         ),
         Expanded(
-          child:Obx(() {
-            // Group transactions by date
-            final groupedTransactions = groupTransactionsByDate(controller.transactions);
+          child: Obx(() {
+            final groupedTransactions =
+                groupTransactionsByDate(controller.transactions);
 
             return ListView.builder(
               itemCount: groupedTransactions.keys.length,
@@ -223,44 +258,48 @@ class TransactionHistoryTab extends StatelessWidget {
                       ),
                     ),
                     ...transactions.map((transaction) => ListTile(
-                      title: Text(
-                        'Ref ID: ${transaction.refId}',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Text(transaction.type.displayName),
-                      trailing: Text(
-                        '\$${transaction.amount.toStringAsFixed(2)}',
-                        style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
-                      ),
-                    )),
+                          title: Text(
+                            'Ref ID: ${transaction.refId}',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.green),
+                          ),
+                          subtitle: Text(
+                            transaction.type.displayName,
+                            style: TextStyle(color: theme.dividerColor, fontSize: 13, fontWeight: FontWeight.w600),
+                          ),
+                          trailing: transaction.type.displayName == 'GST'
+                              ? Text(
+                                  '\$${transaction.amount.toStringAsFixed(2)}',
+                                  style: const TextStyle(
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14),
+                                )
+                              : Text(
+                                  '- \$${transaction.amount.toStringAsFixed(2)}',
+                                  style: const TextStyle(
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14),
+                                ),
+                        )),
                   ],
                 );
               },
             );
           }),
-          // ListView.builder(
-          //   itemCount: 10,
-          //   itemBuilder: (context, index) {
-          //     return Column(
-          //       children: [
-          //         ListTile(
-          //           title: Text('Ref ID: #XXXXX'),
-          //           subtitle: Text('Service Fee'),
-          //           trailing: Text('\$0.00'),
-          //         ),
-          //       ],
-          //     );
-          //   },
-          // ),
         ),
       ],
     );
   }
 
-  Map<DateTime, List<Transaction>> groupTransactionsByDate(List<Transaction> transactions) {
+  Map<DateTime, List<Transaction>> groupTransactionsByDate(
+      List<Transaction> transactions) {
     final Map<DateTime, List<Transaction>> grouped = {};
     for (var transaction in transactions) {
-      final date = DateTime(transaction.date.year, transaction.date.month, transaction.date.day);
+      final date = DateTime(
+          transaction.date.year, transaction.date.month, transaction.date.day);
       if (!grouped.containsKey(date)) {
         grouped[date] = [];
       }

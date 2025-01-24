@@ -13,48 +13,6 @@ class ActivityView extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Tab-like header for Activity
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: [
-          //       GestureDetector(
-          //         onTap: () {}, // Add tab-switching logic for "Activity"
-          //         child: Column(
-          //           children: [
-          //             Text(
-          //               "Activity",
-          //               style: TextStyle(
-          //                 fontSize: 18,
-          //                 fontWeight: FontWeight.bold,
-          //                 color: Colors.green,
-          //               ),
-          //             ),
-          //             Container(
-          //               height: 3,
-          //               width: 50,
-          //               color: Colors.green,
-          //             ),
-          //           ],
-          //         ),
-          //       ),
-          //       GestureDetector(
-          //         onTap: () {
-          //           Get.toNamed("/jobAlerts"); // Navigate to "Job Alerts" page
-          //         },
-          //         child: Text(
-          //           "Job alerts",
-          //           style: TextStyle(
-          //             fontSize: 18,
-          //             fontWeight: FontWeight.bold,
-          //             color: Colors.grey,
-          //           ),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
           SizedBox(height: 10),
           // Section Title
           Padding(
@@ -76,24 +34,30 @@ class ActivityView extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
                     child: Container(
                         width: MediaQuery.of(context).size.width,
-                        height: 80,
+                        height: 60,
                         decoration: BoxDecoration(
-                           color: theme.highlightColor,
+                           color: theme.hoverColor,
                             borderRadius: BorderRadius.circular(10)
                         ),
                         child: Center(
                             child: Row(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
-                                  child: Text('No new Notification',
-                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),),
+                                Expanded(
+                                  flex: 2,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Center(
+                                      child: Text('No new Notification',
+                                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),),
+                                    ),
+                                  ),
                                 ),
                                 Expanded(
+                                  flex: 1,
                                   child: SvgPicture.asset(
                                     'assets/icon/no-notification.svg', // Path to your SVG file
-                                    height: 40, // Adjust the size of the SVG icon
-                                    width: 40,
+                                    height: 50, // Adjust the size of the SVG icon
+                                    width: 50,
                                   ),
                                 ),
                               ],
@@ -126,7 +90,10 @@ class ActivityView extends StatelessWidget {
                                 style: TextStyle(fontSize: 12, color: Colors.grey),
                               ),
                             ),
-                            Divider()
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Divider(),
+                            )
                           ],
                         );
                       },

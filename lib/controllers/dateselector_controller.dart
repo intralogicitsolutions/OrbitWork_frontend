@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -9,11 +10,14 @@ class DateSelectorController extends GetxController {
   final customStartDate = Rxn<DateTime>();
   final customEndDate = Rxn<DateTime>();
 
+  final startDateController = TextEditingController();
+  final endDateController = TextEditingController();
 
   @override
   void onInit() {
     super.onInit();
     generateDateRanges();
+    _setCurrentActivityRange();
   }
 
   void generateDateRanges() {
@@ -46,17 +50,52 @@ class DateSelectorController extends GetxController {
         },
       {
         'label': 'Custom date range',
-        'range': '',
+        'range': '${_formatDate(now.subtract(Duration(days: 30)))} - ${_formatDate(now)}',
       },
     ]);
   }
 
+
+  void _setCurrentActivityRange() {
+    final now = DateTime.now();
+    final activityStart = now.subtract(Duration(days: 30));
+    customStartDate.value = activityStart;
+    customEndDate.value = now;
+
+    final currentActivityIndex = dateRanges.indexWhere(
+          (element) => element['label'] == 'Current activity',
+    );
+    if (currentActivityIndex != -1) {
+      dateRanges[currentActivityIndex]['range'] =
+      '${_formatDate(activityStart)} - ${_formatDate(now)}';
+      dateRanges.refresh();
+    }
+  }
+
+
+
   void selectDateLabel(String label) {
     selectedDateLabel.value = label;
 
-    if (label != 'Custom date range') {
-      customStartDate.value = null;
-      customEndDate.value = null;
+    if (label == 'Custom date range') {
+      return;
+
+    } else {
+      final selectedRange = dateRanges.firstWhere(
+            (range) => range['label'] == label,
+        orElse: () => {'range': ''},
+      )['range'] ?? '';
+
+      if (selectedRange.isNotEmpty) {
+        final dates = selectedRange.split(' - ').map((date) {
+          return DateFormat('MMM dd, yyyy').parse(date);
+        }).toList();
+
+        customStartDate.value = dates.first;
+        customEndDate.value = dates.last;
+
+        updateCustomDateRange();
+      }
     }
   }
 
@@ -72,13 +111,6 @@ class DateSelectorController extends GetxController {
     return DateFormat('MMM dd, yyyy').format(date);
   }
 
-  // String get selectedDateRange {
-  //   final selectedRange = dateRanges.firstWhere(
-  //         (range) => range['label'] == selectedDateLabel.value,
-  //     orElse: () => {'range': ''},
-  //   );
-  //   return selectedRange['range'] ?? '';
-  // }
 
   String get selectedDateRange {
     if (selectedDateLabel.value == 'Custom date range') {
@@ -99,14 +131,22 @@ class DateSelectorController extends GetxController {
   }
 
   void updateCustomDateRange() {
-    if (customStartDate.value != null && customEndDate.value != null) {
-      final formattedStart = DateFormat('MMM dd, yyyy').format(customStartDate.value!);
-      final formattedEnd = DateFormat('MMM dd, yyyy').format(customEndDate.value!);
+    final formattedStart = customStartDate.value != null
+        ? _formatDate(customStartDate.value!)
+        : '';
+    final formattedEnd = customEndDate.value != null
+        ? _formatDate(customEndDate.value!)
+        : '';
 
-      dateRanges.firstWhere((element) => element['label'] == 'Custom date range')['range'] = '$formattedStart - $formattedEnd';
+    final range = '$formattedStart - $formattedEnd';
 
-      update();
+    final customDateRangeIndex = dateRanges.indexWhere(
+          (element) => element['label'] == 'Custom date range',
+    );
+
+    if (customDateRangeIndex != -1) {
+      dateRanges[customDateRangeIndex]['range'] = range;
+      dateRanges.refresh();
     }
   }
 }
-

@@ -24,15 +24,20 @@ class SelectTransactionCategoryBottomSheet extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           // Search bar
-          TextField(
-            decoration: InputDecoration(
-              hintText: 'Search clients...',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.search),
+          Container(
+            height: 40,
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Search transactions...',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.search),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+              ),
+              onChanged: (query) {
+                controller.updateSearchQuery(query);
+              },
             ),
-            onChanged: (query) {
-              controller.updateSearchQuery(query);
-            },
           ),
           const SizedBox(height: 12),
           // List of clients with checkboxes
@@ -43,15 +48,18 @@ class SelectTransactionCategoryBottomSheet extends StatelessWidget {
               child: ListView.builder(
                 itemCount: filteredCategories.length,
                 itemBuilder: (context, index) {
-                  int clientIndex = controller.categories.indexOf(filteredCategories[index]);
+                  int clientIndex =
+                      controller.categories.indexOf(filteredCategories[index]);
                   return ListTile(
-                    leading:
-                    Obx(() => Checkbox(
-                      value: controller.selectedCategories[clientIndex],
-                      onChanged: (bool? value) {
-                        controller.toggleCategorySelection(clientIndex);
-                      },
-                    )),
+                    minVerticalPadding: 0,
+                    horizontalTitleGap: 8.0,
+                    contentPadding: EdgeInsets.zero,
+                    leading: Obx(() => Checkbox(
+                          value: controller.selectedCategories[clientIndex],
+                          onChanged: (bool? value) {
+                            controller.toggleCategorySelection(clientIndex);
+                          },
+                        )),
                     title: Text(filteredCategories[index]),
                   );
                 },
