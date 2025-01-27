@@ -9,6 +9,7 @@ import 'package:orbitwork/views/onboarding.dart';
 import 'package:orbitwork/views/reports_page.dart';
 import 'package:orbitwork/views/settings_page.dart';
 import 'package:orbitwork/views/signup.dart';
+import 'package:orbitwork/views/submit_proposal_page.dart';
 
 class AppPages {
   static final routes = [
@@ -20,6 +21,7 @@ class AppPages {
     GetPage(name: AppRoutes.reports, page: () => ReportsPage()),
     GetPage(name: AppRoutes.setting, page: () => SettingPage()),
     GetPage(name: AppRoutes.heplandsupport, page: () => HelpAndSupportPage()),
-    GetPage(name: AppRoutes.jobdetails, page: () => JobDetailsView()),
+    GetPage(name: AppRoutes.jobdetails, page: () => JobDetailsView(job: Get.arguments,)),
+    GetPage(name: AppRoutes.submitproposal, page: () => SubmitProposalPage()),
   ];
 }

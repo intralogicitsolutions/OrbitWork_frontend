@@ -12,4 +12,5 @@ class AppRoutes{
   static const String messages = '/messages';
   static const String alerts = '/alerts';
   static const String jobdetails = '/jobdetails';
+  static const String submitproposal = '/submitproposal';
 }

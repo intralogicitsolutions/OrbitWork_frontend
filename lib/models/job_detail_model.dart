@@ -12,6 +12,13 @@ class JobDetailsModel {
   final int activeHirers;
   final double avgHourlyRate;
   final String industry;
+  final String tokmakTime;
+  final double hireRate;
+  final int openJobs;
+  final int jobsPosted;
+  final double totalSpent;
+  final String hours;
+  final String sinceDate;
 
   JobDetailsModel({
     required this.title,
@@ -27,5 +34,12 @@ class JobDetailsModel {
     required this.activeHirers,
     required this.avgHourlyRate,
     required this.industry,
+    required this.tokmakTime,
+    required this.hireRate,
+    required this.openJobs,
+    required this.jobsPosted,
+    required this.totalSpent,
+    required this.hours,
+    required this.sinceDate,
   });
 }
