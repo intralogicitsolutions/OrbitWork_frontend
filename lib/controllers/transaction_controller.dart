@@ -5,6 +5,7 @@ import '../models/transaction_model.dart';
 
 class TransactionController extends GetxController {
   var transactions = <Transaction>[].obs;
+  RxBool isLoading = true.obs;
 
   @override
   void onInit() {
@@ -12,7 +13,8 @@ class TransactionController extends GetxController {
     fetchTransactions();
   }
 
-  void fetchTransactions() {
+  void fetchTransactions() async{
+    await Future.delayed(Duration(seconds: 2));
     transactions.value = [
       Transaction(
         date: DateTime(2025, 1, 29),
@@ -45,5 +47,6 @@ class TransactionController extends GetxController {
         amount: 0.00,
       ),
     ];
+    isLoading.value = false;
   }
 }

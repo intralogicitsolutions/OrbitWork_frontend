@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../component/select_reason_bottom_sheet.dart';
 import '../controllers/jobs_controller.dart';
 import '../models/job_model.dart';
+import 'custom_shimmer.dart';
 
 class JobCard extends StatelessWidget {
   final Job job;
@@ -29,14 +30,21 @@ class JobCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "Posted ${job.postedTimeAgo} ago",
-                    style: TextStyle(
-                      //color: Theme.of(context).textTheme.bodySmall?.color,
-                      color: Colors.grey[600],
-                      fontSize: 12,
-                    ),
-                    //style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                  Obx(
+                    () {
+                      if (controller.isLoading.value) {
+                      return CustomShimmer(width: MediaQuery.of(context).size.width *0.3, height: 10,);
+                    }
+                      return Text(
+                        "Posted ${job.postedTimeAgo} ago",
+                        style: TextStyle(
+                          //color: Theme.of(context).textTheme.bodySmall?.color,
+                          color: Colors.grey[600],
+                          fontSize: 12,
+                        ),
+                        //style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                      );
+                    }
                   ),
                 ],
               ),
@@ -44,16 +52,23 @@ class JobCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: Text(
-                      job.title,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                      // style: const TextStyle(
-                      //     fontSize: 16, fontWeight: FontWeight.bold),
-                      overflow: TextOverflow.visible,
-                    ),
+                  Obx(
+                     () {
+                       if (controller.isLoading.value) {
+                         return CustomShimmer(width: MediaQuery.of(context).size.width *0.5, height: 20,);
+                       }//for skeleton
+                      return Expanded(
+                        child: Text(
+                          job.title,
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                          // style: const TextStyle(
+                          //     fontSize: 16, fontWeight: FontWeight.bold),
+                          overflow: TextOverflow.visible,
+                        ),
+                      );
+                    }
                   ),
                   // Display TextButton ("Expand"/"Collapse") when hasFeedback is true
                   hasFeedback
@@ -72,8 +87,6 @@ class JobCard extends StatelessWidget {
                                       size: 20,
                                     ),
                                     onPressed: () {
-                                      print('isExpanded3 ===> ${isExpanded}');
-                                      print("job data1 ===> ${job}");
                                       showSelectReasonBottomSheet(context, job);
                                     },
                                   ),
@@ -124,8 +137,6 @@ class JobCard extends StatelessWidget {
                                 size: 20,
                               ),
                               onPressed: () {
-                                print('isExpanded ===> ${isExpanded}');
-                                print("job data2 ===> ${job}");
                                 showSelectReasonBottomSheet(context, job);
                               },
                             ),
@@ -165,58 +176,79 @@ class JobCard extends StatelessWidget {
               const SizedBox(height: 8),
               if (isExpanded || !hasFeedback) ...[
                 // const SizedBox(height: 8),
-                job.isFixedPrice
-                    ? Text(
-                        "Fixed Price - ${job.jobType} - Est. Budget: \$${job.budget}",
-                        style: TextStyle(
-                            fontSize: 12,
-                            //color: Theme.of(context).textTheme.bodySmall?.color
-                            color: Colors.grey.shade600),
-                      )
-                    : Text(
-                        "Hourly: \$${job.hourlyRateMin} - \$${job.hourlyRateMax} - ${job.jobType} - Est. Time: ${job.estimatedTime}, ${job.hoursPerWeek} hrs/week",
-                        style: TextStyle(
-                            fontSize: 12,
-                            //color: Theme.of(context).textTheme.bodySmall?.color,
-                            color: Colors.grey.shade600),
-                      ),
+                Obx(
+                   () {
+                     if (controller.isLoading.value) {
+                       return CustomShimmer(width: MediaQuery.of(context).size.width *0.7, height: 12,);
+                     }
+                    return job.isFixedPrice
+                        ? Text(
+                            "Fixed Price - ${job.jobType} - Est. Budget: \$${job.budget}",
+                            style: TextStyle(
+                                fontSize: 12,
+                                //color: Theme.of(context).textTheme.bodySmall?.color
+                                color: Colors.grey.shade600),
+                          )
+                        : Text(
+                            "Hourly: \$${job.hourlyRateMin} - \$${job.hourlyRateMax} - ${job.jobType} - Est. Time: ${job.estimatedTime}, ${job.hoursPerWeek} hrs/week",
+                            style: TextStyle(
+                                fontSize: 12,
+                                //color: Theme.of(context).textTheme.bodySmall?.color,
+                                color: Colors.grey.shade600),
+                          );
+                  }
+                ),
                 const SizedBox(height: 8),
-                Text(
-                  job.description,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                  // style: const TextStyle(fontSize: 14, color: Colors.black87),
+                Obx(
+                   () {
+                     if (controller.isLoading.value) {
+                       return CustomShimmer(width: MediaQuery.of(context).size.width *0.7, height: 20,);
+                     }
+                    return Text(
+                      job.description,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      // style: const TextStyle(fontSize: 14, color: Colors.black87),
+                    );
+                  }
                 ),
                 const SizedBox(height: 8),
                 Row(
                   children: [
                     Expanded(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: job.tags
-                              .map((tag) => Container(
-                                    margin: const EdgeInsets.only(right: 8),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12, vertical: 6),
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      // color: Theme.of(context)
-                                      //     .chipTheme
-                                      //     .backgroundColor,
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    child: Text(
-                                      tag,
-                                      // style: Theme.of(context)
-                                      //     .chipTheme
-                                      //     .labelStyle
-                                      //     ?.copyWith(fontSize: 12),
-                                      style: TextStyle(
-                                          fontSize: 12, color: Colors.black),
-                                    ),
-                                  ))
-                              .toList(),
-                        ),
+                      child: Obx(
+                         () {
+                           if (controller.isLoading.value) {
+                             return CustomShimmer(width: MediaQuery.of(context).size.width *0.7, height: 20,);
+                           }
+                          return SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: job.tags
+                                  .map((tag) => Container(
+                                        margin: const EdgeInsets.only(right: 8),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 6),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          // color: Theme.of(context)
+                                          //     .chipTheme
+                                          //     .backgroundColor,
+                                          borderRadius: BorderRadius.circular(16),
+                                        ),
+                                        child: Text(
+                                          tag,
+                                          // style: Theme.of(context)
+                                          //     .chipTheme
+                                          //     .labelStyle
+                                          //     ?.copyWith(fontSize: 12),
+                                          style: TextStyle(
+                                              fontSize: 12, color: Colors.black),
+                                        ),
+                                      ))
+                                  .toList(),
+                            ),
+                          );
+                        }
                       ),
                     ),
                     const Icon(Icons.arrow_forward_ios,
@@ -239,12 +271,18 @@ class JobCard extends StatelessWidget {
                                 fontSize: 12)),
                       ],
                     ),
-                    Row(
-                      children: [
-                        Icon(Icons.star,
-                            color: Colors.yellow.shade700, size: 16),
-                        Text("${job.rating}"),
-                      ],
+                    Obx(
+                       () {if (controller.isLoading.value) {
+                         return CustomShimmer(width: MediaQuery.of(context).size.width *0.1, height: 16,);
+                       }
+                        return Row(
+                          children: [
+                            Icon(Icons.star,
+                                color: Colors.yellow.shade700, size: 16),
+                            Text("${job.rating}"),
+                          ],
+                        );
+                      }
                     ),
                   ],
                 ),
@@ -257,18 +295,31 @@ class JobCard extends StatelessWidget {
                         ),
                     // color: Colors.grey
 
-                    Text(job.location,
-                        style: TextStyle(
-                            fontSize: 12,
-                            // color: theme.textTheme.bodySmall?.color,
-                            color: Colors.grey)),
+                    Obx(
+                       () {
+                         if (controller.isLoading.value) {
+                           return CustomShimmer(width: MediaQuery.of(context).size.width *0.2, height: 12,);
+                         }
+                        return Text(job.location,
+                            style: TextStyle(
+                                fontSize: 12,
+                                // color: theme.textTheme.bodySmall?.color,
+                                color: Colors.grey));
+                      }
+                    ),
                   ],
                 ),
                 const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Text("Proposals : 10 to 15"),
-                  ],
+                Obx(
+                   () {if (controller.isLoading.value) {
+                     return CustomShimmer(width: MediaQuery.of(context).size.width *0.7, height: 20,);
+                   }
+                    return Row(
+                      children: [
+                        Text("Proposals : 10 to 15"),
+                      ],
+                    );
+                  }
                 ),
               ],
               const SizedBox(height: 8),

@@ -8,6 +8,7 @@ class JobsController extends GetxController {
   var selectedReasons = <Job, String>{};
   var expandedJob = Rx<Job?>(null);
   var expandedJobs = <Job, bool>{}.obs;
+  RxBool isLoading = true.obs;
 
   @override
   void onInit() {
@@ -15,7 +16,8 @@ class JobsController extends GetxController {
     fetchJobs();
   }
 
-  void fetchJobs() {
+  void fetchJobs() async{
+    await Future.delayed(Duration(seconds: 2));
     jobs.value = [
       Job(
         title: "Support on inside page User Interface Design",
@@ -50,9 +52,11 @@ class JobsController extends GetxController {
         isFixedPrice: false,
       ),
     ];
+    isLoading.value = false;
     for (var job in jobs) {
       expandedJobs[job] = false;
     }
+
   }
 
   void toggleFavorite(Job job) {

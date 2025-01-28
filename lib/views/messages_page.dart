@@ -83,6 +83,7 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import '../controllers/message_controller.dart';
 import '../widgets/custom_appbar.dart';
+import '../widgets/custom_shimmer.dart';
 
 class MessagesPage extends StatelessWidget {
   final MessageController controller = Get.put(MessageController());
@@ -160,6 +161,20 @@ class MessagesPage extends StatelessWidget {
           // Message List
           Expanded(
             child: Obx(() {
+              if (controller.isLoading.value) {
+                return ListView.builder(
+                  itemCount: 2, // Number of shimmer placeholders
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                      child: CustomShimmer(
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        height: 40,
+                      ),
+                    );
+                  },
+                );
+              }
               return ListView.builder(
                 itemCount: controller.filteredMessages.length,
                 itemBuilder: (context, index) {
@@ -170,89 +185,94 @@ class MessagesPage extends StatelessWidget {
                     child: Column(
                       children: [
 
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0), // Optional spacing
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            // Align title and trailing
-                            children: [
-                              Row(
+
+                             // if (controller.isLoading.value) {
+                             //   return CustomShimmer(width: MediaQuery.of(context).size.width * 0.9 , height: 40,);
+                             // }
+                             Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8.0), // Optional spacing
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                // Align title and trailing
                                 children: [
-                                  Stack(
-                                    clipBehavior: Clip.none,
-                                    // Ensures the dot can overflow outside the stack
+                                  Row(
                                     children: [
-                                      CircleAvatar(
-                                        child: Text(
-                                          getInitials(message.name),
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white),
-                                        ),
-                                        backgroundColor: Colors.grey.shade400,
-                                      ),
-                                      Positioned(
-                                        top: 1,
-                                        // Position the dot slightly above the CircleAvatar
-                                        left: 1,
-                                        // Position the dot slightly to the left of the CircleAvatar
-                                        child: Container(
-                                          width: 9, // Size of the dot
-                                          height: 9,
-                                          decoration: BoxDecoration(
-                                            color: theme.scaffoldBackgroundColor, // Dot color
-                                            shape: BoxShape
-                                                .circle, // Makes the container circular
+                                      Stack(
+                                        clipBehavior: Clip.none,
+                                        // Ensures the dot can overflow outside the stack
+                                        children: [
+                                          CircleAvatar(
+                                            child: Text(
+                                              getInitials(message.name),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white),
+                                            ),
+                                            backgroundColor: Colors.grey.shade400,
                                           ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        top: 2,
-                                        // Position the dot slightly above the CircleAvatar
-                                        left: 2,
-                                        // Position the dot slightly to the left of the CircleAvatar
-                                        child: Container(
-                                          width: 6, // Size of the dot
-                                          height: 6,
-                                          decoration: BoxDecoration(
-                                            color: theme.unselectedWidgetColor, // Dot color
-                                            shape: BoxShape
-                                                .circle, // Makes the container circular
+                                          Positioned(
+                                            top: 1,
+                                            // Position the dot slightly above the CircleAvatar
+                                            left: 1,
+                                            // Position the dot slightly to the left of the CircleAvatar
+                                            child: Container(
+                                              width: 9, // Size of the dot
+                                              height: 9,
+                                              decoration: BoxDecoration(
+                                                color: theme.scaffoldBackgroundColor, // Dot color
+                                                shape: BoxShape
+                                                    .circle, // Makes the container circular
+                                              ),
+                                            ),
                                           ),
-                                        ),
+                                          Positioned(
+                                            top: 2,
+                                            // Position the dot slightly above the CircleAvatar
+                                            left: 2,
+                                            // Position the dot slightly to the left of the CircleAvatar
+                                            child: Container(
+                                              width: 6, // Size of the dot
+                                              height: 6,
+                                              decoration: BoxDecoration(
+                                                color: theme.unselectedWidgetColor, // Dot color
+                                                shape: BoxShape
+                                                    .circle, // Makes the container circular
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(width: 10),
+                                      // Space between avatar and title
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            message.name,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            message.title,
+                                            style: TextStyle(color: Colors.grey.shade500),
+                                          ),
+                                          Text(
+                                            message.lastMessage,
+                                            style: TextStyle(color: theme.hintColor, fontWeight: FontWeight.w400),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                  SizedBox(width: 10),
-                                  // Space between avatar and title
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        message.name,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        message.title,
-                                        style: TextStyle(color: Colors.grey.shade500),
-                                      ),
-                                      Text(
-                                        message.lastMessage,
-                                        style: TextStyle(color: theme.hintColor, fontWeight: FontWeight.w400),
-                                      ),
-                                    ],
+                                  Text(
+                                    message.date,
+                                    style: TextStyle(color: theme.dividerColor, fontWeight: FontWeight.w500),
                                   ),
                                 ],
                               ),
-                              Text(
-                                message.date,
-                                style: TextStyle(color: theme.dividerColor, fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                        ),
+                            ),
+
 
                         Divider()
                       ],

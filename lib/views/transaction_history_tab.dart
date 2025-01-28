@@ -10,6 +10,7 @@ import '../controllers/dateselector_controller.dart';
 import '../controllers/transaction_category_controller.dart';
 import '../controllers/transaction_controller.dart';
 import '../models/transaction_model.dart';
+import '../widgets/custom_shimmer.dart';
 
 class TransactionHistoryTab extends StatelessWidget {
   final clientController = Get.put(SelectClientsController());
@@ -234,6 +235,33 @@ class TransactionHistoryTab extends StatelessWidget {
         ),
         Expanded(
           child: Obx(() {
+            if (controller.isLoading.value) {
+              // Show shimmer placeholders while loading
+              return ListView.builder(
+                itemCount: 5, // Number of shimmer items to display
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomShimmer(width: MediaQuery.of(context).size.width*0.5, height: 20),
+                            const SizedBox(height: 10),
+                            CustomShimmer(width: MediaQuery.of(context).size.width*0.3, height: 20),
+                          ],
+                        ),
+                        const Spacer(),
+                        CustomShimmer(width: 50, height: 20), // Simulating Amount
+                      ],
+                    ),
+                  );
+                },
+              );
+            }
             final groupedTransactions =
                 groupTransactionsByDate(controller.transactions);
 

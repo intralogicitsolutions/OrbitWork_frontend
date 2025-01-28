@@ -5,6 +5,7 @@ class MessageController extends GetxController {
   var messages = <MessageModel>[].obs;
   var filteredMessages = <MessageModel>[].obs;
   var searchQuery = ''.obs;
+  RxBool isLoading = true.obs;
 
   @override
   void onInit() {
@@ -12,7 +13,8 @@ class MessageController extends GetxController {
     fetchMessages();
   }
 
-  void fetchMessages() {
+  void fetchMessages() async{
+    await Future.delayed(Duration(seconds: 2));
     messages.value = [
       MessageModel(
         name: "Quentin Leopold, kfzBlitz24 GmbH",
@@ -28,6 +30,7 @@ class MessageController extends GetxController {
       ),
       // Add more messages...
     ];
+    isLoading.value = false;
     filteredMessages.value = messages;
   }
 

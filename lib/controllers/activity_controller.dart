@@ -4,6 +4,7 @@ import '../models/activity_model.dart';
 
 class ActivityController extends GetxController {
   var activities = <ActivityModel>[].obs;
+  RxBool isLoading = true.obs;
 
   @override
   void onInit() {
@@ -11,7 +12,8 @@ class ActivityController extends GetxController {
     fetchActivities();
   }
 
-  void fetchActivities() {
+  void fetchActivities() async{
+    await Future.delayed(Duration(seconds: 2));
     activities.value = [
       ActivityModel(
         title: "Your proposal was viewed",
@@ -42,5 +44,6 @@ class ActivityController extends GetxController {
         iconColor: Colors.green,
       ),
     ];
+    isLoading.value = false;
   }
 }

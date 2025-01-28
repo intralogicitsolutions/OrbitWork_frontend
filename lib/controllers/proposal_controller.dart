@@ -4,19 +4,9 @@ import '../models/proposal_models.dart';
 import 'package:file_picker/file_picker.dart';
 
 class ProposalController extends GetxController {
-  final proposal = ProposalModel(
-    requiredConnects: 14,
-    remainingConnects: 112,
-    jobTitle: '[${250}] Attachments: PDF preview loads with delay, the grey line shown first #55671 - Expensify',
-    category: 'Mobile App Development',
-    postedDate: 'Jan 27, 2025',
-    description: 'Expensify is a team of generalists developing today\'s leading expense management tool. Maintaining our reputation as an innovative leader in the world of finance requires an incredibly reliable and secure system for processing financial transactions. Accordingly, we primarily leverage time-tested...',
-    budget: 250.0,
-    bid: 250.0,
-    serviceFee: 0.00,
-    finalAmount: 0.00,
-    duration: '', coverLetter: '',
-  ).obs;
+  final isDescriptionExpanded = false.obs;
+  final proposal = Rx<ProposalModel?>(null);
+  RxBool isLoading = true.obs;
 
 
   final bidAmount = 0.0.obs;
@@ -33,6 +23,7 @@ class ProposalController extends GetxController {
   void onInit() {
     super.onInit();
     // Initialize with default items
+    loadProposalData();
     highlightItems.addAll([
       HighlightItemModel(
         id: '1',
@@ -56,6 +47,25 @@ class ProposalController extends GetxController {
 
   void dismissInfoCard() {
     showInfoCard.value = false;
+  }
+
+  void loadProposalData() async {
+    await Future.delayed(Duration(seconds: 2));
+    proposal.value = ProposalModel(
+      requiredConnects: 14,
+      remainingConnects: 112,
+      jobTitle: '[${250}] Attachments: PDF preview loads with delay, the grey line shown first #55671 - Expensify',
+      category: 'Mobile App Development',
+      postedDate: 'Jan 27, 2025',
+      description: 'Expensify is a team of generalists developing today\'s leading expense management tool. Maintaining our reputation as an innovative leader in the world of finance requires an incredibly reliable and secure system for processing financial transactions. Accordingly, we primarily leverage time-tested...',
+      budget: 250.0,
+      bid: 250.0,
+      serviceFee: 250.0 * 0.10,
+      finalAmount: 250.0 - (250.0 * 0.10),
+      duration: '',
+      coverLetter: '',
+    );
+    isLoading.value = false; // Loading complete
   }
 
   void seeWhatsNew() {
@@ -92,6 +102,10 @@ class ProposalController extends GetxController {
     proposal.update((val) {
       val?.coverLetter = value;
     });
+  }
+
+  void toggleDescriptionExpansion() {
+    isDescriptionExpanded.value = !isDescriptionExpanded.value;
   }
 
   Future<void> pickFile() async {

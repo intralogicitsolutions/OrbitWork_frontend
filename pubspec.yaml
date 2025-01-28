@@ -23,6 +23,7 @@ dependencies:
   syncfusion_flutter_datepicker: ^28.1.41
   flutter_svg: ^2.0.17
   file_picker: ^8.1.7
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

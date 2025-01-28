@@ -5,6 +5,7 @@ import 'package:orbitwork/views/job_details_page.dart';
 import 'package:orbitwork/views/jobs_page.dart';
 import 'package:orbitwork/views/login.dart';
 import 'package:orbitwork/views/my_home_page.dart';
+import 'package:orbitwork/views/my_stats_page.dart';
 import 'package:orbitwork/views/onboarding.dart';
 import 'package:orbitwork/views/reports_page.dart';
 import 'package:orbitwork/views/settings_page.dart';
@@ -23,5 +24,7 @@ class AppPages {
     GetPage(name: AppRoutes.heplandsupport, page: () => HelpAndSupportPage()),
     GetPage(name: AppRoutes.jobdetails, page: () => JobDetailsView(job: Get.arguments,)),
     GetPage(name: AppRoutes.submitproposal, page: () => SubmitProposalPage()),
+    GetPage(name: AppRoutes.submitproposal, page: () => SubmitProposalPage()),
+    GetPage(name: AppRoutes.mystats, page: () => MyStatePage()),
   ];
 }

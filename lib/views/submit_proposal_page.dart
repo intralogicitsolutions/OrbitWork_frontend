@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/proposal_controller.dart';
 import '../models/proposal_models.dart';
+import '../widgets/custom_shimmer.dart';
 
 class SubmitProposalPage extends StatelessWidget {
   final ProposalController controller = Get.put(ProposalController());
-   SubmitProposalPage({Key? key}) : super(key: key);
+
+  SubmitProposalPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +34,11 @@ class SubmitProposalPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 24),
-              _buildProposalSettings(),
+              _buildProposalSettings(context),
               SizedBox(height: 24),
-              _buildJobDetails(),
+              _buildJobDetails(context),
               SizedBox(height: 24),
-              _buildTerms(),
+              _buildTerms(context),
             ],
           ),
         ),
@@ -44,7 +46,7 @@ class SubmitProposalPage extends StatelessWidget {
     );
   }
 
-  Widget _buildProposalSettings() {
+  Widget _buildProposalSettings(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -56,20 +58,36 @@ class SubmitProposalPage extends StatelessWidget {
           ),
         ),
         SizedBox(height: 8),
-        Obx(() => Text(
-          'This proposal requires ${controller.proposal.value.requiredConnects} Connects',
-          style: TextStyle(color: Colors.grey[600]),
-        )),
+        Obx(() {
+          if (controller.isLoading.value) {
+            return CustomShimmer(
+              width: MediaQuery.of(context).size.width * 0.7,
+              height: 20,
+            );
+          }
+          return Text(
+            'This proposal requires ${controller.proposal.value?.requiredConnects} Connects',
+            style: TextStyle(color: Colors.grey[600]),
+          );
+        }),
         SizedBox(height: 4),
-        Obx(() => Text(
-          'When you submit this proposal, you\'ll have ${controller.proposal.value.remainingConnects} Connects remaining.',
-          style: TextStyle(color: Colors.grey[600]),
-        )),
+        Obx(() {
+          if (controller.isLoading.value) {
+            return CustomShimmer(
+              width: MediaQuery.of(context).size.width * 0.7,
+              height: 20,
+            );
+          }
+          return Text(
+            'When you submit this proposal, you\'ll have ${controller.proposal.value?.remainingConnects} Connects remaining.',
+            style: TextStyle(color: Colors.grey[600]),
+          );
+        }),
       ],
     );
   }
 
-  Widget _buildJobDetails() {
+  Widget _buildJobDetails(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -80,12 +98,20 @@ class SubmitProposalPage extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 8),
-        Obx(() => Text(
-          controller.proposal.value.jobTitle,
-          style: TextStyle(fontSize: 16),
-        )),
-        SizedBox(height: 8),
+        SizedBox(height: 24),
+        Obx(() {
+          if (controller.isLoading.value) {
+            return CustomShimmer(
+              width: MediaQuery.of(context).size.width * 0.7,
+              height: 20,
+            );
+          }
+          return Text(
+            controller.proposal.value?.jobTitle ?? '',
+            style: TextStyle(fontSize: 16),
+          );
+        }),
+        SizedBox(height: 24),
         Row(
           children: [
             Container(
@@ -94,37 +120,64 @@ class SubmitProposalPage extends StatelessWidget {
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Obx(() => Text(
-                controller.proposal.value.category,
-                style: TextStyle(color: Colors.grey[600]),
-              )),
+              child: Obx(() {
+                // if (controller.isLoading.value) {
+                //   return CustomShimmer(
+                //     width: MediaQuery.of(context).size.width * 0.2,
+                //     height: 20,
+                //   );
+                // }
+                return Text(
+                  controller.proposal.value?.category ?? '',
+                  style: TextStyle(color: Colors.grey[600]),
+                );
+              }),
             ),
             SizedBox(width: 8),
-            Obx(() => Text(
-              'Posted ${controller.proposal.value.postedDate}',
-              style: TextStyle(color: Colors.grey[600]),
-            )),
+            Obx(() {
+              if (controller.isLoading.value) {
+                return CustomShimmer(width: MediaQuery.of(context).size.width *0.7, height: 20,);
+              }
+              return Text(
+                'Posted ${controller.proposal.value?.postedDate}',
+                style: TextStyle(color: Colors.grey[600]),
+              );
+            }),
           ],
         ),
-        SizedBox(height: 8),
-        Obx(() => Text(
-          controller.proposal.value.description,
-          style: TextStyle(color: Colors.grey[800]),
-        )),
-        TextButton(
-          onPressed: () {},
-          child: Text('more'),
-          style: TextButton.styleFrom(
-            padding: EdgeInsets.zero,
-            minimumSize: Size(0, 0),
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          ),
-        ),
+        SizedBox(height: 24),
+        Obx(() {
+          if (controller.isLoading.value) {
+            return CustomShimmer(width: MediaQuery.of(context).size.width *0.7, height: 20,);
+          }
+          final isExpanded = controller.isDescriptionExpanded.value;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                controller.proposal.value?.description ?? '',
+                style: TextStyle(color: Colors.grey[800]),
+                maxLines: isExpanded ? null : 5,
+                overflow:
+                    isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+              ),
+              TextButton(
+                onPressed: controller.toggleDescriptionExpansion,
+                child: Text(isExpanded ? 'less' : 'more'),
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size(0, 0),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+              ),
+            ],
+          );
+        }),
       ],
     );
   }
 
-  Widget _buildTerms() {
+  Widget _buildTerms(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -146,21 +199,47 @@ class SubmitProposalPage extends StatelessWidget {
           'Total amount the client will see on your proposal',
           style: TextStyle(color: Colors.grey),
         ),
-        SizedBox(height: 8,),
-        TextField(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            prefixText: '\$',
-          ),
-          keyboardType: TextInputType.number,
-          onChanged: controller.updateBid,
+        SizedBox(
+          height: 8,
+        ),
+        Obx(
+           () {
+             if (controller.isLoading.value) {
+             return CustomShimmer(width: MediaQuery.of(context).size.width *0.7, height: 20,);
+           }
+            return TextField(
+              enabled: false,
+              controller: TextEditingController(
+                  text: (controller.proposal.value!.bid).toStringAsFixed(2)),
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                disabledBorder: OutlineInputBorder(
+                  borderSide:
+                      BorderSide(color: Colors.grey.shade700), // Disabled border
+                ),
+                prefixText: '\$',
+                prefixStyle: TextStyle(color: Colors.grey.shade700),
+              ),
+              keyboardType: TextInputType.number,
+              style: TextStyle(color: Colors.grey.shade700),
+              onChanged: controller.updateBid,
+            );
+          }
         ),
         SizedBox(height: 24),
         Text('10% Freelancer Service Fee'),
-        Obx(() => Text(
-          '\$${(controller.proposal.value.serviceFee).toStringAsFixed(2)}',
-          style: TextStyle(color: Colors.grey),
-        )),
+        Obx(() {
+          if (controller.isLoading.value) {
+            return CustomShimmer(
+              width: MediaQuery.of(context).size.width * 0.7,
+              height: 20,
+            );
+          }
+          return Text(
+            '\$${(controller.proposal.value!.serviceFee).toStringAsFixed(2)}',
+            style: TextStyle(color: Colors.grey),
+          );
+        }),
         SizedBox(height: 24),
         Text('You\'ll Receive'),
         Text(
@@ -168,16 +247,23 @@ class SubmitProposalPage extends StatelessWidget {
           style: TextStyle(color: Colors.grey),
         ),
         SizedBox(height: 8),
-        Container(
-          padding: EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade300),
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: Obx(() => Text(
-            '\$${(controller.proposal.value.finalAmount).toStringAsFixed(2)}',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          )),
+        Obx(
+           () {if (controller.isLoading.value) {
+             return CustomShimmer(width: MediaQuery.of(context).size.width *0.7, height: 20,);
+           }
+            return Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey.shade300),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child:
+                Text(
+                  '\$${(controller.proposal.value!.finalAmount).toStringAsFixed(2)}',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+            );
+          }
         ),
         SizedBox(height: 16),
         Container(
@@ -272,25 +358,24 @@ class SubmitProposalPage extends StatelessWidget {
           ),
         ),
         SizedBox(height: 16),
-
         Obx(() => ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: controller.attachments.length,
-          itemBuilder: (context, index) {
-            final attachment = controller.attachments[index];
-            return ListTile(
-              leading: Icon(Icons.insert_drive_file),
-              title: Text(attachment.fileName),
-              subtitle: Text('${attachment.fileSize.toStringAsFixed(1)} MB'),
-              trailing: IconButton(
-                icon: Icon(Icons.close),
-                onPressed: () => controller.removeAttachment(index),
-              ),
-            );
-          },
-        )),
-
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: controller.attachments.length,
+              itemBuilder: (context, index) {
+                final attachment = controller.attachments[index];
+                return ListTile(
+                  leading: Icon(Icons.insert_drive_file),
+                  title: Text(attachment.fileName),
+                  subtitle:
+                      Text('${attachment.fileSize.toStringAsFixed(1)} MB'),
+                  trailing: IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () => controller.removeAttachment(index),
+                  ),
+                );
+              },
+            )),
         SizedBox(height: 24),
         Row(
           children: [
@@ -327,48 +412,47 @@ class SubmitProposalPage extends StatelessWidget {
           ),
         ),
         SizedBox(height: 16),
-
-        Obx(() => controller.showInfoCard.value ? _buildInfoCard() : SizedBox()),
-
+        Obx(() =>
+            controller.showInfoCard.value ? _buildInfoCard() : SizedBox()),
         Obx(() => ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: controller.highlightItems.length,
-          itemBuilder: (context, index) {
-            final item = controller.highlightItems[index];
-            return _buildHighlightItem(item);
-          },
-        )),
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: controller.highlightItems.length,
+              itemBuilder: (context, index) {
+                final item = controller.highlightItems[index];
+                return _buildHighlightItem(item);
+              },
+            )),
         SizedBox(height: 24),
-
         Row(
           children: [
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Implement submit proposal
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4),
-                  ),
+            ElevatedButton(
+              onPressed: () {
+                // Implement submit proposal
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                padding: EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4),
                 ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Text(
                   'Submit proposal',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
             ),
-            SizedBox(width: 16),
+            SizedBox(width: 12),
             TextButton(
               onPressed: () {
                 Get.back();
               },
               child: Text(
                 'Cancel',
-                style: TextStyle(color: Colors.grey[700]),
+                style: TextStyle(color: Colors.green),
               ),
             ),
           ],
@@ -423,9 +507,7 @@ class SubmitProposalPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
             ),
             child: TextButton(
-              onPressed: () {
-
-              },
+              onPressed: () {},
               //controller.seeWhatsNew,
               child: Text('See what\'s new'),
             ),
@@ -467,5 +549,4 @@ class SubmitProposalPage extends StatelessWidget {
       ),
     );
   }
-
 }
