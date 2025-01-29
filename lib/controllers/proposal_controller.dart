@@ -7,6 +7,7 @@ class ProposalController extends GetxController {
   final isDescriptionExpanded = false.obs;
   final proposal = Rx<ProposalModel?>(null);
   RxBool isLoading = true.obs;
+  var selectedDuration = 'Select a duration'.obs;
 
 
   final bidAmount = 0.0.obs;
@@ -183,5 +184,10 @@ class ProposalController extends GetxController {
       'Proposal submitted successfully',
       snackPosition: SnackPosition.BOTTOM,
     );
+  }
+
+  void updateDurations(String value) {
+    selectedDuration.value = value;
+    Get.back(); // Close BottomSheet after selection
   }
 }

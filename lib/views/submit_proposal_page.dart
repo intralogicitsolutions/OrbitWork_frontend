@@ -207,22 +207,27 @@ class SubmitProposalPage extends StatelessWidget {
              if (controller.isLoading.value) {
              return CustomShimmer(width: MediaQuery.of(context).size.width *0.7, height: 20,);
            }
-            return TextField(
-              enabled: false,
-              controller: TextEditingController(
-                  text: (controller.proposal.value!.bid).toStringAsFixed(2)),
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                disabledBorder: OutlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Colors.grey.shade700), // Disabled border
+            return SizedBox(
+              height: 40,
+              child: TextField(
+                enabled: false,
+                controller: TextEditingController(
+                    text: (controller.proposal.value!.bid).toStringAsFixed(2)),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  disabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Colors.grey.shade700), // Disabled border
+                  ),
+                  prefixText: '\$',
+                  prefixStyle: TextStyle(color: Colors.grey.shade700),
+                  contentPadding:
+                  EdgeInsets.symmetric(vertical: 0, horizontal: 12),
                 ),
-                prefixText: '\$',
-                prefixStyle: TextStyle(color: Colors.grey.shade700),
+                keyboardType: TextInputType.number,
+                style: TextStyle(color: Colors.grey.shade700),
+                onChanged: controller.updateBid,
               ),
-              keyboardType: TextInputType.number,
-              style: TextStyle(color: Colors.grey.shade700),
-              onChanged: controller.updateBid,
             );
           }
         ),
@@ -252,7 +257,7 @@ class SubmitProposalPage extends StatelessWidget {
              return CustomShimmer(width: MediaQuery.of(context).size.width *0.7, height: 20,);
            }
             return Container(
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey.shade300),
                 borderRadius: BorderRadius.circular(4),
@@ -283,24 +288,42 @@ class SubmitProposalPage extends StatelessWidget {
         SizedBox(height: 24),
         Text('How long will this project take?'),
         SizedBox(height: 8),
-        DropdownButtonFormField<String>(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Select a duration',
+        Obx(()=> GestureDetector(
+          onTap: () => _showBottomSheet(context),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(controller.selectedDuration.value,
+                    style: const TextStyle(fontSize: 16)),
+                const Icon(Icons.arrow_drop_down),
+              ],
+            ),
           ),
-          items: [
-            'Less than 1 month',
-            '1 to 3 months',
-            '3 to 6 months',
-            'More than 6 months',
-          ].map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-          onChanged: (value) => controller.updateDuration(value ?? ''),
-        ),
+        )),
+        // DropdownButtonFormField<String>(
+        //   decoration: InputDecoration(
+        //     border: OutlineInputBorder(),
+        //     hintText: 'Select a duration',
+        //   ),
+        //   items: [
+        //     'Less than 1 month',
+        //     '1 to 3 months',
+        //     '3 to 6 months',
+        //     'More than 6 months',
+        //   ].map((String value) {
+        //     return DropdownMenuItem<String>(
+        //       value: value,
+        //       child: Text(value),
+        //     );
+        //   }).toList(),
+        //   onChanged: (value) => controller.updateDuration(value ?? ''),
+        // ),
         SizedBox(height: 24),
         Text(
           'Additional details',
@@ -358,7 +381,7 @@ class SubmitProposalPage extends StatelessWidget {
           ),
         ),
         SizedBox(height: 16),
-        Obx(() => ListView.builder(
+        Obx(() => ListView.separated(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               itemCount: controller.attachments.length,
@@ -375,6 +398,11 @@ class SubmitProposalPage extends StatelessWidget {
                   ),
                 );
               },
+          separatorBuilder: (context, index) => Divider(
+            color: Colors.grey.shade300, // Divider color
+            thickness: 1, // Divider thickness
+            height: 0, // Space between items
+          ),
             )),
         SizedBox(height: 24),
         Row(
@@ -521,7 +549,7 @@ class SubmitProposalPage extends StatelessWidget {
   Widget _buildHighlightItem(HighlightItemModel item) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8),
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey[300]!),
         borderRadius: BorderRadius.circular(8),
@@ -547,6 +575,35 @@ class SubmitProposalPage extends StatelessWidget {
           //   Icon(Icons.chevron_right, color: Colors.grey),
         ],
       ),
+    );
+  }
+
+  void _showBottomSheet(BuildContext context) {
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildBottomSheetItem("Less than 1 month"),
+            _buildBottomSheetItem("1 to 3 months"),
+            _buildBottomSheetItem("3 to 6 months"),
+            _buildBottomSheetItem("More than 6 months"),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // CREATE LIST ITEM FOR BOTTOM SHEET
+  Widget _buildBottomSheetItem(String title) {
+    return ListTile(
+      title: Text(title),
+      onTap: () => controller.updateDurations(title),
     );
   }
 }

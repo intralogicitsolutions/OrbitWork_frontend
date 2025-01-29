@@ -575,12 +575,13 @@ class JobDetailsView extends StatelessWidget {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
+                                                  SizedBox(height: 20,),
                                                   Text(
                                                     '${job['title']}',
                                                     style: TextStyle(
                                                         fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18),
+                                                            FontWeight.w500,
+                                                        fontSize: 16),
                                                   ),
                                                   SizedBox(height: 5),
                                                   Row(
@@ -599,13 +600,18 @@ class JobDetailsView extends StatelessWidget {
                                                     ],
                                                   ),
                                                   SizedBox(height: 5),
-                                                  Text(
-                                                    'To freelancer: ${job['freelancer']}\n\nMay 2023 - Jul 2024'
-                                                    '\n${job['hours']} hrs @ \$${job['rate']}/hr'
-                                                    '\nBilled: ${job['billed']}',
-                                                    style: TextStyle(
-                                                        color: Colors.black),
-                                                  ),
+                                                  Text('To freelancer: ${job['freelancer']}', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),),
+                                                  SizedBox(height: 5,),
+                                                  Text('May 2023 - Jul 2024'),
+                                                  Text('${job['hours']} hrs @ \$${job['rate']}/hr', style: TextStyle(fontWeight: FontWeight.w500),),
+                                                  Text('Billed: ${job['billed']}'),
+                                                  // Text(
+                                                  //   'To freelancer: ${job['freelancer']}\n\nMay 2023 - Jul 2024'
+                                                  //   '\n${job['hours']} hrs @ \$${job['rate']}/hr'
+                                                  //   '\nBilled: ${job['billed']}',
+                                                  //   style: TextStyle(
+                                                  //       color: Colors.black),
+                                                  // ),
                                                 ],
                                               );
                                             }).toList(),
@@ -663,8 +669,8 @@ class JobDetailsView extends StatelessWidget {
                                           Text(
                                             'Jobs in progress (${jobController.jobsInProgress.length})',
                                             style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500),
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold),
                                           ),
                                           GestureDetector(
                                             onTap: () => jobController
@@ -712,11 +718,25 @@ class JobDetailsView extends StatelessWidget {
                                             // ),
                                             ...displayedJobs.map((job) {
                                               return ListTile(
-                                                title: Text('${job['title']}'),
-                                                subtitle: Text(
-                                                  'To freelancer: ${job['freelancer']}\nMay 2023 - Jul 2024'
-                                                  '\n${job['hours']} hrs @ \$${job['rate']}/hr'
-                                                  '\nBilled: ${job['billed']}',
+                                                title: Text('${job['title']}', style: TextStyle(
+                                                    fontWeight:
+                                                    FontWeight.w500,
+                                                    fontSize: 16),),
+                                                subtitle: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    SizedBox(height: 5),
+                                                    Text('To freelancer: ${job['freelancer']}', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),),
+                                                    SizedBox(height: 5,),
+                                                    Text('May 2023 - Jul 2024'),
+                                                    Text('${job['hours']} hrs @ \$${job['rate']}/hr', style: TextStyle(fontWeight: FontWeight.w500),),
+                                                    Text('Billed: ${job['billed']}'),
+                                                    // Text(
+                                                    //   'To freelancer: ${job['freelancer']}\nMay 2023 - Jul 2024'
+                                                    //   '\n${job['hours']} hrs @ \$${job['rate']}/hr'
+                                                    //   '\nBilled: ${job['billed']}',
+                                                    // ),
+                                                  ],
                                                 ),
                                               );
                                             }).toList(),
@@ -751,66 +771,6 @@ class JobDetailsView extends StatelessWidget {
                                         ),
                                     ],
                                   );
-                                  // return ListTile(
-                                  //   title: Text(
-                                  //     'Jobs in progress',
-                                  //     style: TextStyle(
-                                  //         fontSize: 16,
-                                  //         fontWeight: FontWeight.w500),
-                                  //   ),
-                                  //   trailing: Icon(Icons.keyboard_arrow_down),
-                                  //   onTap: () =>
-                                  //       jobController.toggleJobsExpanded(),
-                                  // );
-
-                                  //}
-
-                                  // return Column(
-                                  //   crossAxisAlignment: CrossAxisAlignment.start,
-                                  //   children: [
-                                  //     ListTile(
-                                  //       title: Text(
-                                  //         'Jobs in progress',
-                                  //         style: TextStyle(
-                                  //             fontSize: 16,
-                                  //             fontWeight: FontWeight.w500),
-                                  //       ),
-                                  //       trailing: Icon(Icons.keyboard_arrow_up),
-                                  //       onTap: () =>
-                                  //           jobController.toggleJobsExpanded(),
-                                  //     ),
-                                  //     ...displayedJobs.map((job) {
-                                  //       return ListTile(
-                                  //         title: Text('${job['title']}'),
-                                  //         subtitle: Text(
-                                  //             'To freelancer: ${job['freelancer']}'),
-                                  //       );
-                                  //     }).toList(),
-                                  //     if (remainingJobs > 0)
-                                  //       TextButton(
-                                  //         onPressed: () {
-                                  //           jobController.increaseDisplayLimit();
-                                  //         },
-                                  //         child: Text(
-                                  //           'View More ($remainingJobs)',
-                                  //           style: TextStyle(color: Colors.green),
-                                  //         ),
-                                  //       ),
-                                  //     if (remainingJobs <= 0 &&
-                                  //         jobsInProgress.length > 5)
-                                  //       TextButton(
-                                  //         onPressed: () {
-                                  //           jobController.resetDisplayLimit();
-                                  //           jobController.isJobsExpanded.value =
-                                  //               false;
-                                  //         },
-                                  //         child: Text(
-                                  //           'View Less',
-                                  //           style: TextStyle(color: Colors.green),
-                                  //         ),
-                                  //       ),
-                                  //   ],
-                                  // );
                                 }),
                               ],
                             ),
@@ -859,7 +819,7 @@ class JobDetailsView extends StatelessWidget {
                                   Text(
                                     'Other open jobs by this Client (${controller.jobs.length})',
                                     style: const TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.bold),
                                   ),
                                   const SizedBox(height: 10),
@@ -977,7 +937,7 @@ class JobDetailsView extends StatelessWidget {
                     SizedBox(width: 16),
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {jobscontroller.toggleFavorite(job);},
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
                           // padding: EdgeInsets.symmetric(vertical: 16),
