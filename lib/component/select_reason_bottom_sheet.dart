@@ -6,7 +6,7 @@ import '../models/job_model.dart';
 void showSelectReasonBottomSheet(BuildContext context, Job job) {
   final theme = Theme.of(context);
   Get.bottomSheet(
-    backgroundColor:  theme.scaffoldBackgroundColor,
+    backgroundColor: theme.scaffoldBackgroundColor,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(20),
     ),
@@ -51,17 +51,19 @@ class SelectReasonBottomSheet extends StatelessWidget {
             child: ListView.separated(
               padding: EdgeInsets.zero,
               itemCount: [
-                "Just not interested",
-                "Vague Description",
-                "Unrealistic Expectations",
-                "Too Many Applicants",
-                "Job posted too long ago",
-                "Poor reviews about the client",
-                "Doesn't Match Skills",
-                "I am overqualified",
-                "Budget too low",
-                "Not in my preferred location"
-              ].length + (controller.selectedReasons.containsKey(job) ? 1 : 0), // Add 1 if "Remove Feedback" item is shown
+                    "Just not interested",
+                    "Vague Description",
+                    "Unrealistic Expectations",
+                    "Too Many Applicants",
+                    "Job posted too long ago",
+                    "Poor reviews about the client",
+                    "Doesn't Match Skills",
+                    "I am overqualified",
+                    "Budget too low",
+                    "Not in my preferred location"
+                  ].length +
+                  (controller.selectedReasons.containsKey(job) ? 1 : 0),
+              // Add 1 if "Remove Feedback" item is shown
               itemBuilder: (context, index) {
                 if (controller.selectedReasons.containsKey(job) && index == 0) {
                   // Show "Remove Feedback" option as the first item
@@ -69,7 +71,8 @@ class SelectReasonBottomSheet extends StatelessWidget {
                     dense: true,
                     title: const Text(
                       "Remove Feedback",
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                     ),
                     onTap: () {
                       controller.removeFeedback(job);
@@ -90,7 +93,10 @@ class SelectReasonBottomSheet extends StatelessWidget {
                   "I am overqualified",
                   "Budget too low",
                   "Not in my preferred location"
-                ][index - (controller.selectedReasons.containsKey(job) ? 1 : 0)]; // Adjust index if "Remove Feedback" is present
+                ][index -
+                    (controller.selectedReasons.containsKey(job)
+                        ? 1
+                        : 0)]; // Adjust index if "Remove Feedback" is present
 
                 return ListTile(
                   dense: true,
@@ -111,10 +117,8 @@ class SelectReasonBottomSheet extends StatelessWidget {
               ),
             ),
           ),
-
         ],
       ),
     );
   }
 }
-

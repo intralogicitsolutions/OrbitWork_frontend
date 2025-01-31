@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/proposal_controller.dart';
-import '../models/proposal_models.dart';
+import '../controllers/submit_proposal_controller.dart';
+import '../models/submit_proposal_models.dart';
 import '../widgets/custom_shimmer.dart';
 
 class SubmitProposalPage extends StatelessWidget {
-  final ProposalController controller = Get.put(ProposalController());
+  final SubmitProposalController controller = Get.put(SubmitProposalController());
 
   SubmitProposalPage({Key? key}) : super(key: key);
 

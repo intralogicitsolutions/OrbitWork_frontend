@@ -28,7 +28,6 @@ class MessageController extends GetxController {
         lastMessage: "You: Thanks for the update!",
         date: "12/26/24",
       ),
-      // Add more messages...
     ];
     isLoading.value = false;
     filteredMessages.value = messages;

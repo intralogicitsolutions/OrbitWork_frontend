@@ -1,193 +1,148 @@
 import 'package:get/get.dart';
-import '../models/attachment_model.dart';
-import '../models/proposal_models.dart';
-import 'package:file_picker/file_picker.dart';
+
+import '../models/chip_data.dart';
+import '../models/proposal_model.dart';
+
 
 class ProposalController extends GetxController {
-  final isDescriptionExpanded = false.obs;
-  final proposal = Rx<ProposalModel?>(null);
-  RxBool isLoading = true.obs;
-  var selectedDuration = 'Select a duration'.obs;
+  var proposals = <Proposal>[].obs;
+  var activeProposals = <Proposal>[].obs;
+  var archivedProposals = <Proposal>[].obs;
+  var referralProposals = <Proposal>[].obs;
+  var selectedTab = 'Active'.obs;
+  var selectedChip = ''.obs;
+  var selectedStatus = 'Submitted'.obs;
 
+  // Counters for Active tab
+  var offersCount = 0.obs;
+  var invitesCount = 0.obs;
+  var discussingCount = 0.obs;
+  var submittedCount = 29.obs;
 
-  final bidAmount = 0.0.obs;
-  final serviceFeePercentage = 0.10;
-  final coverLetter = ''.obs;
-  final attachments = <AttachmentModel>[].obs;
-  final profileHighlights = <ProfileHighlightModel>[].obs;
-  final maxAttachments = 5;
-  final maxFileSize = 25 * 1024 * 1024;
-  final showInfoCard = true.obs;
-  final highlightItems = <HighlightItemModel>[].obs;
+  // Counters for Referrals tab
+  var jobsReferredCount = 0.obs;
+  var freelancersReferredCount = 0.obs;
+
+  // Counters for Archived tab
+  var archivedProposalsCount = 15.obs;
+  var archivedInvitesCount = 3.obs;
 
   @override
   void onInit() {
     super.onInit();
-    // Initialize with default items
-    loadProposalData();
-    highlightItems.addAll([
-      HighlightItemModel(
-        id: '1',
-        title: 'Add an Orbitwork job',
-        icon: '💼',
+    loadActiveProposals();
+    loadArchiveProposals();
+  }
+
+  void loadActiveProposals() {
+    activeProposals.value = [
+      Proposal(
+        title: 'Full-Stack Developer Needed (MEAN/MERN Stack)',
+        status: 'Active',
+        date: DateTime(2025, 1, 20),
+        viewedByClient: true,
+        profileType: 'General Profile',
       ),
-      HighlightItemModel(
-        id: '2',
-        title: 'Add a portfolio project',
-        icon: '🎨',
+      Proposal(
+        title: 'Vendor Module',
+        status: 'Active',
+        date: DateTime(2025, 1, 10),
+        viewedByClient: false,
+        profileType: 'General Profile',
       ),
-      HighlightItemModel(
-        id: '3',
-        title: 'You don\'t have any certificates.',
-        icon: '🏅',
-        isEnabled: false,
+      Proposal(
+        title: 'Gig Posting Application Development',
+        status: 'Active',
+        date: DateTime(2025, 1, 9),
+        viewedByClient: false,
+        profileType: 'General Profile',
       ),
-    ]);
+      Proposal(
+        title: 'Nodejs API Integration',
+        status: 'Active',
+        date: DateTime(2024, 12, 26),
+        viewedByClient: false,
+        profileType: 'General Profile',
+      ),
+    ];
   }
 
-
-  void dismissInfoCard() {
-    showInfoCard.value = false;
+  void loadArchiveProposals(){
+    archivedProposals.value = [
+      Proposal(
+        title: 'NextJs: Chakra UI to Tailwind CSS',
+        status: 'Active',
+        date: DateTime(2025, 1, 28),
+        isJobClosed: true,
+        profileType: 'General Profile',
+      ),
+      Proposal(
+        title: 'React Developer',
+        status: 'Active',
+        date: DateTime(2025, 1, 20),
+        isJobClosed: true,
+        profileType: 'General Profile',
+      ),
+      Proposal(
+        title: 'Urgent required Vue.js front-end developer for long term',
+        status: 'Active',
+        date: DateTime(2025, 1, 1),
+        isJobClosed: true,
+        profileType: 'General Profile',
+      ),
+      Proposal(
+        title: 'Mobile App Designer for Dream Journal',
+        status: 'Active',
+        date: DateTime(2024, 12, 31),
+        isJobClosed: true,
+        profileType: 'General Profile',
+      ),
+    ];
   }
 
-  void loadProposalData() async {
-    await Future.delayed(Duration(seconds: 2));
-    proposal.value = ProposalModel(
-      requiredConnects: 14,
-      remainingConnects: 112,
-      jobTitle: '[${250}] Attachments: PDF preview loads with delay, the grey line shown first #55671 - Expensify',
-      category: 'Mobile App Development',
-      postedDate: 'Jan 27, 2025',
-      description: 'Expensify is a team of generalists developing today\'s leading expense management tool. Maintaining our reputation as an innovative leader in the world of finance requires an incredibly reliable and secure system for processing financial transactions. Accordingly, we primarily leverage time-tested...',
-      budget: 250.0,
-      bid: 250.0,
-      serviceFee: 250.0 * 0.10,
-      finalAmount: 250.0 - (250.0 * 0.10),
-      duration: '',
-      coverLetter: '',
-    );
-    isLoading.value = false; // Loading complete
+  void changeTab(String tab) {
+    selectedTab.value = tab;
   }
 
-  void seeWhatsNew() {
-    Get.snackbar(
-      'New Features',
-      'Checking new portfolio features...',
-      snackPosition: SnackPosition.BOTTOM,
-    );
-  }
-
-
-
-  void updateBidAmount(double amount) {
-    bidAmount.value = amount;
-  }
-
-  void updateBid(String value) {
-    double bidAmount = double.tryParse(value) ?? 0.0;
-    print('bidAmount ==> ${bidAmount}');
-    proposal.update((val) {
-      val?.bid = bidAmount;
-      val?.serviceFee = bidAmount * serviceFeePercentage;
-      val?.finalAmount = bidAmount - (bidAmount * serviceFeePercentage);
-    });
-  }
-
-  void updateDuration(String value) {
-    proposal.update((val) {
-      val?.duration = value;
-    });
-  }
-
-  void updateCoverLetter(String value) {
-    proposal.update((val) {
-      val?.coverLetter = value;
-    });
-  }
-
-  void toggleDescriptionExpansion() {
-    isDescriptionExpanded.value = !isDescriptionExpanded.value;
-  }
-
-  Future<void> pickFile() async {
-    if (attachments.length >= maxAttachments) {
-      Get.snackbar(
-        'Error',
-        'Maximum 5 files allowed',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      return;
-    }
-
-    final remainingSlots = maxAttachments - attachments.length;
-
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      allowMultiple: true,
-      withData: true,
-    );
-
-    if (result != null) {
-      // PlatformFile file = result.files.first;
-      final filesToAdd = result.files.take(remainingSlots);
-
-      for (PlatformFile file in filesToAdd) {
-        if (file.size > maxFileSize) {
-          Get.snackbar(
-            'Error',
-            'File size must be under 25MB',
-            snackPosition: SnackPosition.BOTTOM,
-          );
-          //return;
-          continue;
-        }
-
-        attachments.add(AttachmentModel(
-          fileName: file.name,
-          filePath: file.path ?? '',
-          fileSize: file.size / (1024 * 1024), // Convert to MB
-        ));
-      }
-      if (attachments.length >= maxAttachments) {
-        Get.snackbar(
-          'Info',
-          'Maximum file limit (5) reached',
-          snackPosition: SnackPosition.BOTTOM,
-        );
-      }
+  List<Proposal> getCurrentProposals() {
+    switch (selectedTab.value) {
+      case 'Active':
+        return activeProposals;
+      case 'Archived':
+        return archivedProposals;
+      case 'Referrals':
+        return referralProposals;
+      default:
+        return activeProposals;
     }
   }
 
-  void removeAttachment(int index) {
-    attachments.removeAt(index);
-  }
-
-  // void updateCoverLetter(String value) {
-  //   coverLetter.value = value;
-  // }
-
-  void addProfileHighlight(ProfileHighlightModel highlight) {
-    if (profileHighlights.length < 4) {
-      profileHighlights.add(highlight);
+  List<ChipData> getChipsForCurrentTab() {
+    switch (selectedTab.value) {
+      case 'Active':
+        return [
+          ChipData('Offers', offersCount.value),
+          ChipData('Invites', invitesCount.value),
+          ChipData('Discussing', discussingCount.value),
+          ChipData('Submitted', submittedCount.value),
+        ];
+      case 'Referrals':
+        return [
+          ChipData('Jobs referred to you', jobsReferredCount.value),
+          ChipData('Freelancers you referred', freelancersReferredCount.value),
+        ];
+      case 'Archived':
+        return [
+          ChipData('Proposals', archivedProposalsCount.value),
+          ChipData('Invites', archivedInvitesCount.value),
+        ];
+      default:
+        return [];
     }
   }
 
-  void removeProfileHighlight(String id) {
-    profileHighlights.removeWhere((element) => element.id == id);
+  void selectChip(String chipLabel) {
+    selectedChip.value = chipLabel;
   }
 
-
-  void submitProposal() {
-    // Implement your submission logic here
-    print('Submitting proposal: ${proposal.value}');
-    Get.snackbar(
-      'Success',
-      'Proposal submitted successfully',
-      snackPosition: SnackPosition.BOTTOM,
-    );
-  }
-
-  void updateDurations(String value) {
-    selectedDuration.value = value;
-    Get.back(); // Close BottomSheet after selection
-  }
 }

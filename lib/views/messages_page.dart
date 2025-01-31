@@ -1,87 +1,11 @@
-// import 'package:flutter/material.dart';
-//
-// import '../widgets/custom_appbar.dart';
-//
-// class MessagesPage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     final theme = Theme.of(context);
-//     return Scaffold(
-//       appBar: CustomAppBar(
-//         title: "Message",
-//         rightIcon: Container(
-//           width: 40,
-//           height: 40,
-//           decoration: BoxDecoration(
-//             shape: BoxShape.circle,
-//             border: Border.all(
-//               color: theme.dividerColor,
-//               // color: Colors.black,
-//               width: 1,
-//             ),
-//           ),
-//           child: IconButton(
-//             icon: Icon(Icons.add),
-//             onPressed: () {
-//               print("Notifications clicked");
-//             },
-//           ),
-//         ),
-//       ),
-//       body: Column(
-//         children: [
-//           Wrap(
-//             children: [
-//               Row(
-//                 children: [
-//                   Expanded(
-//                     child: Padding(
-//                       padding: const EdgeInsets.only(left: 12.0),
-//                       child: TextField(
-//                         decoration: InputDecoration(
-//                           hintText: "Search for jobs",
-//                           prefixIcon: const Icon(Icons.search),
-//                           border: OutlineInputBorder(
-//                             borderRadius: BorderRadius.circular(8),
-//                           ),
-//                         ),
-//                         onChanged: (value) {},
-//                       ),
-//                     ),
-//                   ),
-//                   Padding(
-//                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-//                     child: IconButton(
-//                       icon: Icon(Icons.filter,
-//                         color: Colors.green,
-//                       ),
-//                       onPressed: () {},
-//                     ),
-//                   ),
-//
-//                 ],
-//               ),
-//             ],
-//           ),
-//           ListView(
-//             children: [
-//               Row(
-//                 children: [
-//
-//                 ],
-//               )
-//             ],
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import '../component/new_room_bottomsheet.dart';
 import '../controllers/message_controller.dart';
+import '../controllers/room_controller.dart';
+import '../routes/app_routes.dart';
 import '../widgets/custom_appbar.dart';
 import '../widgets/custom_shimmer.dart';
 
@@ -91,6 +15,23 @@ class MessagesPage extends StatelessWidget {
   String getInitials(String name) {
     List<String> nameParts = name.split(' ');
     return nameParts.take(2).map((part) => part[0].toUpperCase()).join();
+  }
+
+  void showNewRoomSheet() {
+    Get.lazyPut(() => RoomController());
+
+    Get.bottomSheet(
+      const NewRoomBottomSheet(),
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+    ).then((_) {
+      Get.delete<RoomController>();
+    });
   }
 
   @override
@@ -113,7 +54,18 @@ class MessagesPage extends StatelessWidget {
           child: IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
-              print("Notifications clicked");
+              Get.bottomSheet(
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.9,
+                    child: const NewRoomBottomSheet()),
+                isScrollControlled: true,
+                backgroundColor: Colors.white,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(20),
+                  ),
+                ),
+              );
             },
           ),
         ),
@@ -180,102 +132,105 @@ class MessagesPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final message = controller.filteredMessages[index];
 
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Column(
-                      children: [
-
-
-                             // if (controller.isLoading.value) {
-                             //   return CustomShimmer(width: MediaQuery.of(context).size.width * 0.9 , height: 40,);
-                             // }
-                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8.0), // Optional spacing
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                // Align title and trailing
-                                children: [
-                                  Row(
-                                    children: [
-                                      Stack(
-                                        clipBehavior: Clip.none,
-                                        // Ensures the dot can overflow outside the stack
-                                        children: [
-                                          CircleAvatar(
-                                            child: Text(
-                                              getInitials(message.name),
+                  return GestureDetector(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.chat, arguments: message.name);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Column(
+                        children: [
+                               // if (controller.isLoading.value) {
+                               //   return CustomShimmer(width: MediaQuery.of(context).size.width * 0.9 , height: 40,);
+                               // }
+                               Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 8.0), // Optional spacing
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  // Align title and trailing
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Stack(
+                                          clipBehavior: Clip.none,
+                                          // Ensures the dot can overflow outside the stack
+                                          children: [
+                                            CircleAvatar(
+                                              child: Text(
+                                                getInitials(message.name),
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white),
+                                              ),
+                                              backgroundColor: Colors.grey.shade400,
+                                            ),
+                                            Positioned(
+                                              top: 1,
+                                              // Position the dot slightly above the CircleAvatar
+                                              left: 1,
+                                              // Position the dot slightly to the left of the CircleAvatar
+                                              child: Container(
+                                                width: 9, // Size of the dot
+                                                height: 9,
+                                                decoration: BoxDecoration(
+                                                  color: theme.scaffoldBackgroundColor, // Dot color
+                                                  shape: BoxShape
+                                                      .circle, // Makes the container circular
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              top: 2,
+                                              // Position the dot slightly above the CircleAvatar
+                                              left: 2,
+                                              // Position the dot slightly to the left of the CircleAvatar
+                                              child: Container(
+                                                width: 6, // Size of the dot
+                                                height: 6,
+                                                decoration: BoxDecoration(
+                                                  color: theme.unselectedWidgetColor, // Dot color
+                                                  shape: BoxShape
+                                                      .circle, // Makes the container circular
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(width: 10),
+                                        // Space between avatar and title
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              message.name,
                                               style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.white),
+                                                  fontWeight: FontWeight.bold),
                                             ),
-                                            backgroundColor: Colors.grey.shade400,
-                                          ),
-                                          Positioned(
-                                            top: 1,
-                                            // Position the dot slightly above the CircleAvatar
-                                            left: 1,
-                                            // Position the dot slightly to the left of the CircleAvatar
-                                            child: Container(
-                                              width: 9, // Size of the dot
-                                              height: 9,
-                                              decoration: BoxDecoration(
-                                                color: theme.scaffoldBackgroundColor, // Dot color
-                                                shape: BoxShape
-                                                    .circle, // Makes the container circular
-                                              ),
+                                            Text(
+                                              message.title,
+                                              style: TextStyle(color: Colors.grey.shade500),
                                             ),
-                                          ),
-                                          Positioned(
-                                            top: 2,
-                                            // Position the dot slightly above the CircleAvatar
-                                            left: 2,
-                                            // Position the dot slightly to the left of the CircleAvatar
-                                            child: Container(
-                                              width: 6, // Size of the dot
-                                              height: 6,
-                                              decoration: BoxDecoration(
-                                                color: theme.unselectedWidgetColor, // Dot color
-                                                shape: BoxShape
-                                                    .circle, // Makes the container circular
-                                              ),
+                                            Text(
+                                              message.lastMessage,
+                                              style: TextStyle(color: theme.hintColor, fontWeight: FontWeight.w400),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(width: 10),
-                                      // Space between avatar and title
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            message.name,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            message.title,
-                                            style: TextStyle(color: Colors.grey.shade500),
-                                          ),
-                                          Text(
-                                            message.lastMessage,
-                                            style: TextStyle(color: theme.hintColor, fontWeight: FontWeight.w400),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    message.date,
-                                    style: TextStyle(color: theme.dividerColor, fontWeight: FontWeight.w500),
-                                  ),
-                                ],
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Text(
+                                      message.date,
+                                      style: TextStyle(color: theme.dividerColor, fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
 
 
-                        Divider()
-                      ],
+                          Divider()
+                        ],
+                      ),
                     ),
                   );
                 },

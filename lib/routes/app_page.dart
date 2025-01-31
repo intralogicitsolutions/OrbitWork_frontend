@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:orbitwork/routes/app_routes.dart';
+import 'package:orbitwork/views/chat_page.dart';
 import 'package:orbitwork/views/help_and_support.dart';
 import 'package:orbitwork/views/job_details_page.dart';
 import 'package:orbitwork/views/jobs_page.dart';
@@ -26,5 +27,6 @@ class AppPages {
     GetPage(name: AppRoutes.submitproposal, page: () => SubmitProposalPage()),
     GetPage(name: AppRoutes.submitproposal, page: () => SubmitProposalPage()),
     GetPage(name: AppRoutes.mystats, page: () => MyStatePage()),
+    GetPage(name: AppRoutes.chat, page: () => ChatPage(name: Get.arguments,)),
   ];
 }
