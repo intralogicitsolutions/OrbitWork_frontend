@@ -116,9 +116,9 @@ class CustomDrawer extends StatelessWidget {
                                 }else if (option['title'] == 'Settings') {
                                   Get.toNamed(AppRoutes.setting);
                                 }else if (option['title'] == 'Help & Support') {
-                                  Get.toNamed(AppRoutes.heplandsupport);
+                                  Get.toNamed(AppRoutes.helpAndSupport);
                                 }else if (option['title'] == 'My stats') {
-                                  Get.toNamed(AppRoutes.mystats);
+                                  Get.toNamed(AppRoutes.myStats);
                                 }
                                 else {
                                   // Handle other options

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../routes/app_routes.dart';
 
 class SettingPage extends StatelessWidget {
   @override
@@ -16,7 +19,9 @@ class SettingPage extends StatelessWidget {
             SettingsTile(
               icon: Icons.attach_money,
               title: "Billing & payments",
-              onTap: () => print("Billing & payments"),
+              onTap: () {
+                Get.toNamed(AppRoutes.billingAndPayments);
+              },
             ),
 
             // User Settings Section
@@ -24,12 +29,16 @@ class SettingPage extends StatelessWidget {
             SettingsTile(
               icon: Icons.card_membership,
               title: "Membership & Connects",
-              onTap: () => print("Membership & Connects"),
+              onTap: () {
+                Get.toNamed(AppRoutes.membershipAndConnects);
+              },
             ),
             SettingsTile(
               icon: Icons.contact_page,
               title: "Contact info",
-              onTap: () => print("Contact info"),
+              onTap: () {
+                Get.toNamed(AppRoutes.contactInfo);
+              },
             ),
             SettingsTile(
               icon: Icons.account_balance_wallet,
@@ -39,12 +48,16 @@ class SettingPage extends StatelessWidget {
             SettingsTile(
               icon: Icons.file_copy,
               title: "Tax forms",
-              onTap: () => print("Tax forms"),
+              onTap: () {
+                Get.toNamed(AppRoutes.taxForm);
+              }
             ),
             SettingsTile(
               icon: Icons.person,
               title: "Profile settings",
-              onTap: () => print("Profile settings"),
+              onTap: () {
+                Get.toNamed(AppRoutes.profileSetting);
+              }
             ),
             SettingsTile(
               icon: Icons.payment,
@@ -59,7 +72,9 @@ class SettingPage extends StatelessWidget {
             SettingsTile(
               icon: Icons.security,
               title: "Password & security",
-              onTap: () => print("Password & security"),
+              onTap: () {
+                Get.toNamed(AppRoutes.passwordAndSecurity);
+              }
             ),
             SettingsTile(
               icon: Icons.verified_user,
@@ -75,7 +90,9 @@ class SettingPage extends StatelessWidget {
             SettingsTile(
               icon: Icons.privacy_tip,
               title: "Privacy preferences",
-              onTap: () => print("Privacy preferences"),
+              onTap: () {
+                Get.toNamed(AppRoutes.privacyPreferences);
+              },
             ),
 
             SectionTitle(title: "Notification settings"),

@@ -1,17 +1,25 @@
 import 'package:get/get.dart';
 import 'package:orbitwork/routes/app_routes.dart';
+import 'package:orbitwork/views/add_billing_method_page.dart';
+import 'package:orbitwork/views/billing_and_payments.dart';
 import 'package:orbitwork/views/chat_page.dart';
+import 'package:orbitwork/views/contact_info_page.dart';
 import 'package:orbitwork/views/help_and_support.dart';
 import 'package:orbitwork/views/job_details_page.dart';
 import 'package:orbitwork/views/jobs_page.dart';
 import 'package:orbitwork/views/login.dart';
+import 'package:orbitwork/views/membership_and_connects.dart';
 import 'package:orbitwork/views/my_home_page.dart';
 import 'package:orbitwork/views/my_stats_page.dart';
 import 'package:orbitwork/views/onboarding.dart';
+import 'package:orbitwork/views/password_security_page.dart';
+import 'package:orbitwork/views/privacy_preferences_page.dart';
+import 'package:orbitwork/views/profile_setting_page.dart';
 import 'package:orbitwork/views/reports_page.dart';
 import 'package:orbitwork/views/settings_page.dart';
 import 'package:orbitwork/views/signup.dart';
 import 'package:orbitwork/views/submit_proposal_page.dart';
+import 'package:orbitwork/views/tax_forms_page.dart';
 
 class AppPages {
   static final routes = [
@@ -22,11 +30,19 @@ class AppPages {
     GetPage(name: AppRoutes.jobs, page: () => JobsPage()),
     GetPage(name: AppRoutes.reports, page: () => ReportsPage()),
     GetPage(name: AppRoutes.setting, page: () => SettingPage()),
-    GetPage(name: AppRoutes.heplandsupport, page: () => HelpAndSupportPage()),
-    GetPage(name: AppRoutes.jobdetails, page: () => JobDetailsView(job: Get.arguments,)),
-    GetPage(name: AppRoutes.submitproposal, page: () => SubmitProposalPage()),
-    GetPage(name: AppRoutes.submitproposal, page: () => SubmitProposalPage()),
-    GetPage(name: AppRoutes.mystats, page: () => MyStatePage()),
+    GetPage(name: AppRoutes.helpAndSupport, page: () => HelpAndSupportPage()),
+    GetPage(name: AppRoutes.jobDetails, page: () => JobDetailsView(job: Get.arguments,)),
+    GetPage(name: AppRoutes.submitProposal, page: () => SubmitProposalPage()),
+    GetPage(name: AppRoutes.submitProposal, page: () => SubmitProposalPage()),
+    GetPage(name: AppRoutes.myStats, page: () => MyStatePage()),
     GetPage(name: AppRoutes.chat, page: () => ChatPage(name: Get.arguments,)),
+    GetPage(name: AppRoutes.billingAndPayments, page: () => BillingAndPayments()),
+    GetPage(name: AppRoutes.addBillingMethod, page: () => AddBillingMethod()),
+    GetPage(name: AppRoutes.membershipAndConnects, page: () => MembershipAndConnects()),
+    GetPage(name: AppRoutes.contactInfo, page: () => ContactInfoPage()),
+    GetPage(name: AppRoutes.taxForm, page: () => TaxFormsPage()),
+    GetPage(name: AppRoutes.profileSetting, page: () => ProfileSetting()),
+    GetPage(name: AppRoutes.passwordAndSecurity, page: () => PasswordAndSecurity()),
+    GetPage(name: AppRoutes.privacyPreferences, page: () => PrivacyPreferences()),
   ];
 }

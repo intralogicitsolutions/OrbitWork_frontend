@@ -159,6 +159,7 @@ class ProposalsPage extends StatelessWidget {
       return Container(
         margin: EdgeInsets.only(right: 8),
         child: FilterChip(
+          showCheckmark: false,
           label: Text(
             chipData.displayText,
             style: TextStyle(

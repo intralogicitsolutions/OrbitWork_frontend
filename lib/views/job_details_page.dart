@@ -930,7 +930,7 @@ class JobDetailsView extends StatelessWidget {
                       child: CustomButton(
                         'Apply now',
                         onPressed: () {
-                          Get.toNamed(AppRoutes.submitproposal);
+                          Get.toNamed(AppRoutes.submitProposal);
                         },
                       ),
                     ),

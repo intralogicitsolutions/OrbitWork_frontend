@@ -6,13 +6,21 @@ class AppRoutes{
   static const String jobs = '/jobs';
   static const String reports = '/reports';
   static const String setting = '/setting';
-  static const String heplandsupport = '/helpandsupport';
+  static const String helpAndSupport = '/helpandsupport';
   static const String proposals = '/proposal';
   static const String contracts = '/contracts';
   static const String messages = '/messages';
   static const String alerts = '/alerts';
-  static const String jobdetails = '/jobdetails';
-  static const String submitproposal = '/submitproposal';
-  static const String mystats = '/mystats';
+  static const String jobDetails = '/jobdetails';
+  static const String submitProposal = '/submitproposal';
+  static const String myStats = '/mystats';
   static const String chat = '/chat';
+  static const String billingAndPayments = '/billingandpayments';
+  static const String addBillingMethod = '/addbillingmethod';
+  static const String membershipAndConnects = '/membershipandconnects';
+  static const String contactInfo = '/contactinfo';
+  static const String taxForm = '/taxForm';
+  static const String profileSetting = '/profilesetting';
+  static const String passwordAndSecurity = '/passwordandsecurity';
+  static const String privacyPreferences = '/privacypreferences';
 }

@@ -347,7 +347,7 @@ class JobsPage extends StatelessWidget {
                 children: controller.jobs.map((job) {
                   return GestureDetector(
                     onTap: () {
-                      Get.toNamed(AppRoutes.jobdetails, arguments: job);
+                      Get.toNamed(AppRoutes.jobDetails, arguments: job);
                     },
                     child: JobCard(job: job),
                   );
