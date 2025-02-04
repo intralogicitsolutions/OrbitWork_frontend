@@ -8,12 +8,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final Widget? rightIcon; // Optional right icon (can be null)
   final bool isBackButtonEnabled;
+  final bool isProfile;
 
   const CustomAppBar({
     Key? key,
     required this.title,
     this.rightIcon,
     this.isBackButtonEnabled = false,
+    this.isProfile = false,
   }) : super(key: key);
 
   @override
@@ -49,7 +51,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                             widthFactor: 0.8,
                             child: SlideTransition(
                               position: drawerController.slideAnimation,
-                              child: const CustomDrawer(),
+                              child: CustomDrawer(isProfilePage: isProfile,),
                             ),
                           ),
                         ),

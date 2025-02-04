@@ -18,7 +18,8 @@ class SignUpController extends GetxController{
         email.isEmpty ||
         password.isEmpty) {
      // Get.offNamed(AppRoutes.jobs);
-      Get.offNamed(AppRoutes.homeScreen);
+     //  Get.offNamed(AppRoutes.homeScreen);
+      Get.offNamed(AppRoutes.getStarted);
       Get.snackbar('Error', 'Please fill in all fields.');
       return;
     }
@@ -34,7 +35,8 @@ class SignUpController extends GetxController{
     }
     //Get.offNamed(AppRoutes.homeScreen);
     //Get.toNamed(AppRoutes.jobs);
-    Get.toNamed(AppRoutes.homeScreen);
+    // Get.toNamed(AppRoutes.homeScreen);
+   Get.toNamed(AppRoutes.getStarted);
     print("First Name: $firstName");
     print("Last Name: $lastName");
     print("Email: $email");

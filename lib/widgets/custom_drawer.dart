@@ -6,7 +6,8 @@ import '../controllers/drawer_controller.dart';
 import '../controllers/theme_controller.dart';
 
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({Key? key}) : super(key: key);
+  final bool isProfilePage;
+  const CustomDrawer({Key? key, this.isProfilePage = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +80,9 @@ class CustomDrawer extends StatelessWidget {
                         // Add 1 to account for the last item
                         itemBuilder: (context, index) {
                           // List of drawer options
-                          final options = [
+                          final options = isProfilePage ? [
+                            {'icon': Icons.apps, 'title': 'Apps and Offers', 'trailingIcon': Icons.keyboard_arrow_right},
+                          ]:[
                             {'icon': Icons.person, 'title': 'Profile', 'trailingIcon': Icons.keyboard_arrow_right},
                             {'icon': Icons.bar_chart, 'title': 'My stats', 'trailingIcon': Icons.keyboard_arrow_right},
                             {'icon': Icons.receipt_long, 'title': 'Reports', 'trailingIcon': Icons.keyboard_arrow_right,},

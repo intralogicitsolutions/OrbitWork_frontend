@@ -1,33 +1,46 @@
+
 import 'package:get/get.dart';
 
+import '../models/privacy_preference_model.dart';
+
+
 class PrivacyPreferencesController extends GetxController {
-  final _performanceCookiesEnabled = true.obs;
-  final _functionalCookiesEnabled = true.obs;
-  final _targetingCookiesEnabled = true.obs;
+  var isPrivacyTextExpanded = false.obs;
+  var cookies = <PrivacyPreferenceModel>[
+    PrivacyPreferenceModel(title: "Strictly Necessary Cookies", description: " These cookies are essential for users to browse or use our website and its features, such as accessing secure areas of the site..."),
+    PrivacyPreferenceModel(title: "Performance Cookies", description: "These cookies allow us to count visits in traffic sources so we can measure and improve the performance of...", isEnabled: true),
+    PrivacyPreferenceModel(title: "Functional Cookies", description: "These cookies enable the website to provide enhanced functionality and personalisation...", isEnabled: true),
+    PrivacyPreferenceModel(title: "Targeting Cookies", description: "These cookies track users' online activity to help advertisers deliver more relevant advertising...", isEnabled: true),
+  ].obs;
 
-  bool get performanceCookiesEnabled => _performanceCookiesEnabled.value;
-  bool get functionalCookiesEnabled => _functionalCookiesEnabled.value;
-  bool get targetingCookiesEnabled => _targetingCookiesEnabled.value;
 
-  void togglePerformanceCookies(bool value) {
-    _performanceCookiesEnabled.value = value;
+  void toggleCookie(int index) {
+    cookies[index].isEnabled = !cookies[index].isEnabled!;
+    cookies.refresh();
   }
 
-  void toggleFunctionalCookies(bool value) {
-    _functionalCookiesEnabled.value = value;
+  void toggleExpand(int index) {
+    cookies[index].isExpanded = !cookies[index].isExpanded;
+    cookies.refresh();
   }
 
-  void toggleTargetingCookies(bool value) {
-    _targetingCookiesEnabled.value = value;
+  void togglePrivacyText() {
+    isPrivacyTextExpanded.value = !isPrivacyTextExpanded.value;
   }
+
 
   void rejectAll() {
-    _performanceCookiesEnabled.value = false;
-    _functionalCookiesEnabled.value = false;
-    _targetingCookiesEnabled.value = false;
+    for (var cookie in cookies) {
+      cookie.isEnabled = false;
+    }
+    cookies.refresh();
   }
 
-  void confirmChoices() {
-    // Implement logic to save the user's cookie preferences
+
+  void confirmAll() {
+    for (var cookie in cookies) {
+      cookie.isEnabled = true;
+    }
+    cookies.refresh();
   }
 }

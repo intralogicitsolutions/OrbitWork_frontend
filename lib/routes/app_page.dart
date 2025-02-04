@@ -4,6 +4,8 @@ import 'package:orbitwork/views/add_billing_method_page.dart';
 import 'package:orbitwork/views/billing_and_payments.dart';
 import 'package:orbitwork/views/chat_page.dart';
 import 'package:orbitwork/views/contact_info_page.dart';
+import 'package:orbitwork/views/createProfile/get_started.dart';
+import 'package:orbitwork/views/createProfile/profile_setup.dart';
 import 'package:orbitwork/views/help_and_support.dart';
 import 'package:orbitwork/views/job_details_page.dart';
 import 'package:orbitwork/views/jobs_page.dart';
@@ -20,6 +22,9 @@ import 'package:orbitwork/views/settings_page.dart';
 import 'package:orbitwork/views/signup.dart';
 import 'package:orbitwork/views/submit_proposal_page.dart';
 import 'package:orbitwork/views/tax_forms_page.dart';
+import 'package:orbitwork/widgets/profile_setup_container.dart';
+
+import '../views/createProfile/freelancing_setup.dart';
 
 class AppPages {
   static final routes = [
@@ -44,5 +49,10 @@ class AppPages {
     GetPage(name: AppRoutes.profileSetting, page: () => ProfileSetting()),
     GetPage(name: AppRoutes.passwordAndSecurity, page: () => PasswordAndSecurity()),
     GetPage(name: AppRoutes.privacyPreferences, page: () => PrivacyPreferences()),
+    /// Create User Profile ///
+    GetPage(name: AppRoutes.getStarted, page: () => GetStarted(),),
+    GetPage(name: AppRoutes.profileSetupContainer, page: () => ProfileSetupContainer(),),
+    // GetPage(name: AppRoutes.profileSetup, page: () => ProfileSetup(),),
+    // GetPage(name: AppRoutes.freelancingSetup, page: () => ProfileSetupView(),),
   ];
 }
