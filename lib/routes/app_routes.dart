@@ -26,6 +26,11 @@ class AppRoutes{
   ///Create User Profile///
   static const String getStarted = '/getstarted';
   static const String profileSetupContainer = '/profilesetupcontainer';
-  // static const String profileSetup = '/profileSetup';
-  // static const String freelancingSetup = '/freelancingsetup';
+  static const String profileCreation = '/profilecreation';
+  static const String selectCategory = '/selectcategory';
+  static const String skillSection = '/skillsection';
+  static const String profileSkill = '/profileskill';
+  static const String profileTitle = '/profileTitle';
+  static const String addExperience = '/addexperience';
+  static const String addEducation = '/addeducation';
 }

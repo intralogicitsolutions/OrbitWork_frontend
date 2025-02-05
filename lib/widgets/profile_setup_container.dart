@@ -6,13 +6,15 @@ import 'package:orbitwork/widgets/step_indicator.dart';
 import '../controllers/user_profile_controller.dart';
 import '../views/createProfile/freelancing_setup.dart';
 import '../views/createProfile/profile_setup.dart';
+import '../views/createProfile/work_setup.dart';
 
 class ProfileSetupContainer extends StatelessWidget{
   final ProfilesController controller = Get.put(ProfilesController());
 
   final List<Widget> steps = [
-    ProfileSetup(), // Step 1
-    ProfileSetupView(), // Step 2
+    ProfileSetup(),
+    ProfileSetupView(),
+    WorkProfile(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -61,9 +63,13 @@ class ProfileSetupContainer extends StatelessWidget{
                       backgroundColor: Colors.green,
                       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
                     ),
-                    child: const Text(
-                      'Next',
-                      style: TextStyle(color: Colors.white),
+                    child: Obx(
+                       () {
+                        return Text(
+                          controller.currentStep.value == 2 ? 'Create Profile' : 'Save',
+                          style: const TextStyle(color: Colors.white),
+                        );
+                      }
                     ),
                     onPressed: () => controller.nextStep(),
                   ),
