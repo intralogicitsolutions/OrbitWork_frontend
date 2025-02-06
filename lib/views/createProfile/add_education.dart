@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../component/add_education_history_bottomsheet.dart';
+import '../../routes/app_routes.dart';
+
 class AddEducation extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
@@ -32,6 +35,13 @@ class AddEducation extends StatelessWidget{
                     ),
                     OutlinedButton(
                       onPressed: () {
+                        Get.bottomSheet(
+                          Container(
+                              height: Get.height * 0.8,
+                              child: EducationHistoryBottomsheet()),
+                          isScrollControlled: true,
+                          ignoreSafeArea: false,
+                        );
                       },
                       style: OutlinedButton.styleFrom(
                         side: BorderSide(color: Colors.green, width: 2),
@@ -82,7 +92,7 @@ class AddEducation extends StatelessWidget{
                 ),
                 ElevatedButton(
                   onPressed: () {
-
+                    Get.toNamed(AppRoutes.addLanguages);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,

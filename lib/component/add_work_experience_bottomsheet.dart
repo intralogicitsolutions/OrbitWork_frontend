@@ -282,7 +282,7 @@ class WorkExperienceSheet extends GetView<WorkExperienceController> {
                   // Location Field
                   _buildLabel('Description'),
                   TextField(
-                    onChanged: (value) => controller.location.value = value,
+                    onChanged: (value) => controller.description.value = value,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8)),

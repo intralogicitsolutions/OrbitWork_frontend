@@ -45,11 +45,3 @@ class WorkExperienceController extends GetxController {
   }
 }
 
-// Example usage in your main view:
-// void showAddExperienceSheet() {
-//   Get.bottomSheet(
-//     const WorkExperienceSheet(),
-//     isScrollControlled: true,
-//     ignoreSafeArea: false,
-//   );
-// }

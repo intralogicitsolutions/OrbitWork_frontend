@@ -6,12 +6,17 @@ import 'package:orbitwork/views/chat_page.dart';
 import 'package:orbitwork/views/contact_info_page.dart';
 import 'package:orbitwork/views/createProfile/add_education.dart';
 import 'package:orbitwork/views/createProfile/add_experience.dart';
+import 'package:orbitwork/views/createProfile/add_languages.dart';
 import 'package:orbitwork/views/createProfile/add_profile_title.dart';
 import 'package:orbitwork/views/createProfile/get_started.dart';
+import 'package:orbitwork/views/createProfile/photo_and_location.dart';
+import 'package:orbitwork/views/createProfile/preview_profile.dart';
 import 'package:orbitwork/views/createProfile/profile_creation_page.dart';
 import 'package:orbitwork/views/createProfile/profile_setup.dart';
 import 'package:orbitwork/views/createProfile/select_category.dart';
+import 'package:orbitwork/views/createProfile/set_user_rate.dart';
 import 'package:orbitwork/views/createProfile/skill_section.dart';
+import 'package:orbitwork/views/createProfile/write_an_overview.dart';
 import 'package:orbitwork/views/help_and_support.dart';
 import 'package:orbitwork/views/job_details_page.dart';
 import 'package:orbitwork/views/jobs_page.dart';
@@ -66,5 +71,10 @@ class AppPages {
     GetPage(name: AppRoutes.profileTitle, page: () => ProfileTitleView(),),
     GetPage(name: AppRoutes.addExperience, page: () => AddExperience(),),
     GetPage(name: AppRoutes.addEducation, page: () => AddEducation(),),
+    GetPage(name: AppRoutes.addLanguages, page: () => AddLanguages(),),
+    GetPage(name: AppRoutes.writeAnOverview, page: () => WriteAnOverview(),),
+    GetPage(name: AppRoutes.setUserRate, page: () => SetUserRate(),),
+    GetPage(name: AppRoutes.photoAndLocation, page: () => PhotoAndLocation(),),
+    GetPage(name: AppRoutes.previewProfile, page: () => PreviewProfile(),)
   ];
 }

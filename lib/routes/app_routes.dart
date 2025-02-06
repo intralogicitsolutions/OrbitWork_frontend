@@ -33,4 +33,9 @@ class AppRoutes{
   static const String profileTitle = '/profileTitle';
   static const String addExperience = '/addexperience';
   static const String addEducation = '/addeducation';
+  static const String addLanguages = '/addlanguages';
+  static const String writeAnOverview = '/writeanoverview';
+  static const String setUserRate = '/setUserRate';
+  static const String photoAndLocation = '/photoAndLocation';
+  static const String previewProfile = '/previewProfile';
 }
