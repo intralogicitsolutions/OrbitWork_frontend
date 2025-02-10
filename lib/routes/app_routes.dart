@@ -38,4 +38,6 @@ class AppRoutes{
   static const String setUserRate = '/setUserRate';
   static const String photoAndLocation = '/photoAndLocation';
   static const String previewProfile = '/previewProfile';
+
+  static const String createProfileContainer = '/createProfileContainer';
 }

@@ -14,7 +14,7 @@ class ProfileCreationPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader(),
+           // _buildHeader(),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -33,7 +33,7 @@ class ProfileCreationPage extends StatelessWidget {
                 ),
               ),
             ),
-            _buildBackButton(),
+           // _buildBackButton(),
           ],
         ),
       ),
@@ -118,7 +118,10 @@ class ProfileCreationPage extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         _buildOptionButton(
-          onPressed: controller.onManualFill,
+          //onPressed: controller.onManualFill,
+          onPressed: () {  // Now it's a valid callback
+            controller.currentProfileStep.value = 1;
+          },
           text: 'Fill out manually',
           subtitle: '(15 min)',
           showSubtitle: true,
@@ -175,22 +178,6 @@ class ProfileCreationPage extends StatelessWidget {
               ),
             ],
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBackButton() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.grey[300]!),
-        ),
-        child: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.green),
-          onPressed: () => Get.back(),
         ),
       ),
     );

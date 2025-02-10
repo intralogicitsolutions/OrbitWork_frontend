@@ -8,9 +8,9 @@ class AddExperience extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Create Your Profile'),
-      ),
+      // appBar: AppBar(
+      //   title: Text('Create Your Profile'),
+      // ),
       body: SafeArea(
         child: Column(
           children: [
@@ -20,7 +20,7 @@ class AddExperience extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 32),
                     Text(
                       'If you have relevant work experience, add it here.',
                       style:
@@ -77,43 +77,43 @@ class AddExperience extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(color: Colors.grey, width: 0.5),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_ios, color: Colors.green),
-                    onPressed: () => Get.back(),
-                  ),
-                  ElevatedButton(
-                    onPressed: () { Get.toNamed(AppRoutes.addEducation);},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 32,
-                        vertical: 16,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text(
-                      'Add education',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // Container(
+            //   padding: const EdgeInsets.all(16),
+            //   decoration: const BoxDecoration(
+            //     border: Border(
+            //       top: BorderSide(color: Colors.grey, width: 0.5),
+            //     ),
+            //   ),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       IconButton(
+            //         icon: const Icon(Icons.arrow_back_ios, color: Colors.green),
+            //         onPressed: () => Get.back(),
+            //       ),
+            //       ElevatedButton(
+            //         onPressed: () { Get.toNamed(AppRoutes.addEducation);},
+            //         style: ElevatedButton.styleFrom(
+            //           backgroundColor: Colors.green,
+            //           padding: const EdgeInsets.symmetric(
+            //             horizontal: 32,
+            //             vertical: 16,
+            //           ),
+            //           shape: RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.circular(8),
+            //           ),
+            //         ),
+            //         child: const Text(
+            //           'Add education',
+            //           style: TextStyle(
+            //             fontSize: 16,
+            //             color: Colors.white,
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),

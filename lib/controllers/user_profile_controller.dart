@@ -12,7 +12,9 @@ import '../models/work_preference.dart';
 class ProfilesController extends GetxController {
   final userProfile = UserProfile().obs;
   final currentStep = 0.obs;
+  final currentProfileStep = 0.obs;
   final totalSteps = 3;
+  final totalProfileSteps = 10;
   var workPreferences = <WorkPreference>[].obs;
   var selectedFile = Rx<PlatformFile?>(null);
   var isFileSelected = false.obs;
@@ -104,14 +106,30 @@ class ProfilesController extends GetxController {
     if (currentStep.value < totalSteps - 1) {
       currentStep.value++;
     }else {
-      // Navigate to profile_creation page when "Create Profile" is clicked
-      Get.toNamed(AppRoutes.profileCreation);
+      //Get.toNamed(AppRoutes.profileCreation);
+      Get.toNamed(AppRoutes.createProfileContainer);
+    }
+  }
+
+  void nextProfileStep() {
+    if (currentProfileStep.value < totalProfileSteps - 1) {
+      currentProfileStep.value++;
+    }else {
+      Get.toNamed(AppRoutes.previewProfile);
     }
   }
 
   void previousStep() {
     if (currentStep.value > 0) {
       currentStep.value--;
+    }
+  }
+
+  void previousProfileStep() {
+    if (currentProfileStep.value > 0) {
+      currentProfileStep.value--;
+    }else {
+      Get.back();
     }
   }
 

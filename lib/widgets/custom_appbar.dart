@@ -6,9 +6,9 @@ import 'custom_drawer.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final Widget? rightIcon; // Optional right icon (can be null)
+  final Widget? rightIcon;
   final bool isBackButtonEnabled;
-  final bool isProfile;
+  final bool? isProfile;
 
   const CustomAppBar({
     Key? key,
@@ -20,7 +20,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Drawercontroller drawerController = Get.find<Drawercontroller>();
+   final Drawercontroller drawerController = Get.find<Drawercontroller>();
+    //final Drawercontroller drawerController = Get.put(Drawercontroller(), permanent: true);
     final theme = Theme.of(context);
 
     return AppBar(
@@ -36,7 +37,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 Get.dialog(
                   GestureDetector(
                     onTap: () {
-                      drawerController.closeDrawer();
+                      //drawerController.closeDrawer();
+                      if (Get.isRegistered<Drawercontroller>()) {
+                        drawerController.closeDrawer();
+                      }
                       Future.delayed(
                         const Duration(milliseconds: 300),
                             () => Get.back(),
@@ -51,7 +55,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                             widthFactor: 0.8,
                             child: SlideTransition(
                               position: drawerController.slideAnimation,
-                              child: CustomDrawer(isProfilePage: isProfile,),
+                              child: CustomDrawer(isProfilePage: isProfile!,),
                             ),
                           ),
                         ),

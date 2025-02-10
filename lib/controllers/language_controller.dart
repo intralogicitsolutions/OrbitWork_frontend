@@ -21,12 +21,14 @@ class LanguageController extends GetxController{
   @override
   void onInit() {
     super.onInit();
+    Future.delayed(Duration.zero, () {
     // Add default English language
     languages.add(Language(
         name: 'English',
         proficiency: 'Conversational',
         isDefault: true
     ));
+    });
   }
 
   void addLanguage() {

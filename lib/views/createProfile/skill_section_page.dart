@@ -20,27 +20,27 @@ class ProfileSkillView extends GetView<ProfileSkillController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Profile Header
-                Row(
-                  children: [
-                    const CircleAvatar(
-                      backgroundColor: Colors.grey,
-                      child: Icon(Icons.person_outline, color: Colors.white),
-                    ),
-                    const SizedBox(width: 16),
-                    const Text(
-                      'Create Your Profile',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                   // const Spacer(),
-                    IconButton(
-                      icon: const Icon(Icons.more_vert),
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     const CircleAvatar(
+                //       backgroundColor: Colors.grey,
+                //       child: Icon(Icons.person_outline, color: Colors.white),
+                //     ),
+                //     const SizedBox(width: 16),
+                //     const Text(
+                //       'Create Your Profile',
+                //       style: TextStyle(
+                //         fontSize: 24,
+                //         fontWeight: FontWeight.bold,
+                //       ),
+                //     ),
+                //    // const Spacer(),
+                //     IconButton(
+                //       icon: const Icon(Icons.more_vert),
+                //       onPressed: () {},
+                //     ),
+                //   ],
+                // ),
 
                 const SizedBox(height: 32),
 
@@ -49,7 +49,7 @@ class ProfileSkillView extends GetView<ProfileSkillController> {
                   'Nearly there! What work are you here to do?',
                   style: TextStyle(
                     fontSize: 24,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
 
@@ -195,26 +195,26 @@ class ProfileSkillView extends GetView<ProfileSkillController> {
                // const Spacer(),
 
                 // Add Profile Title Button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {Get.toNamed(AppRoutes.profileTitle);},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text(
-                      'Add Profile Title',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
+                // SizedBox(
+                //   width: double.infinity,
+                //   child: ElevatedButton(
+                //     onPressed: () {Get.toNamed(AppRoutes.profileTitle);},
+                //     style: ElevatedButton.styleFrom(
+                //       backgroundColor: Colors.green,
+                //       padding: const EdgeInsets.symmetric(vertical: 10),
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(8),
+                //       ),
+                //     ),
+                //     child: const Text(
+                //       'Add Profile Title',
+                //       style: TextStyle(
+                //         color: Colors.white,
+                //         fontSize: 16,
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

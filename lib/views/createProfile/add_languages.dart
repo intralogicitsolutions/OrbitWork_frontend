@@ -174,24 +174,24 @@ class AddLanguages extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Get.back(),
-        ),
-        title: Text(
-          'Create Your Profile',
-          style: TextStyle(color: Colors.black),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.more_vert, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.white,
+      //   elevation: 0,
+      //   leading: IconButton(
+      //     icon: Icon(Icons.arrow_back, color: Colors.black),
+      //     onPressed: () => Get.back(),
+      //   ),
+      //   title: Text(
+      //     'Create Your Profile',
+      //     style: TextStyle(color: Colors.black),
+      //   ),
+      //   actions: [
+      //     IconButton(
+      //       icon: Icon(Icons.more_vert, color: Colors.black),
+      //       onPressed: () {},
+      //     ),
+      //   ],
+      // ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -256,42 +256,6 @@ class AddLanguages extends StatelessWidget {
                                 padding: const EdgeInsets.only(bottom: 12.0),
                                 child: Row(
                                   children: [
-                                    // Expanded(
-                                    //   child: Container(
-                                    //     decoration: BoxDecoration(
-                                    //       border: Border.all(color: Colors.grey[300]!),
-                                    //       borderRadius: BorderRadius.circular(4),
-                                    //     ),
-                                    //     child: controller.languages[i].isDefault
-                                    //         ? Padding(
-                                    //       padding: EdgeInsets.symmetric(
-                                    //         horizontal: 12,
-                                    //         vertical: 14,
-                                    //       ),
-                                    //       child: Text(
-                                    //         'English (all profiles include this)',
-                                    //         style: TextStyle(color: Colors.grey[600]),
-                                    //       ),
-                                    //     )
-                                    //         : DropdownButton<String>(
-                                    //       value: controller.languages[i].name,
-                                    //       isExpanded: true,
-                                    //       underline: SizedBox(),
-                                    //       padding: EdgeInsets.symmetric(horizontal: 12),
-                                    //       items: controller.languageOptions
-                                    //           .map((String value) {
-                                    //         return DropdownMenuItem<String>(
-                                    //           value: value,
-                                    //           child: Text(value),
-                                    //         );
-                                    //       }).toList(),
-                                    //       onChanged: (newValue) {
-                                    //         controller.languages[i].name = newValue!;
-                                    //         controller.languages.refresh();
-                                    //       },
-                                    //     ),
-                                    //   ),
-                                    // ),
                                     Expanded(
                                       child: controller.languages[i].isDefault
                                           ? Container(
@@ -443,45 +407,45 @@ class AddLanguages extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(color: Colors.grey, width: 0.5),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_ios, color: Colors.green),
-                    onPressed: () => Get.back(),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Get.toNamed(AppRoutes.writeAnOverview);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 32,
-                        vertical: 16,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text(
-                      'Write an overview',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // Container(
+            //   padding: const EdgeInsets.all(16),
+            //   decoration: const BoxDecoration(
+            //     border: Border(
+            //       top: BorderSide(color: Colors.grey, width: 0.5),
+            //     ),
+            //   ),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       IconButton(
+            //         icon: const Icon(Icons.arrow_back_ios, color: Colors.green),
+            //         onPressed: () => Get.back(),
+            //       ),
+            //       ElevatedButton(
+            //         onPressed: () {
+            //           Get.toNamed(AppRoutes.writeAnOverview);
+            //         },
+            //         style: ElevatedButton.styleFrom(
+            //           backgroundColor: Colors.green,
+            //           padding: const EdgeInsets.symmetric(
+            //             horizontal: 32,
+            //             vertical: 16,
+            //           ),
+            //           shape: RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.circular(8),
+            //           ),
+            //         ),
+            //         child: const Text(
+            //           'Write an overview',
+            //           style: TextStyle(
+            //             fontSize: 16,
+            //             color: Colors.white,
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),

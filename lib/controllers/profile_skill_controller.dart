@@ -14,6 +14,7 @@ class ProfileSkillController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    Future.delayed(Duration.zero, () {
     // Initialize with some default skills
     suggestedSkills.addAll([
       Skill(name: 'Mobile Game'),
@@ -41,6 +42,7 @@ class ProfileSkillController extends GetxController {
 
     ]);
     updateFilteredSkills();
+    });
   }
 
   void addSkill(Skill skill) {
@@ -81,5 +83,4 @@ class ProfileSkillController extends GetxController {
     }
     updateFilteredSkills();
   }
-
 }

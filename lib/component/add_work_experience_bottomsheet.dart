@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orbitwork/component/select_country_bottomsheet.dart';
+import 'package:orbitwork/component/select_month_bottomsheet.dart';
+import 'package:orbitwork/component/select_year_bottomsheet.dart';
 import '../controllers/work_experience_controller.dart';
 
 class WorkExperienceSheet extends GetView<WorkExperienceController> {
@@ -112,16 +115,28 @@ class WorkExperienceSheet extends GetView<WorkExperienceController> {
                     // ),
                     child: InkWell(
                       onTap: () {
-                        // Implement month selection
+                       Get.bottomSheet(
+                         Container(
+                             height: Get.height * 0.9,
+                             child: CountryBottomsheet()),
+                         isScrollControlled: true,
+                       );
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween, // Center items
                           children: [
-                            Text(
-                              'Country',
-                            //  style: TextStyle(fontSize: 14),
+                            Obx(
+                               () {
+                                return Text(
+                                  // 'Country',
+                                  controller.selectedCountry.value.isEmpty
+                                      ? 'Country'
+                                      : controller.selectedCountry.value,
+                                //  style: TextStyle(fontSize: 14),
+                                );
+                              }
                             ),
                             const SizedBox(width: 5), // Spacing between text and icon
                             const Icon(Icons.keyboard_arrow_down, size: 20),
@@ -161,15 +176,27 @@ class WorkExperienceSheet extends GetView<WorkExperienceController> {
                           child: InkWell(
                             onTap: () {
                               // Implement month selection
+                              Get.bottomSheet(
+                                 Container(
+                                   height: Get.height * 0.9,
+                                     child: MonthBottomSheet()),
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                              );
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16.0),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Center items
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    'Month',
-                                    style: TextStyle(fontSize: 14),
+                                  Obx(
+                                    () {
+                                      return Text(
+                                       // 'Month',
+                                        controller.selectedMonth.value?.name ?? 'Month',
+                                        style: TextStyle(fontSize: 14),
+                                      );
+                                    }
                                   ),
                                   const SizedBox(width: 5), // Spacing between text and icon
                                   const Icon(Icons.keyboard_arrow_down, size: 20),
@@ -189,6 +216,12 @@ class WorkExperienceSheet extends GetView<WorkExperienceController> {
                           ),
                           child: InkWell(
                             onTap: () {
+                              Get.bottomSheet(
+                                Container(
+                                  height: Get.height * 0.9,
+                                    child: SelectYearBottomsheet()),
+                                isScrollControlled: true,
+                              );
                               // Implement month selection
                             },
                             child: Padding(
@@ -196,9 +229,14 @@ class WorkExperienceSheet extends GetView<WorkExperienceController> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween, // Center items
                                 children: [
-                                  Text(
-                                    'Year',
-                                    style: TextStyle(fontSize: 14),
+                                  Obx(
+                                    () {
+                                      return Text(
+                                       // 'Year',
+                                        controller.selectedYear.value.toString() ,
+                                        style: TextStyle(fontSize: 14),
+                                      );
+                                    }
                                   ),
                                   const SizedBox(width: 5), // Spacing between text and icon
                                   const Icon(Icons.keyboard_arrow_down, size: 20),
@@ -226,16 +264,27 @@ class WorkExperienceSheet extends GetView<WorkExperienceController> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              // Implement month selection
+                              Get.bottomSheet(
+                                Container(
+                                    height: Get.height * 0.9,
+                                    child: MonthBottomSheet()),
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                              );
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16.0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween, // Center items
                                 children: [
-                                  Text(
-                                    'Month',
-                                    style: TextStyle(fontSize: 14),
+                                  Obx(
+                                     () {
+                                      return Text(
+                                        //'Month',
+                                        controller.selectedMonth.value?.name ?? 'Month',
+                                        style: TextStyle(fontSize: 14),
+                                      );
+                                    }
                                   ),
                                   const SizedBox(width: 5), // Spacing between text and icon
                                   const Icon(Icons.keyboard_arrow_down, size: 20),
@@ -255,16 +304,26 @@ class WorkExperienceSheet extends GetView<WorkExperienceController> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              // Implement month selection
+                              Get.bottomSheet(
+                                Container(
+                                    height: Get.height * 0.9,
+                                    child: SelectYearBottomsheet()),
+                                isScrollControlled: true,
+                              );
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16.0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween, // Center items
                                 children: [
-                                  Text(
-                                    'Year',
-                                    style: TextStyle(fontSize: 14),
+                                  Obx(
+                                     () {
+                                      return Text(
+                                        //'Year',
+                                        controller.selectedYear.value.toString(),
+                                        style: TextStyle(fontSize: 14),
+                                      );
+                                    }
                                   ),
                                   const SizedBox(width: 5), // Spacing between text and icon
                                   const Icon(Icons.keyboard_arrow_down, size: 20),

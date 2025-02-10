@@ -34,6 +34,7 @@ import 'package:orbitwork/views/signup.dart';
 import 'package:orbitwork/views/createProfile/skill_section_page.dart';
 import 'package:orbitwork/views/submit_proposal_page.dart';
 import 'package:orbitwork/views/tax_forms_page.dart';
+import 'package:orbitwork/widgets/create_profile_container.dart';
 import 'package:orbitwork/widgets/profile_setup_container.dart';
 
 import '../views/createProfile/freelancing_setup.dart';
@@ -75,6 +76,8 @@ class AppPages {
     GetPage(name: AppRoutes.writeAnOverview, page: () => WriteAnOverview(),),
     GetPage(name: AppRoutes.setUserRate, page: () => SetUserRate(),),
     GetPage(name: AppRoutes.photoAndLocation, page: () => PhotoAndLocation(),),
-    GetPage(name: AppRoutes.previewProfile, page: () => PreviewProfile(),)
+    GetPage(name: AppRoutes.previewProfile, page: () => PreviewProfile(),),
+
+    GetPage(name: AppRoutes.createProfileContainer, page: () => CreateProfileContainer(),)
   ];
 }

@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orbitwork/controllers/theme_controller.dart';
 
-class Drawercontroller extends GetxController with SingleGetTickerProviderMixin {
+class Drawercontroller extends GetxController with GetSingleTickerProviderStateMixin  {
   late AnimationController animationController;
   late Animation<Offset> slideAnimation;
   //final Rx<ThemeMode> themeMode = ThemeMode.system.obs;
   final themeController = Get.find<ThemeController>();
+  bool _isDisposed = false;
 
   @override
   void onInit() {
@@ -28,15 +29,22 @@ class Drawercontroller extends GetxController with SingleGetTickerProviderMixin 
   }
 
   void openDrawer() {
-    animationController.forward(); // Start animation to open the drawer
+    //animationController.forward(); // Start animation to open the drawer
+    if (!_isDisposed) {
+      animationController.forward(); // Start animation to open the drawer
+    }
   }
 
   void closeDrawer() {
-    animationController.reverse(); // Reverse animation to close the drawer
+    // animationController.reverse(); // Reverse animation to close the drawer
+    if (!_isDisposed) {
+      animationController.reverse(); // Reverse animation to close the drawer
+    }
   }
 
   @override
   void onClose() {
+    _isDisposed = true;
     animationController.dispose();
     super.onClose();
   }

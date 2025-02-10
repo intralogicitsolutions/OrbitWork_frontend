@@ -24,7 +24,7 @@ class JobsPage extends StatelessWidget {
       // backgroundColor: Colors.white,
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: CustomAppBar(
-        title: "Jobs",
+        title: 'Jobs',
       ),
 
       body: SingleChildScrollView(

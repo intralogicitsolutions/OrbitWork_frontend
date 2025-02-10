@@ -23,37 +23,37 @@ class ProfileTitleView extends GetView<ProfileTitleController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Header
-                      Row(
-                        children: [
-                          Container(
-                            width: 40,
-                            height: 40,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.grey,
-                            ),
-                            child: const Icon(
-                              Icons.person_outline,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          const Text(
-                            'Create Your Profile',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const Spacer(),
-                          IconButton(
-                            icon: const Icon(Icons.more_vert),
-                            onPressed: () {},
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   children: [
+                      //     Container(
+                      //       width: 40,
+                      //       height: 40,
+                      //       decoration: const BoxDecoration(
+                      //         shape: BoxShape.circle,
+                      //         color: Colors.grey,
+                      //       ),
+                      //       child: const Icon(
+                      //         Icons.person_outline,
+                      //         color: Colors.white,
+                      //       ),
+                      //     ),
+                      //     const SizedBox(width: 12),
+                      //     const Text(
+                      //       'Create Your Profile',
+                      //       style: TextStyle(
+                      //         fontSize: 20,
+                      //         fontWeight: FontWeight.bold,
+                      //       ),
+                      //     ),
+                      //     const Spacer(),
+                      //     IconButton(
+                      //       icon: const Icon(Icons.more_vert),
+                      //       onPressed: () {},
+                      //     ),
+                      //   ],
+                      // ),
 
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 32),
 
                       // Main Title
                       const Text(
@@ -153,47 +153,47 @@ class ProfileTitleView extends GetView<ProfileTitleController> {
             ),
 
             // Bottom Navigation
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(color: Colors.grey, width: 0.5),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_ios, color: Colors.green),
-                    onPressed: () => Get.back(),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (controller.canProceed()) {
-                        Get.toNamed(AppRoutes.addExperience);
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 32,
-                        vertical: 16,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text(
-                      'Add experience',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // Container(
+            //   padding: const EdgeInsets.all(16),
+            //   decoration: const BoxDecoration(
+            //     border: Border(
+            //       top: BorderSide(color: Colors.grey, width: 0.5),
+            //     ),
+            //   ),
+              // child: Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     IconButton(
+              //       icon: const Icon(Icons.arrow_back_ios, color: Colors.green),
+              //       onPressed: () => Get.back(),
+              //     ),
+              //     ElevatedButton(
+              //       onPressed: () {
+              //         if (controller.canProceed()) {
+              //           Get.toNamed(AppRoutes.addExperience);
+              //         }
+              //       },
+              //       style: ElevatedButton.styleFrom(
+              //         backgroundColor: Colors.green,
+              //         padding: const EdgeInsets.symmetric(
+              //           horizontal: 32,
+              //           vertical: 16,
+              //         ),
+              //         shape: RoundedRectangleBorder(
+              //           borderRadius: BorderRadius.circular(8),
+              //         ),
+              //       ),
+              //       child: const Text(
+              //         'Add experience',
+              //         style: TextStyle(
+              //           fontSize: 16,
+              //           color: Colors.white,
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
+           // ),
           ],
         ),
       ),

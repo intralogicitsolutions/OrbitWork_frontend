@@ -11,15 +11,15 @@ class PhotoAndLocation extends GetView<PhotoAndLocationController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Your Profile'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {},
-          ),
-        ],
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Create Your Profile'),
+      //   actions: [
+      //     IconButton(
+      //       icon: const Icon(Icons.more_vert),
+      //       onPressed: () {},
+      //     ),
+      //   ],
+      // ),
       body: Column(
         children: [
           Expanded(
@@ -161,43 +161,43 @@ class PhotoAndLocation extends GetView<PhotoAndLocationController> {
               ),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: const BoxDecoration(
-              border: Border(
-                top: BorderSide(color: Colors.grey, width: 0.5),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back_ios, color: Colors.green),
-                  onPressed: () => Get.back(),
-                ),
-                ElevatedButton(
-                  onPressed: controller.submitProfile,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 32,
-                      vertical: 16,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text(
-                    'Review your profile',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // Container(
+          //   padding: const EdgeInsets.all(16),
+          //   decoration: const BoxDecoration(
+          //     border: Border(
+          //       top: BorderSide(color: Colors.grey, width: 0.5),
+          //     ),
+          //   ),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       IconButton(
+          //         icon: const Icon(Icons.arrow_back_ios, color: Colors.green),
+          //         onPressed: () => Get.back(),
+          //       ),
+          //       ElevatedButton(
+          //         onPressed: controller.submitProfile,
+          //         style: ElevatedButton.styleFrom(
+          //           backgroundColor: Colors.green,
+          //           padding: const EdgeInsets.symmetric(
+          //             horizontal: 32,
+          //             vertical: 16,
+          //           ),
+          //           shape: RoundedRectangleBorder(
+          //             borderRadius: BorderRadius.circular(8),
+          //           ),
+          //         ),
+          //         child: const Text(
+          //           'Review your profile',
+          //           style: TextStyle(
+          //             fontSize: 16,
+          //             color: Colors.white,
+          //           ),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );
