@@ -32,7 +32,7 @@ class JobsPage extends StatelessWidget {
           children: [
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -281,16 +281,24 @@ class JobsPage extends StatelessWidget {
             DefaultTabController(
               length: 3,
               child: Column(
+                //crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  TabBar(
-                    labelColor: theme.primaryColor,
-                    unselectedLabelColor: theme.unselectedWidgetColor,
-                    indicatorColor: theme.primaryColor,
-                    tabs: const [
-                      Tab(text: "My Feed"),
-                      Tab(text: "Best Matches"),
-                      Tab(text: "Most Recent"),
-                    ],
+                  SizedBox(
+                    width: double.infinity,
+                    child: TabBar(
+                      isScrollable: true,
+                      labelPadding: EdgeInsets.symmetric(horizontal: 16),
+                      tabAlignment: TabAlignment.start,
+                      labelColor: theme.primaryColor,
+                      unselectedLabelColor: theme.unselectedWidgetColor,
+                      indicatorColor: theme.primaryColor,
+                      tabs: const [
+                        Tab(text: "My Feed"),
+                        Tab(text: "Best Matches"),
+                        Tab(text: "Most Recent"),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 8),
                 ],

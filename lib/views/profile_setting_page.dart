@@ -69,7 +69,7 @@ class ProfileSetting extends StatelessWidget {
                             controller.profile.value.visibility,
                             style: TextStyle(
                                 fontSize: 14,
-                                color: Colors.black,
+                                color: theme.secondaryHeaderColor,
                                 fontWeight: FontWeight.w400),
                           ),
                           Icon(
@@ -118,7 +118,7 @@ class ProfileSetting extends StatelessWidget {
               Obx(() => TextFormField(
                     enabled: false,
                     initialValue: controller.profile.value.customUrl,
-                    style: const TextStyle(color: Colors.black),
+                    style: TextStyle(color: theme.secondaryHeaderColor),
                     decoration: const InputDecoration(
                       //border: OutlineInputBorder()
                       border: InputBorder.none,
@@ -155,8 +155,8 @@ class ProfileSetting extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                     ),
                     child: Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 4), 
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                       width: double.infinity,
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey),
@@ -169,7 +169,7 @@ class ProfileSetting extends StatelessWidget {
                             controller.profile.value.projectPreference,
                             style: TextStyle(
                                 fontSize: 14,
-                                color: Colors.black,
+                                color: theme.secondaryHeaderColor,
                                 fontWeight: FontWeight.w400),
                           ),
                           Icon(
@@ -195,28 +195,26 @@ class ProfileSetting extends StatelessWidget {
                   )
                 ],
               ),
-              // Obx(() => CheckboxListTile(
-              //   contentPadding: EdgeInsets.symmetric(horizontal: 0),
-              //   title:  Text('Hide my Orbitwork earnings'),
-              //   value: controller.profile.value.hideEarnings,
-              //   onChanged: (bool? value) => controller.toggleHideEarnings(value!),
-              //   controlAffinity: ListTileControlAffinity.leading,
-              //   activeColor: Colors.green,
-              // )),
               Obx(
                 () => Row(
                   mainAxisSize: MainAxisSize.min,
-                  // To keep the row tight around its children
                   children: [
-                    Checkbox(
-                      side: BorderSide(color: Colors.grey, width: 1.5),
-                      value: controller.profile.value.hideEarnings,
-                      onChanged: (bool? value) =>
-                          controller.toggleHideEarnings(value!),
-                      activeColor:
-                          Colors.green, // Changes selected checkbox color
+                    Transform.scale(
+                      scale: 0.85,
+                      child: Checkbox(
+                        visualDensity: VisualDensity.compact,
+                        side: BorderSide(color: Colors.grey, width: 1.5),
+                        value: controller.profile.value.hideEarnings,
+                        onChanged: (bool? value) =>
+                            controller.toggleHideEarnings(value!),
+                        activeColor: Colors.green,
+                      ),
                     ),
-                    const Text('Hide my Orbitwork earnings', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),),
+                    const Text(
+                      'Hide my Orbitwork earnings',
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                    ),
                   ],
                 ),
               ),
@@ -232,39 +230,35 @@ class ProfileSetting extends StatelessWidget {
               // ),
 
               Obx(() => Text(
-                'This setting hides historical earnings on your profile. Your earnings will still be visible when you submit proposals or accept invitations to interview.' +
-                    (controller.isExpanded.value
-                        ? ''
-                        : '...'),
-                style: TextStyle(color: Colors.grey),
-                maxLines: controller.isExpanded.value ? null : 3,
-                overflow: controller.isExpanded.value
-                    ? TextOverflow.visible
-                    : TextOverflow.ellipsis,
-              )),
+                    'This setting hides historical earnings on your profile. Your earnings will still be visible when you submit proposals or accept invitations to interview.' +
+                        (controller.isExpanded.value ? '' : '...'),
+                    style: TextStyle(color: Colors.grey),
+                    maxLines: controller.isExpanded.value ? null : 3,
+                    overflow: controller.isExpanded.value
+                        ? TextOverflow.visible
+                        : TextOverflow.ellipsis,
+                  )),
               Obx(() {
-                  return TextButton(
-                    child: Text(
-                      controller.isExpanded.value ? 'Show less' : 'Learn more',
-                      style: TextStyle(color: Colors.green),
-                    ),
-                    onPressed: () {
-                      // Toggle the expanded state
-                      controller.isExpanded.value = !controller.isExpanded.value;
-                    },
-                  );
-                }
-              ),
-
+                return TextButton(
+                  child: Text(
+                    controller.isExpanded.value ? 'Show less' : 'Learn more',
+                    style: TextStyle(color: Colors.green),
+                  ),
+                  onPressed: () {
+                    // Toggle the expanded state
+                    controller.isExpanded.value = !controller.isExpanded.value;
+                  },
+                );
+              }),
 
               const SizedBox(height: 20),
-              _buildExperienceLevel(),
+              _buildExperienceLevel(context),
               const SizedBox(height: 20),
               _buildCategories(context),
               const SizedBox(height: 20),
-              _buildSpecializedProfiles(),
+              _buildSpecializedProfiles(context),
               const SizedBox(height: 20),
-              _buildAIPreference(),
+              _buildAIPreference(context),
             ],
           ),
         ),
@@ -272,10 +266,11 @@ class ProfileSetting extends StatelessWidget {
     );
   }
 
-  Widget _buildExperienceLevel() {
+  Widget _buildExperienceLevel(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -285,7 +280,7 @@ class ProfileSetting extends StatelessWidget {
           ),
         ],
       ),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -298,12 +293,15 @@ class ProfileSetting extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           ...controller.experienceLevels.map(
-            (level) => Obx(() => _buildExperienceLevelTile(
-                  title: level['title']!,
-                  description: level['description']!,
-                  isSelected: controller.profile.value.experienceLevel ==
-                      level['title'],
-                )),
+            (level) => Obx(
+              () => _buildExperienceLevelTile(
+                context: context,
+                title: level['title']!,
+                description: level['description']!,
+                isSelected:
+                    controller.profile.value.experienceLevel == level['title'],
+              ),
+            ),
           ),
         ],
       ),
@@ -311,15 +309,17 @@ class ProfileSetting extends StatelessWidget {
   }
 
   Widget _buildExperienceLevelTile({
+    required BuildContext context,
     required String title,
     required String description,
     required bool isSelected,
   }) {
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
         border: Border.all(
-          color: isSelected ? Colors.black : Colors.grey.shade300,
+          color: isSelected ? theme.secondaryHeaderColor : Colors.grey.shade400,
           width: isSelected ? 1.5 : 1,
         ),
         borderRadius: BorderRadius.circular(8),
@@ -356,7 +356,7 @@ class ProfileSetting extends StatelessWidget {
     final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -447,10 +447,11 @@ class ProfileSetting extends StatelessWidget {
     );
   }
 
-  Widget _buildSpecializedProfiles() {
+  Widget _buildSpecializedProfiles(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -508,7 +509,7 @@ class ProfileSetting extends StatelessWidget {
                         text: controller.isExpanded.value
                             ? 'Create up to two different versions of your profile to more effectively highlight your individual specialties. This text will be expanded and show more details about how profiles can be specialized.'
                             : 'Create up to two different versions of your profile to more effectively highlight your individual specialties.',
-                        style: TextStyle(fontSize: 14, color: Colors.black),
+                        style: TextStyle(fontSize: 14, color: theme.secondaryHeaderColor),
                       ),
                       TextSpan(
                         text: ' Learn more',
@@ -564,10 +565,11 @@ class ProfileSetting extends StatelessWidget {
     );
   }
 
-  Widget _buildAIPreference() {
+  Widget _buildAIPreference(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -602,8 +604,11 @@ class ProfileSetting extends StatelessWidget {
                     color: Colors.grey,
                     fontSize: 14,
                   ),
-                  maxLines: controller.isExpanded.value ? null : 2,  // Allow unlimited lines when expanded
-                  overflow: controller.isExpanded.value ? TextOverflow.visible : TextOverflow.ellipsis, // Add ellipsis when not expanded
+                  maxLines: controller.isExpanded.value ? null : 2,
+                  // Allow unlimited lines when expanded
+                  overflow: controller.isExpanded.value
+                      ? TextOverflow.visible
+                      : TextOverflow.ellipsis, // Add ellipsis when not expanded
                 ),
                 TextButton(
                   onPressed: controller.toggleTextVisibility,
@@ -622,7 +627,6 @@ class ProfileSetting extends StatelessWidget {
               ],
             );
           }),
-
           const SizedBox(height: 8),
           ListTile(
             contentPadding: EdgeInsets.zero,
@@ -693,11 +697,12 @@ class ProfileSetting extends StatelessWidget {
   }
 
   void _showProjectPreferenceBottomSheet(BuildContext context) {
+    final theme = Theme.of(context);
     Get.bottomSheet(
       Container(
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: theme.scaffoldBackgroundColor,
           borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
         ),
         child: Column(

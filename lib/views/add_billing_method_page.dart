@@ -8,26 +8,26 @@ class AddBillingMethod extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: theme.scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back),
           onPressed: () => Get.back(),
         ),
         title: Text(
           'Billing & payments',
           style: TextStyle(
-            color: Colors.black,
             fontSize: 20,
             fontWeight: FontWeight.w500,
           ),
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+        padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -1,14 +1,3 @@
-// import 'package:flutter/material.dart';
-//
-// class MembershipAndConnects extends StatelessWidget{
-//   @override
-//   Widget build(BuildContext context) {
-//     // TODO: implement build
-//     throw UnimplementedError();
-//   }
-//
-// }
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,19 +8,19 @@ class MembershipAndConnects extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: theme.scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back),
           onPressed: () => Get.back(),
         ),
         title: Text(
           'Membership & Connects',
           style: TextStyle(
-            color: Colors.black,
             fontSize: 18,
             fontWeight: FontWeight.w500,
           ),
@@ -51,7 +40,7 @@ class MembershipAndConnects extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 24),
-              _buildCard(),
+              _buildCard(context),
             ],
           ),
         ),
@@ -59,10 +48,11 @@ class MembershipAndConnects extends StatelessWidget {
     );
   }
 
-  Widget _buildCard() {
+  Widget _buildCard(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.grey.shade200),
       ),

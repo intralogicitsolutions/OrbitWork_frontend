@@ -552,7 +552,7 @@ class JobDetailsView extends StatelessWidget {
                                                         .isExpanded.value
                                                     ? Icons.keyboard_arrow_up
                                                     : Icons
-                                                        .keyboard_arrow_down),
+                                                        .keyboard_arrow_down, color: theme.scaffoldBackgroundColor,),
                                                 backgroundColor:
                                                     Colors.grey.shade200,
                                                 shape: RoundedRectangleBorder(
@@ -686,7 +686,7 @@ class JobDetailsView extends StatelessWidget {
                                                         .isJobsExpanded.value
                                                     ? Icons.keyboard_arrow_up
                                                     : Icons
-                                                        .keyboard_arrow_down),
+                                                        .keyboard_arrow_down,  color: theme.scaffoldBackgroundColor,),
                                                 backgroundColor:
                                                     Colors.grey.shade200,
                                                 shape: RoundedRectangleBorder(
@@ -919,7 +919,7 @@ class JobDetailsView extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: theme.scaffoldBackgroundColor,
                   border: Border(
                     top: BorderSide(color: Colors.grey.shade300, width: 1),
                   ),
@@ -939,7 +939,7 @@ class JobDetailsView extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () {jobscontroller.toggleFavorite(job);},
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
+                          backgroundColor: theme.scaffoldBackgroundColor,
                           // padding: EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             side: BorderSide(color: Colors.green),

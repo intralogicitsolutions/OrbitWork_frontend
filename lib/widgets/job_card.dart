@@ -21,7 +21,7 @@ class JobCard extends StatelessWidget {
 
       return Container(
         color: Theme.of(context).scaffoldBackgroundColor,
-       margin: const EdgeInsets.only(top: 8, left: 16, right: 16),
+       //margin: const EdgeInsets.only(top: 8, left: 16, right: 16),
         child: Padding(
           padding: const EdgeInsets.only(top: 8, left: 16, right: 16),
           child: Column(

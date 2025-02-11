@@ -138,131 +138,6 @@ class SelectDateBottomSheet extends StatelessWidget {
     );
   }
 
-  // Widget _buildCustomDatePicker(BuildContext context) {
-  //   final controller = Get.find<DateSelectorController>();
-  //   final dateRangePickerController = DateRangePickerController();
-  //   final theme = Theme.of(context);
-  //
-  //   return Obx(() {
-  //     final startDateText = controller.customStartDate.value != null
-  //         ? DateFormat('MMM dd, yyyy').format(controller.customStartDate.value!)
-  //         : '';
-  //     final endDateText = controller.customEndDate.value != null
-  //         ? DateFormat('MMM dd, yyyy').format(controller.customEndDate.value!)
-  //         : '';
-  //
-  //     // Update the display date of the picker based on the custom start date
-  //     if (controller.customStartDate.value != null) {
-  //       dateRangePickerController.displayDate = controller.customStartDate.value;
-  //       dateRangePickerController.displayDate = controller.customEndDate.value;
-  //     }
-  //
-  //     return Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         SfDateRangePicker(
-  //           controller: dateRangePickerController,
-  //           backgroundColor: theme.scaffoldBackgroundColor,
-  //           todayHighlightColor: theme.primaryColor,
-  //           selectionColor: Colors.green,
-  //           rangeSelectionColor: Colors.black.withOpacity(0.2),
-  //           startRangeSelectionColor: Colors.black,
-  //           endRangeSelectionColor: Colors.black,
-  //           headerStyle: DateRangePickerHeaderStyle(
-  //             textStyle: TextStyle(
-  //               fontWeight: FontWeight.bold,
-  //             ),
-  //             backgroundColor: theme.scaffoldBackgroundColor,
-  //           ),
-  //           selectionMode: DateRangePickerSelectionMode.range,
-  //           initialSelectedRange: PickerDateRange(
-  //             controller.customStartDate.value ?? DateTime.now(),
-  //             controller.customEndDate.value ?? DateTime.now(),
-  //           ),
-  //           minDate: DateTime(2000),
-  //           maxDate: DateTime.now(),
-  //           monthCellStyle: DateRangePickerMonthCellStyle(
-  //             todayTextStyle: TextStyle(color: Colors.black),
-  //             blackoutDateTextStyle: TextStyle(
-  //               color: Colors.black,
-  //               decoration: TextDecoration.lineThrough,
-  //             ),
-  //           ),
-  //           onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
-  //             if (args.value is PickerDateRange) {
-  //               final PickerDateRange range = args.value;
-  //               controller.customStartDate.value = range.startDate;
-  //               controller.customEndDate.value = range.endDate;
-  //
-  //               // Update the display date to the start date of the selected range
-  //               if (range.startDate != null && range.endDate !=null) {
-  //                 dateRangePickerController.displayDate = range.startDate;
-  //                 dateRangePickerController.displayDate = range.endDate;
-  //               }
-  //
-  //               controller.updateCustomDateRange();
-  //             }
-  //           },
-  //         ),
-  //         const SizedBox(height: 10),
-  //         Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           children: [
-  //             Expanded(
-  //               child: TextField(
-  //                 readOnly: true,
-  //                 controller: TextEditingController(
-  //                   text: startDateText,
-  //                 ),
-  //                 decoration: const InputDecoration(
-  //                   prefixIcon: Icon(Icons.calendar_today),
-  //                   labelText: 'Start Date',
-  //                   border: OutlineInputBorder(),
-  //                 ),
-  //               ),
-  //             ),
-  //             const SizedBox(width: 10),
-  //             Expanded(
-  //               child: TextField(
-  //                 readOnly: true,
-  //                 controller: TextEditingController(
-  //                   text: endDateText,
-  //                 ),
-  //                 decoration: const InputDecoration(
-  //                   prefixIcon: Icon(Icons.calendar_today),
-  //                   labelText: 'End Date',
-  //                   border: OutlineInputBorder(),
-  //                 ),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //         const SizedBox(height: 16),
-  //         Center(
-  //           child: Builder(
-  //             builder: (context) {
-  //               return ElevatedButton(
-  //                 onPressed: () {
-  //                   if (controller.customStartDate.value != null &&
-  //                       controller.customEndDate.value != null) {
-  //                     Get.back(); // Close the bottom sheet
-  //                   }
-  //                 },
-  //                 style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-  //                 child: const Text(
-  //                   "Done",
-  //                   style: TextStyle(color: Colors.white),
-  //                 ),
-  //               );
-  //             },
-  //           ),
-  //         ),
-  //       ],
-  //     );
-  //   });
-  // }
-
-
 
 Widget _buildCustomDatePicker(BuildContext context) {
     final controller = Get.find<DateSelectorController>();
@@ -283,12 +158,11 @@ Widget _buildCustomDatePicker(BuildContext context) {
           SfDateRangePicker(
             initialDisplayDate: displayDate,
               backgroundColor: theme.scaffoldBackgroundColor,
-              todayHighlightColor: theme.primaryColor,
+              todayHighlightColor: theme.hintColor,
               selectionColor: Colors.green,
-              rangeSelectionColor: Colors.black.withOpacity(0.2),
-              startRangeSelectionColor: Colors.black,
-              // Start date color in range
-              endRangeSelectionColor: Colors.black,
+             rangeSelectionColor: theme.focusColor,
+             startRangeSelectionColor: theme.secondaryHeaderColor,
+              endRangeSelectionColor: theme.secondaryHeaderColor,
               headerStyle: DateRangePickerHeaderStyle(
                 textStyle: TextStyle(
                   // color: Colors.black,
@@ -322,24 +196,8 @@ Widget _buildCustomDatePicker(BuildContext context) {
                   if (range.startDate != null) {
                     displayDate = range.startDate!;
                   }
-
-                  //controller.selectedDateLabel.value = 'Custom date range';
                   controller.updateCustomDateRange();
 
-                  // if (range.startDate != null && range.endDate != null) {
-                  //   Get.back(); // Automatically close the bottom sheet
-                  // }
-
-                  // Update the range in the "Custom date range" item
-                  // if (range.startDate != null && range.endDate != null) {
-                  //   final formattedStart =
-                  //       DateFormat('MMM dd, yyyy').format(range.startDate!);
-                  //   final formattedEnd =
-                  //       DateFormat('MMM dd, yyyy').format(range.endDate!);
-                  //   controller.dateRanges.firstWhere((element) =>
-                  //           element['label'] == 'Custom date range')['range'] =
-                  //       '$formattedStart - $formattedEnd';
-                  // }
                 }
               }),
           SizedBox(

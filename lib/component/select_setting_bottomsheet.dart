@@ -8,10 +8,11 @@ class BadgeBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.scaffoldBackgroundColor,
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       child: SingleChildScrollView(
@@ -91,10 +92,14 @@ class BadgeBottomSheet extends StatelessWidget {
               'The price to turn on the badge can change, so we\'ll turn the badge off automatically if the price exceeds your maximum.',
               style: TextStyle(color: Colors.grey[600]),
             ),
+            SizedBox(height: 16),
             TextButton(
-              onPressed: () {
-                // Handle "How does this work?" click
-              },
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.zero, // Removes internal padding
+                minimumSize: Size.zero, // Ensures no extra spacing
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap, // Reduces touch area padding
+              ),
+              onPressed: () {},
               child: Text(
                 'How does this work?',
                 style: TextStyle(color: Colors.green),

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../component/add_education_history_bottomsheet.dart';
+import '../../controllers/education_history_controller.dart';
 import '../../routes/app_routes.dart';
 
 class AddEducation extends StatelessWidget{
+  final EducationHistoryController controller = Get.put(EducationHistoryController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,6 +31,70 @@ class AddEducation extends StatelessWidget{
                     ),
                     Text('You don\'t have to have a degree. Adding any relevant education helps make your profile more visible',
                     style: TextStyle(fontSize: 14),
+                    ),
+                    SizedBox(
+                      height: 24,
+                    ),
+                    Obx(
+                            () {
+                          return controller.school.value != '' ?Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey, width: 1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: EdgeInsets.all(8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text('${controller.school.value}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),),
+                                ),
+                                Column(
+                                  children: [
+                                    IconButton(
+                                      padding: EdgeInsets.zero,
+                                      icon: Container(
+                                        padding: const EdgeInsets.all(4),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(color: Colors.green),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(
+                                          Icons.edit,
+                                          color: Colors.green,
+                                          size: 16,
+                                        ),
+                                      ),
+                                      onPressed: () {
+
+                                      },
+                                    ),
+                                    IconButton(
+                                      padding: EdgeInsets.zero,
+                                      icon: Container(
+                                        padding: const EdgeInsets.all(4),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(color: Colors.green),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(
+                                          Icons.delete,
+                                          color: Colors.green,
+                                          size: 16,
+                                        ),
+                                      ),
+                                      onPressed: () {
+
+                                      },
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ): SizedBox();
+                        }
                     ),
                     SizedBox(
                       height: 24,

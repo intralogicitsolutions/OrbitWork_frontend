@@ -12,7 +12,7 @@ class ProposalsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: CustomAppBar(
       title: "My Proposals",
       rightIcon: Container(
@@ -43,7 +43,7 @@ class ProposalsPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //_buildHeader(),
-            _buildTabs(),
+            _buildTabs(context),
             _buildStatusChips(),
             // Expanded(child: _buildProposalsList()),
             Expanded(
@@ -61,43 +61,9 @@ class ProposalsPage extends StatelessWidget {
     );
   }
 
-  // Widget _buildHeader() {
-  //   return Padding(
-  //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           children: [
-  //             CircleAvatar(
-  //               radius: 20,
-  //               backgroundColor: Colors.grey[300],
-  //             ),
-  //             Container(
-  //               padding: EdgeInsets.all(8),
-  //               decoration: BoxDecoration(
-  //                 shape: BoxShape.circle,
-  //                 color: Colors.grey[100],
-  //               ),
-  //               child: Icon(Icons.settings, size: 20, color: Colors.grey[700]),
-  //             ),
-  //           ],
-  //         ),
-  //         const SizedBox(height: 16),
-  //         Text(
-  //           'My proposals',
-  //           style: TextStyle(
-  //             fontSize: 28,
-  //             fontWeight: FontWeight.bold,
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 
-  Widget _buildTabs() {
+  Widget _buildTabs(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
         border: Border(
@@ -114,7 +80,7 @@ class ProposalsPage extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(
-                        color: isSelected ? Colors.black : Colors.transparent,
+                        color: isSelected ?  theme.hintColor : Colors.transparent,
                         width: 2,
                       ),
                     ),
@@ -122,7 +88,7 @@ class ProposalsPage extends StatelessWidget {
                   child: Text(
                     tab,
                     style: TextStyle(
-                      color: isSelected ? Colors.black : Colors.grey[600],
+                      color: isSelected ? theme.hintColor : Colors.grey[600],
                       fontWeight:
                           isSelected ? FontWeight.w600 : FontWeight.normal,
                       fontSize: 16,

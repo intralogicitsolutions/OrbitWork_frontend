@@ -9,6 +9,7 @@ class PrivacyPreferences extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(title: Text("Privacy Preferences")),
       body: Padding(
@@ -24,7 +25,7 @@ class PrivacyPreferences extends StatelessWidget {
 
               return RichText(
                 text: TextSpan(
-                  style: TextStyle(fontSize: 14, color: Colors.black),
+                  style: TextStyle(fontSize: 14, color: theme.secondaryHeaderColor),
                   children: [
                     TextSpan(
                       text: controller.isPrivacyTextExpanded.value
@@ -80,7 +81,7 @@ class PrivacyPreferences extends StatelessWidget {
                     ),
                     subtitle: RichText(
                       text: TextSpan(
-                        style: TextStyle(color: Colors.black, fontSize: 14),
+                        style: TextStyle(color: theme.secondaryHeaderColor, fontSize: 14),
                         children: [
                           TextSpan(
                             text: cookie.isExpanded

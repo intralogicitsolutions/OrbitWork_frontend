@@ -220,14 +220,11 @@ class AddLanguages extends StatelessWidget {
                     Row(
                       children: [
                         Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 16.0),
-                            child: Text(
-                              'Language',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
+                          child: Text(
+                            'Language',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
@@ -267,7 +264,7 @@ class AddLanguages extends StatelessWidget {
                                               // ),
                                               child: Padding(
                                                   padding: EdgeInsets.symmetric(
-                                                    horizontal: 12,
+                                                   // horizontal: 12,
                                                     vertical: 14,
                                                   ),
                                                   child: Text(
@@ -287,7 +284,7 @@ class AddLanguages extends StatelessWidget {
                                               }),
                                               child: Container(
                                                 padding: EdgeInsets.symmetric(
-                                                    horizontal: 12,
+                                                   // horizontal: 12,
                                                     vertical: 14),
                                                 decoration: BoxDecoration(
                                                   border: Border.all(
@@ -378,6 +375,8 @@ class AddLanguages extends StatelessWidget {
                                     //SizedBox(width: 10),
                                     if (!controller.languages[i].isDefault)
                                       IconButton(
+                                        padding: EdgeInsets.zero,
+                                        constraints: BoxConstraints(),
                                         icon: Icon(Icons.delete_outline,
                                             color: Colors.green),
                                         onPressed: () =>

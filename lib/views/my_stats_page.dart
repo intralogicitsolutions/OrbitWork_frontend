@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:orbitwork/views/tabs/impressions_tab.dart';
 import 'package:orbitwork/views/tabs/invites_tab.dart';
 import 'package:orbitwork/views/tabs/profile_view_tab.dart';
+import 'package:path/path.dart';
 import '../controllers/profile_matrics_controller.dart';
 import '../controllers/stats_controller.dart';
 
@@ -10,8 +11,8 @@ class MyStatePage extends StatelessWidget {
   //const MyStatePage({Key? key}) : super(key: key);
 
   final StatsController controller = Get.put(StatsController());
-  final ProfileMetricsController profileMetricsController = Get.put(
-      ProfileMetricsController());
+  final ProfileMetricsController profileMetricsController =
+      Get.put(ProfileMetricsController());
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +60,7 @@ class MyStatePage extends StatelessWidget {
               const Divider(height: 32),
               _buildProfileMetrics(context),
               const Divider(height: 24),
-              _buildProposals(),
+              _buildProposals(context),
             ],
           ),
         ),
@@ -80,8 +81,7 @@ class MyStatePage extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Center(
-          child: Obx(() =>
-              Text(
+          child: Obx(() => Text(
                 '\$${controller.stats.value.earnings}',
                 style: const TextStyle(
                   fontSize: 20,
@@ -137,14 +137,13 @@ class MyStatePage extends StatelessWidget {
                     value: controller.stats.value.jobSuccessScore / 100,
                     strokeWidth: 8,
                     backgroundColor: Colors.blue.withOpacity(0.2),
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                        Colors.blue),
+                    valueColor:
+                        const AlwaysStoppedAnimation<Color>(Colors.blue),
                   ),
                 ),
               ),
               Center(
-                child: Obx(() =>
-                    Text(
+                child: Obx(() => Text(
                       '${controller.stats.value.jobSuccessScore}%',
                       style: const TextStyle(
                         fontSize: 20,
@@ -166,13 +165,14 @@ class MyStatePage extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            SizedBox(width: 5,),
+            SizedBox(
+              width: 5,
+            ),
             Icon(Icons.help_outline),
           ],
         ),
         const SizedBox(height: 8),
-        Obx(() =>
-            Text(
+        Obx(() => Text(
               'As of ${controller.stats.value.lastUpdated}, updates daily',
               style: const TextStyle(color: Colors.grey),
             )),
@@ -180,7 +180,9 @@ class MyStatePage extends StatelessWidget {
         OutlinedButton(
           onPressed: () {},
           child: const Text(
-            'View insights', style: TextStyle(color: Colors.green),),
+            'View insights',
+            style: TextStyle(color: Colors.green),
+          ),
           style: OutlinedButton.styleFrom(
             side: BorderSide(color: Colors.grey),
             shape: RoundedRectangleBorder(
@@ -207,41 +209,49 @@ class MyStatePage extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            Obx(
-                    () {
-                  return OutlinedButton(
-                    onPressed: () {
-                      showBottomSheet();
-                    },
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: Colors.grey),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+            Obx(() {
+              return OutlinedButton(
+                onPressed: () {
+                  showBottomSheet(context);
+                },
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: Colors.grey),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      controller.selectedDuration.value,
+                     style: TextStyle(color: theme.secondaryHeaderColor),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(controller.selectedDuration.value,
-                          style: TextStyle(color: Colors.black),),
-                        const SizedBox(width: 5), // Space between text and icon
-                        const Icon(Icons.keyboard_arrow_down, size: 20,
-                          color: Colors.black,),
-                      ],
+                    const SizedBox(width: 5), // Space between text and icon
+                     Icon(
+                      Icons.keyboard_arrow_down,
+                      size: 20,
+                      color: theme.secondaryHeaderColor,
                     ),
-                  );
-                }
-            ),
+                  ],
+                ),
+              );
+            }),
           ],
         ),
         const SizedBox(height: 24),
         DefaultTabController(
           length: 3,
           child: SizedBox(
+            width: double.infinity,
             height: MediaQuery.of(context).size.height * 0.6,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 TabBar(
+                  isScrollable: true,
+                  labelPadding: EdgeInsets.symmetric(horizontal: 16),
+                  tabAlignment: TabAlignment.start,
                   onTap: profileMetricsController.changeTab,
                   labelColor: theme.primaryColor,
                   unselectedLabelColor: theme.unselectedWidgetColor,
@@ -253,22 +263,22 @@ class MyStatePage extends StatelessWidget {
                     Tab(text: 'Impressions and clicks'),
                   ],
                 ),
-            Expanded(
-              child: Obx(() {
-                switch (profileMetricsController.currentTabIndex.value) {
-                  case 0:
-                    return  ProfileViewsTab();
-                  case 1:
-                    //return const InvitesTab();
-                    return  ProfileViewsTab();
-                  case 2:
-                    //return const ImpressionsTab();
-                    return  ProfileViewsTab();
-                  default:
-                    return ProfileViewsTab();
-                }
-              }),
-            ),
+                Expanded(
+                  child: Obx(() {
+                    switch (profileMetricsController.currentTabIndex.value) {
+                      case 0:
+                        return ProfileViewsTab();
+                      case 1:
+                        //return const InvitesTab();
+                        return ProfileViewsTab();
+                      case 2:
+                        //return const ImpressionsTab();
+                        return ProfileViewsTab();
+                      default:
+                        return ProfileViewsTab();
+                    }
+                  }),
+                ),
               ],
             ),
           ),
@@ -277,7 +287,8 @@ class MyStatePage extends StatelessWidget {
     );
   }
 
-  Widget _buildProposals() {
+  Widget _buildProposals(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -291,46 +302,49 @@ class MyStatePage extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            Obx(
-                    () {
-                  return OutlinedButton(
-                    onPressed: () {
-                      showBottomSheet();
-                    },
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: Colors.grey),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+            Obx(() {
+              return OutlinedButton(
+                onPressed: () {
+                  showBottomSheet(context);
+                },
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: Colors.grey),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      controller.selectedDuration.value,
+                      style: TextStyle(color: theme.secondaryHeaderColor),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(controller.selectedDuration.value,
-                          style: TextStyle(color: Colors.black),),
-                        const SizedBox(width: 5), // Space between text and icon
-                        const Icon(Icons.keyboard_arrow_down, size: 20,
-                          color: Colors.black,),
-                      ],
+                    const SizedBox(width: 5), // Space between text and icon
+                     Icon(
+                      Icons.keyboard_arrow_down,
+                      size: 20,
+                      color: theme.secondaryHeaderColor,
                     ),
-                  );
-                }
-            ),
+                  ],
+                ),
+              );
+            }),
           ],
         ),
         const SizedBox(height: 24),
         Obx(() => Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("${controller.stats.value.proposalsSent} proposals sent",
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-
-          ],
-        )),
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("${controller.stats.value.proposalsSent} proposals sent",
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold)),
+              ],
+            )),
         const SizedBox(height: 10),
         _buildProposalsSection(),
         const SizedBox(height: 10),
-        _buildAvailabilityBadgeInfo(),
+        _buildAvailabilityBadgeInfo(context),
         const SizedBox(height: 10),
         const Divider(height: 32),
         _buildClientRelationships(),
@@ -340,11 +354,12 @@ class MyStatePage extends StatelessWidget {
     );
   }
 
-  Widget _buildAvailabilityBadgeInfo() {
+  Widget _buildAvailabilityBadgeInfo(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
       decoration: BoxDecoration(
-        color: Colors.grey[200],
+        color: theme.hoverColor,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -353,15 +368,17 @@ class MyStatePage extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: RichText(
-              text: const TextSpan(
-                style: TextStyle(fontSize: 12, color: Colors.black),
+              text: TextSpan(
+                style: TextStyle(fontSize: 12, color: theme.hintColor),
                 children: [
-                  TextSpan(text: 'Orbitwork has thousands of available jobs. Browse the ones that best suit you and then send your proposa.'),
+                  TextSpan(
+                      text:
+                          'Orbitwork has thousands of available jobs. Browse the ones that best suit you and then send your proposa.'),
                   TextSpan(
                     text: 'Search jobs',
                     style: TextStyle(color: Colors.green),
                   ),
-                 // TextSpan(text: ', you can signal to clients that you\'re ready for new work now '),
+                  // TextSpan(text: ', you can signal to clients that you\'re ready for new work now '),
                 ],
               ),
             ),
@@ -372,8 +389,7 @@ class MyStatePage extends StatelessWidget {
   }
 
   Widget _buildProposalsSection() {
-    return Obx(() =>
-        Column(
+    return Obx(() => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 8),
@@ -409,8 +425,8 @@ class MyStatePage extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {},
-              child: Text(
-                  'My proposals', style: TextStyle(color: Colors.green)),
+              child:
+                  Text('My proposals', style: TextStyle(color: Colors.green)),
             ),
           ],
         ));
@@ -418,13 +434,14 @@ class MyStatePage extends StatelessWidget {
 
   Widget _buildProposalTimeline() {
     return Obx(() => Column(
-      children: [
-        _timelineItem('proposals sent', controller.stats.value.proposalsSent),
-        _timelineItem('was viewed', controller.stats.value.proposalsViewed),
-        _timelineItem('interviews', controller.stats.value.interviews),
-        _timelineItem('hires', controller.stats.value.hires),
-      ],
-    ));
+          children: [
+            _timelineItem(
+                'proposals sent', controller.stats.value.proposalsSent),
+            _timelineItem('was viewed', controller.stats.value.proposalsViewed),
+            _timelineItem('interviews', controller.stats.value.interviews),
+            _timelineItem('hires', controller.stats.value.hires),
+          ],
+        ));
   }
 
   Widget _timelineItem(String label, int value) {
@@ -525,22 +542,23 @@ class MyStatePage extends StatelessWidget {
               alignment: Alignment.center,
               children: [
                 Obx(() => Container(
-                  height: 80,
-                  width: 80,
-                  child: CircularProgressIndicator(
-                    value: controller.stats.value.clientRelationshipScore / 100,
-                    backgroundColor: Colors.grey[200],
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                    strokeWidth: 8,
-                  ),
-                )),
+                      height: 80,
+                      width: 80,
+                      child: CircularProgressIndicator(
+                        value: controller.stats.value.clientRelationshipScore /
+                            100,
+                        backgroundColor: Colors.grey[200],
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                        strokeWidth: 8,
+                      ),
+                    )),
                 Obx(() => Text(
-                  '${controller.stats.value.clientRelationshipScore.toInt()}%',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
-                )),
+                      '${controller.stats.value.clientRelationshipScore.toInt()}%',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    )),
               ],
             ),
           ),
@@ -558,68 +576,81 @@ class MyStatePage extends StatelessWidget {
       ],
     );
   }
-  Widget _buildLegendItem({required Color color, required String text}){
+
+  Widget _buildLegendItem({required Color color, required String text}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
           width: 12,
           height: 12,
-          decoration: BoxDecoration(
-              color: color,
-              shape: BoxShape.circle
-          ),
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
-        SizedBox(width: 8,),
-        Text(text,
-          style: TextStyle(
-              color: Colors.grey[600],
-              fontSize: 16
-          ),
+        SizedBox(
+          width: 8,
+        ),
+        Text(
+          text,
+          style: TextStyle(color: Colors.grey[600], fontSize: 16),
         )
       ],
     );
   }
-  Widget _buildConnectsSection(){
+
+  Widget _buildConnectsSection() {
     return IntrinsicHeight(
       child: Row(
         children: [
-          Expanded(child: Column(
-            children: [
-              Obx(() => Text('${controller.stats.value.connectsLeft}',
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600
-                ),
-              )),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.copyright_outlined, size: 16,),
-                  SizedBox(width: 4,),
-                  Text('Connects left',
-                    style: TextStyle(
-                      fontSize: 14,
+          Expanded(
+            child: Column(
+              children: [
+                Obx(() => Text(
+                      '${controller.stats.value.connectsLeft}',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                    )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.copyright_outlined,
+                      size: 16,
                     ),
-                  )
-                ],
-              ),
-              SizedBox(height: 8,),
-              OutlinedButton(onPressed: () {},
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: Colors.grey),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    SizedBox(
+                      width: 4,
+                    ),
+                    Text(
+                      'Connects left',
+                      style: TextStyle(
+                        fontSize: 14,
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                OutlinedButton(
+                  onPressed: () {},
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: Colors.grey),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: Text(
+                    'Buy more',
+                    style: TextStyle(color: Colors.grey),
                   ),
                 ),
-                child: Text('Buy more', style: TextStyle(color: Colors.grey),),),
-            ],
-          ),
+              ],
+            ),
           ),
           VerticalDivider(
             thickness: 1,
           ),
-          Expanded(child: Column(
+          Expanded(
+              child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -632,23 +663,29 @@ class MyStatePage extends StatelessWidget {
                       color: Colors.blue[700],
                       borderRadius: BorderRadius.circular(2),
                     ),
-                    child: Icon(Icons.star, color: Colors.white,size: 12,),
-                  ),
-                  SizedBox(width: 8,),
-                  Text('Top Rated',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500
+                    child: Icon(
+                      Icons.star,
+                      color: Colors.white,
+                      size: 12,
                     ),
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    'Top Rated',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
               //SizedBox(height: 8,),
-              TextButton(onPressed: () {
-
-              }, child: Text('Earn Top Rated Plus',
-                style: TextStyle(color: Colors.green[700], fontWeight: FontWeight.w500),
-              ))
+              TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    'Earn Top Rated Plus',
+                    style: TextStyle(
+                        color: Colors.green[700], fontWeight: FontWeight.w500),
+                  ))
             ],
           ))
         ],
@@ -656,12 +693,13 @@ class MyStatePage extends StatelessWidget {
     );
   }
 
-  void showBottomSheet() {
+  void showBottomSheet(BuildContext context) {
+    final theme = Theme.of(context);
     Get.bottomSheet(
       Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: theme.scaffoldBackgroundColor,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
         ),
         child: Column(
@@ -680,15 +718,14 @@ class MyStatePage extends StatelessWidget {
                 "Last 90 days",
               ]
                   .map(
-                    (option) =>
-                    ListTile(
+                    (option) => ListTile(
                       title: Text(option),
                       onTap: () {
                         controller.selectedDuration.value = option;
                         Get.back(); // Close bottom sheet
                       },
                     ),
-              )
+                  )
                   .toList(),
             ),
           ],

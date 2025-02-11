@@ -7,7 +7,9 @@ class NewRoomBottomSheet extends GetView<RoomController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
+      color: theme.scaffoldBackgroundColor,
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
         left: 16,

@@ -7,6 +7,7 @@ class TaxFormsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Tax forms'),
@@ -28,12 +29,12 @@ class TaxFormsPage extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 margin: EdgeInsets.symmetric(vertical: 16),
                 decoration: BoxDecoration(
-                  color: Colors.black,
+                  color: theme.secondaryHeaderColor,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   'Tax forms',
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: theme.scaffoldBackgroundColor),
                 ),
               ),
               Text(
@@ -100,7 +101,7 @@ class TaxFormsPage extends StatelessWidget {
                                       'Submitted on ${form.submissionDate}',
                                       style: TextStyle(
                                           fontSize: 14,
-                                          color: Colors.grey[800]),
+                                          color: Colors.grey[600]),
                                     )
                                   ],
                                 ),
@@ -128,7 +129,7 @@ class TaxFormsPage extends StatelessWidget {
               Container(
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.grey[100],
+                  color: theme.hoverColor,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
@@ -148,7 +149,7 @@ class TaxFormsPage extends StatelessWidget {
                           Text(
                             'Find all the answers you need on local taxes and service fees in your hub',
                             style: TextStyle(
-                              color: Colors.black54,
+                              //color: Colors.black54,
                               fontSize: 14,
                             ),
                           )

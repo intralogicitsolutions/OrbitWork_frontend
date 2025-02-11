@@ -9,6 +9,7 @@ class ThemeController extends GetxController {
   ThemeData get lightTheme => ThemeData(
     brightness: Brightness.light,
     primaryColor: Colors.green,
+    secondaryHeaderColor: Colors.black,
     scaffoldBackgroundColor: Colors.white,
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.white,
@@ -24,6 +25,7 @@ class ThemeController extends GetxController {
   ThemeData get darkTheme => ThemeData(
     brightness: Brightness.dark,
     primaryColor: Colors.green,
+    secondaryHeaderColor: Colors.white,
     scaffoldBackgroundColor: Colors.black, // Correct background property
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.black,

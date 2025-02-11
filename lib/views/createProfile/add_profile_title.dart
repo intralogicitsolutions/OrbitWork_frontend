@@ -123,29 +123,29 @@ class ProfileTitleView extends GetView<ProfileTitleController> {
                       ),
 
                       // Error Message
-                      Obx(() => controller.showError.value
-                          ? const Padding(
-                        padding: EdgeInsets.only(top: 8),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.error_outline,
-                              color: Colors.red,
-                              size: 16,
-                            ),
-                            SizedBox(width: 4),
-                            Text(
-                              'A descriptive title must have at least 4 letters.',
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                          : const SizedBox.shrink(),
-                      ),
+                      // Obx(() => controller.showError.value
+                      //     ? const Padding(
+                      //   padding: EdgeInsets.only(top: 8),
+                      //   child: Row(
+                      //     children: [
+                      //       Icon(
+                      //         Icons.error_outline,
+                      //         color: Colors.red,
+                      //         size: 16,
+                      //       ),
+                      //       SizedBox(width: 4),
+                      //       Text(
+                      //         'A descriptive title must have at least 4 letters.',
+                      //         style: TextStyle(
+                      //           color: Colors.red,
+                      //           fontSize: 14,
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // )
+                      //     : const SizedBox.shrink(),
+                      // ),
                     ],
                   ),
                 ),

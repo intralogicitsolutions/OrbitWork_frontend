@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import '../models/company_model.dart';
+import '../models/job_title_model.dart';
 import '../models/month_model.dart';
 import '../models/work_experience_model.dart';
 
@@ -13,6 +15,13 @@ class WorkExperienceController extends GetxController {
   var endMonth = ''.obs;
   var endYear = ''.obs;
   var description = ''.obs;
+
+  var companies = <Company>[].obs;
+  var filteredCompanies = <Company>[].obs;
+
+  var titles = <JobTitle>[].obs;
+  var filteredTitles = <JobTitle>[].obs;
+
 
   var selectedMonth = Rx<MonthModel?>(null);
   final selectedYear = DateTime.now().year.obs;
@@ -33,6 +42,30 @@ class WorkExperienceController extends GetxController {
     super.onInit();
     filteredCountries.value = countries;
     filteredYears.value = years;
+
+    companies.value = [
+      Company(name: 'IAC/InterActiveCorp'),
+      Company(name: 'IBEX Global'),
+      Company(name: 'IBI GROUP INC'),
+      Company(name: 'IBM'),
+      Company(name: 'IBM Global Services'),
+      Company(name: 'IBM Solutions Delivery'),
+      Company(name: 'Iamgold'),
+      Company(name: 'Iberdrola'),
+      Company(name: 'Ibotta'),
+      Company(name: 'Seven & I Holdings'),
+    ];
+    filteredCompanies.value = companies;
+
+    titles.value = [
+      JobTitle(name: 'Software Engineer'),
+      JobTitle(name: 'Software Quality Assurance Analyst'),
+      JobTitle(name: 'Principal Software Engineer'),
+      JobTitle(name: 'Senior Software Engineer'),
+      JobTitle(name: 'Systems Software Engineer'),
+    ];
+    filteredTitles.value = titles;
+
   }
 
   void toggleCurrentRole(bool? value) {
@@ -41,11 +74,11 @@ class WorkExperienceController extends GetxController {
 
   bool canSave() {
     return title.value.isNotEmpty &&
-        company.value.isNotEmpty &&
-        startMonth.value.isNotEmpty &&
-        startYear.value.isNotEmpty &&
-        endYear.value.isNotEmpty &&
-        endMonth.value.isNotEmpty;
+        company.value.isNotEmpty;
+        // startMonth.value.isNotEmpty &&
+        // startYear.value.isNotEmpty &&
+        // endYear.value.isNotEmpty &&
+        // endMonth.value.isNotEmpty;
   }
 
   void saveExperience() {
@@ -81,6 +114,8 @@ class WorkExperienceController extends GetxController {
     MonthModel(name: 'December', index: 11),
   ];
 
+
+
   void selectMonth(MonthModel month) {
     selectedMonth.value = month;
     Get.back(result: month);
@@ -115,6 +150,28 @@ class WorkExperienceController extends GetxController {
   void updateCountry(String country) {
     selectedCountry.value = country;
     Get.back();
+  }
+
+  void searchCompanies(String query) {
+    if (query.isEmpty) {
+      filteredCompanies.value = companies;
+    } else {
+      filteredCompanies.value = companies
+          .where((company) =>
+          company.name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    }
+  }
+
+  void searchTitles(String query) {
+    if (query.isEmpty) {
+      filteredTitles.value = titles;
+    } else {
+      filteredTitles.value = titles
+          .where((title) =>
+          title.name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    }
   }
 
 }

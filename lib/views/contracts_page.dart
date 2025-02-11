@@ -14,6 +14,7 @@ class ContractsPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,10 +60,10 @@ class ContractsPage extends StatelessWidget {
               ),
               Text(
                 'Activate contracts',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
               ),
               SizedBox(
-                height: 30,
+                height: 12,
               ),
               SizedBox(
                 height: 40,
@@ -85,16 +86,23 @@ class ContractsPage extends StatelessWidget {
               DefaultTabController(
                 length: 3,
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    TabBar(
-                      labelColor: theme.primaryColor,
-                      unselectedLabelColor: theme.unselectedWidgetColor,
-                      indicatorColor: theme.primaryColor,
-                      tabs: const [
-                        Tab(text: "All"),
-                        Tab(text: "Hourly(2)"),
-                        Tab(text: "Active Milestones(0)"),
-                      ],
+                    SizedBox(
+                      width: double.infinity,
+                      child: TabBar(
+                        isScrollable: true,
+                        labelPadding: EdgeInsets.symmetric(horizontal: 16),
+                        tabAlignment: TabAlignment.start,
+                        labelColor: theme.primaryColor,
+                        unselectedLabelColor: theme.unselectedWidgetColor,
+                        indicatorColor: theme.primaryColor,
+                        tabs: const [
+                          Tab(text: "All"),
+                          Tab(text: "Hourly(2)"),
+                          Tab(text: "Active Milestones(0)"),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -143,12 +151,12 @@ class ContractsPage extends StatelessWidget {
                 ],
               ),
               SizedBox(
-                height: 20,
+                height: 12,
               ),
               Text('Hired by Client Name'),
               Text('Client Name'),
               SizedBox(
-                height: 24,
+                height: 12,
               ),
               Container(
                 height: 30,
@@ -187,10 +195,10 @@ class ContractsPage extends StatelessWidget {
               ),
               SizedBox(height: 5,),
               Text('Rate: \$0.00/hr, 12 hrs weekly limit'),
-              SizedBox(height: 24,),
+              SizedBox(height: 12,),
               Text('Sep 26,2024 - Present', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.grey),),
               SizedBox(height: 10,),
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: OutlinedButton(
                   onPressed: () {},

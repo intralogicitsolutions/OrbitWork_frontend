@@ -27,6 +27,7 @@ import 'package:orbitwork/views/my_stats_page.dart';
 import 'package:orbitwork/views/onboarding.dart';
 import 'package:orbitwork/views/password_security_page.dart';
 import 'package:orbitwork/views/privacy_preferences_page.dart';
+import 'package:orbitwork/views/profile_page.dart';
 import 'package:orbitwork/views/profile_setting_page.dart';
 import 'package:orbitwork/views/reports_page.dart';
 import 'package:orbitwork/views/settings_page.dart';
@@ -62,6 +63,7 @@ class AppPages {
     GetPage(name: AppRoutes.profileSetting, page: () => ProfileSetting()),
     GetPage(name: AppRoutes.passwordAndSecurity, page: () => PasswordAndSecurity()),
     GetPage(name: AppRoutes.privacyPreferences, page: () => PrivacyPreferences()),
+    GetPage(name: AppRoutes.profilePage, page: () => ProfilePage(),),
     /// Create User Profile ///
     GetPage(name: AppRoutes.getStarted, page: () => GetStarted(),),
     GetPage(name: AppRoutes.profileSetupContainer, page: () => ProfileSetupContainer(),),

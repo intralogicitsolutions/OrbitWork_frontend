@@ -48,7 +48,7 @@ class ProfileViewsTab extends GetView<ProfileMetricsController> {
           const SizedBox(height: 40),
           _buildLegend(),
           const SizedBox(height: 30),
-          _buildAvailabilityBadgeInfo(),
+          _buildAvailabilityBadgeInfo(context),
         ],
       ),
     );
@@ -120,11 +120,12 @@ class ProfileViewsTab extends GetView<ProfileMetricsController> {
     );
   }
 
-  Widget _buildAvailabilityBadgeInfo() {
+  Widget _buildAvailabilityBadgeInfo(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
       decoration: BoxDecoration(
-        color: Colors.grey[200],
+        color: theme.hoverColor,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -133,8 +134,8 @@ class ProfileViewsTab extends GetView<ProfileMetricsController> {
           const SizedBox(width: 12),
           Expanded(
             child: RichText(
-              text: const TextSpan(
-                style: TextStyle(fontSize: 12, color: Colors.black),
+              text:  TextSpan(
+                style: TextStyle(fontSize: 12, color: theme.hintColor),
                 children: [
                   TextSpan(text: 'With the '),
                   TextSpan(

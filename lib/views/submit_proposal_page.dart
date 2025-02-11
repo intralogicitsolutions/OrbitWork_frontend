@@ -140,7 +140,7 @@ class SubmitProposalPage extends StatelessWidget {
               }
               return Text(
                 'Posted ${controller.proposal.value?.postedDate}',
-                style: TextStyle(color: Colors.grey[600]),
+                style: TextStyle(color: Colors.grey[500]),
               );
             }),
           ],
@@ -156,7 +156,7 @@ class SubmitProposalPage extends StatelessWidget {
             children: [
               Text(
                 controller.proposal.value?.description ?? '',
-                style: TextStyle(color: Colors.grey[800]),
+                style: TextStyle(color: Colors.grey[500]),
                 maxLines: isExpanded ? null : 5,
                 overflow:
                     isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
@@ -178,6 +178,7 @@ class SubmitProposalPage extends StatelessWidget {
   }
 
   Widget _buildTerms(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -281,7 +282,7 @@ class SubmitProposalPage extends StatelessWidget {
             children: [
               Icon(Icons.shield, color: Colors.orange),
               SizedBox(width: 8),
-              Text('Includes Orbitwork Fixed-Price Protection'),
+              Text('Includes Orbitwork Fixed-Price Protection', style: TextStyle( color: theme.scaffoldBackgroundColor),),
             ],
           ),
         ),
@@ -579,11 +580,12 @@ class SubmitProposalPage extends StatelessWidget {
   }
 
   void _showBottomSheet(BuildContext context) {
+    final theme = Theme.of(context);
     Get.bottomSheet(
       Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: theme.scaffoldBackgroundColor,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
         ),
         child: Column(

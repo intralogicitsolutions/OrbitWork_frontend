@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orbitwork/component/select_company_bottomsheet.dart';
 import 'package:orbitwork/component/select_country_bottomsheet.dart';
+import 'package:orbitwork/component/select_jobTitle_bottomsheet.dart';
 import 'package:orbitwork/component/select_month_bottomsheet.dart';
 import 'package:orbitwork/component/select_year_bottomsheet.dart';
 import '../controllers/work_experience_controller.dart';
+import '../models/company_model.dart';
+import '../models/job_title_model.dart';
 
 class WorkExperienceSheet extends GetView<WorkExperienceController> {
   final WorkExperienceController controller = Get.put(WorkExperienceController());
@@ -50,34 +54,103 @@ class WorkExperienceSheet extends GetView<WorkExperienceController> {
                 children: [
                   // Title Field
                   _buildLabel('Title', true),
-                  TextField(
-                    onChanged: (value) => controller.title.value = value,
-                    decoration: const InputDecoration(
-                      hintText: 'Ex: Software Engineer',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                  // Obx(
+                  //    () {
+                  //     return TextField(
+                  //       readOnly: true,
+                  //       controller: TextEditingController(text: controller.company.value),
+                  //       //onChanged: (value) => controller.title.value = value,
+                  //       decoration: const InputDecoration(
+                  //         hintText: 'Ex: Software Engineer',
+                  //         border: OutlineInputBorder(
+                  //           borderRadius: BorderRadius.all(Radius.circular(8)),
+                  //         ),
+                  //         contentPadding: EdgeInsets.symmetric(
+                  //           horizontal: 16,
+                  //           vertical: 12,
+                  //         ),
+                  //       ),
+                  //     );
+                  //   }
+                  // ),
+                  InkWell(
+                    onTap: () async {
+                      final selectedTitle = await Get.bottomSheet<JobTitle>(
+                        TitleBottomSheet(),
+                        isScrollControlled: true,
+                      );
+
+                      if (selectedTitle != null) {
+                        controller.title.value = selectedTitle.name;
+                      }
+                    },
+                    child: Container(
+                      width: Get.width,
+                      height: 48,
+                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black54),
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
+                      child: Obx(() => Text(
+                        controller.title.value.isEmpty
+                            ? 'Ex: Software Engineer'
+                            : controller.title.value,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: controller.title.value.isEmpty ? Colors.grey : Colors.black,
+                        ),
+                      )),
                     ),
                   ),
                   const SizedBox(height: 20),
 
                   // Company Field
                   _buildLabel('Company', true),
-                  TextField(
-                    onChanged: (value) => controller.company.value = value,
-                    decoration: const InputDecoration(
-                      hintText: 'Ex: Microsoft',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                  // TextField(
+                  //   onChanged: (value) => controller.company.value = value,
+                  //   decoration: const InputDecoration(
+                  //     hintText: 'Ex: Microsoft',
+                  //     border: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.all(Radius.circular(8)),
+                  //     ),
+                  //     contentPadding: EdgeInsets.symmetric(
+                  //       horizontal: 16,
+                  //       vertical: 12,
+                  //     ),
+                  //   ),
+                  // ),
+                  InkWell(
+                    onTap: () async {
+                      final selectedCompany = await Get.bottomSheet<Company>(
+                        Container(
+                          height: Get.height * 0.7,
+                          child: CompanyBottomSheet(),
+                        ),
+                        isScrollControlled: true,
+                      );
+
+                      if (selectedCompany != null) {
+                        controller.company.value = selectedCompany.name;
+                      }
+                    },
+                    child: Container(
+                      width: Get.width,
+                      height: 48,
+                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black54),
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
+                      child: Obx(() => Text(
+                        controller.company.value.isEmpty
+                            ? 'Ex: Microsoft'
+                            : controller.company.value,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: controller.company.value.isEmpty ? Colors.grey : Colors.black,
+                        ),
+                      )),
                     ),
                   ),
                   const SizedBox(height: 20),

@@ -11,10 +11,10 @@ class SignUpPage extends StatelessWidget {
   final SignUpController controller = Get.put(SignUpController());
 
   Future<void> _launch(Uri  urlString) async {
-    if (await canLaunchUrl(urlString)) { // Check if the URL can be launched
+    if (await canLaunchUrl(urlString)) {
       await launchUrl(urlString);
     } else {
-      throw 'Could not launch $urlString'; // throw could be used to handle erroneous situations
+      throw 'Could not launch $urlString';
     }
   }
 
@@ -160,6 +160,7 @@ class SignUpPage extends StatelessWidget {
                 ),
                 controlAffinity: ListTileControlAffinity.leading,
                 activeColor: Colors.green,
+                contentPadding: EdgeInsets.zero,
               )),
               Obx(() => CheckboxListTile(
                 value: controller.agreeToTerms.value,
@@ -188,6 +189,7 @@ class SignUpPage extends StatelessWidget {
                 ),
                 controlAffinity: ListTileControlAffinity.leading,
                 activeColor: Colors.green,
+                contentPadding: EdgeInsets.zero,
               )),
               SizedBox(height: 20),
               ElevatedButton(
@@ -200,7 +202,7 @@ class SignUpPage extends StatelessWidget {
                   minimumSize: Size(double.infinity, 50),
                   backgroundColor: Colors.green,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
               ),
