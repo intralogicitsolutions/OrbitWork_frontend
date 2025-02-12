@@ -317,7 +317,8 @@ class JobsPage extends StatelessWidget {
                   children: List.generate(2, (index) {
                     return JobCard(
                       job: Job(
-                        title: '', // Placeholder empty data
+                        title: '',
+                        // Placeholder empty data
                         description: '',
                         postedTimeAgo: '',
                         location: '',
@@ -336,7 +337,6 @@ class JobsPage extends StatelessWidget {
                   }),
                 );
               }
-
 
               // if (controller.isLoading.value) {
               //   return Column(
