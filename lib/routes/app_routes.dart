@@ -24,6 +24,7 @@ class AppRoutes{
   static const String passwordAndSecurity = '/passwordandsecurity';
   static const String privacyPreferences = '/privacypreferences';
   static const String profilePage = '/profilePage';
+  static const String connectsHistory = '/connectsHistory';
   ///Create User Profile///
   static const String getStarted = '/getstarted';
   static const String profileSetupContainer = '/profilesetupcontainer';

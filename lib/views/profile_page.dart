@@ -3,12 +3,19 @@ import 'package:get/get.dart';
 import 'package:orbitwork/controllers/profile_controller.dart';
 
 import '../component/profile/add_portfolio_bottomsheet.dart';
+import '../component/profile/availability_badge_bottomsheet.dart';
+import '../component/profile/boost_profile_bottomsheet.dart';
 import '../component/profile/change_hourly_rate_bottomsheet.dart';
 import '../component/profile/edit_title_bottomsheet.dart';
+import '../component/profile/hours_per_week_bottomsheet.dart';
 import '../component/profile/profile_overview_bottomsheet.dart';
+import '../controllers/profile_skill_controller.dart';
+import '../routes/app_routes.dart';
+import 'createProfile/skill_search_view.dart';
 
 class ProfilePage extends StatelessWidget {
   final ProfileController controller = Get.put(ProfileController());
+  final ProfileSkillController profileSkillController = Get.put(ProfileSkillController());
 
   @override
   Widget build(BuildContext context) {
@@ -282,10 +289,28 @@ class ProfilePage extends StatelessWidget {
                         size: 16,
                       ),
                     ),
-                    onPressed:  () {},
+                    onPressed:  () {
+                      Get.to(() =>  SkillsSearchView(),
+                        binding: BindingsBuilder(() {
+                          Get.put(ProfileSkillController());
+                        }),
+                      );
+                    },
                   ),
                 ],
               ),
+              SizedBox(height: 16,),
+              Obx(() => Wrap(
+                spacing: 4,
+                runSpacing: 2,
+                children: profileSkillController.selectedSkills.map((skill) => Chip(
+                  padding: const EdgeInsets.all(2),
+                  backgroundColor: Colors.white,
+                  label: Text(skill.name),
+                  deleteIcon: const Icon(Icons.close),
+                  onDeleted: () => profileSkillController.removeSkill(skill),
+                )).toList(),
+              )),
               Divider(
                 height: 24,
               ),
@@ -370,7 +395,13 @@ class ProfilePage extends StatelessWidget {
                             ),
                           ),
                           onPressed:  () {
-
+                            Get.bottomSheet(
+                              Container(
+                                  height: Get.height * 0.9,
+                                  child: AvailabilityBadgeBottomSheet()),
+                              isScrollControlled: true,
+                              ignoreSafeArea: false,
+                            );
                           },
                         ),
                       ],
@@ -409,7 +440,13 @@ class ProfilePage extends StatelessWidget {
                             ),
                           ),
                           onPressed:  () {
-
+                            Get.bottomSheet(
+                              Container(
+                                  height: Get.height * 0.9,
+                                  child: BoostProfileBottomsheet()),
+                              isScrollControlled: true,
+                              ignoreSafeArea: false,
+                            );
                           },
                         ),
                       ],
@@ -432,12 +469,17 @@ class ProfilePage extends StatelessWidget {
                       fontSize: 18
                     ),),
                     SizedBox(height: 24,),
-                    Text('View details',
-                      style: TextStyle(
-                        color: theme.primaryColor,
-                        decoration: TextDecoration.underline,
-                        decorationColor: theme.primaryColor,
-                        fontSize: 16
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(AppRoutes.connectsHistory);
+                      },
+                      child: Text('View details',
+                        style: TextStyle(
+                          color: theme.primaryColor,
+                          decoration: TextDecoration.underline,
+                          decorationColor: theme.primaryColor,
+                          fontSize: 16
+                        ),
                       ),
                     )
                   ],
@@ -491,7 +533,15 @@ class ProfilePage extends StatelessWidget {
                         size: 16,
                       ),
                     ),
-                    onPressed:  () {},
+                    onPressed:  () {
+                      Get.bottomSheet(
+                        Container(
+                            height: Get.height * 0.9,
+                            child: HoursPerWeekBottomsheet()),
+                        isScrollControlled: true,
+                        ignoreSafeArea: false,
+                      );
+                    },
                   ),
                 ],
               ),

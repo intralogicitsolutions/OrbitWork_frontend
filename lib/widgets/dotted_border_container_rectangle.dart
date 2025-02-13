@@ -15,8 +15,8 @@ class DottedBorderContainerRectangle extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 150, // Adjust height as needed
-        width: double.infinity, // Adjust width as needed
+        height: 150,
+        width: double.infinity,
         child: CustomPaint(
           painter: DottedBorderPainter(),
           child: Center(child: child),

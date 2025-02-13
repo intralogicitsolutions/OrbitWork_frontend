@@ -3,6 +3,7 @@ import 'package:orbitwork/routes/app_routes.dart';
 import 'package:orbitwork/views/add_billing_method_page.dart';
 import 'package:orbitwork/views/billing_and_payments.dart';
 import 'package:orbitwork/views/chat_page.dart';
+import 'package:orbitwork/views/connects_history.dart';
 import 'package:orbitwork/views/contact_info_page.dart';
 import 'package:orbitwork/views/createProfile/add_education.dart';
 import 'package:orbitwork/views/createProfile/add_experience.dart';
@@ -64,7 +65,10 @@ class AppPages {
     GetPage(name: AppRoutes.passwordAndSecurity, page: () => PasswordAndSecurity()),
     GetPage(name: AppRoutes.privacyPreferences, page: () => PrivacyPreferences()),
     GetPage(name: AppRoutes.profilePage, page: () => ProfilePage(),),
+    GetPage(name: AppRoutes.connectsHistory, page: () => ConnectsHistory(),),
+
     /// Create User Profile ///
+
     GetPage(name: AppRoutes.getStarted, page: () => GetStarted(),),
     GetPage(name: AppRoutes.profileSetupContainer, page: () => ProfileSetupContainer(),),
     GetPage(name: AppRoutes.profileCreation, page: () => ProfileCreationPage(),),

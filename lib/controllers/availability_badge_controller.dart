@@ -6,7 +6,7 @@ class BadgeController extends GetxController {
   final Rx<BadgeModel> badge = BadgeModel(
     currentPrice: 14,
     maximumConnects: 14,
-    availableConnects: 126,
+    availableConnects: 0,
   ).obs;
 
   static const int MIN_CONNECTS = 14;
@@ -43,18 +43,39 @@ class BadgeController extends GetxController {
     }
   }
 
+  // void submitValue() {
+  //   int? value = int.tryParse(textController.text);
+  //   if (value != null) {
+  //     updateMaximumConnects(value);
+  //   }
+  //   focusNode.unfocus();
+  //   badge.update((val) {
+  //     if (val != null) {
+  //       val.isEditing = false;
+  //     }
+  //   });
+  // }
+
+
   void submitValue() {
     int? value = int.tryParse(textController.text);
-    if (value != null) {
+
+    if (badge.value.availableConnects < 14) {
+      value = 0;
+    } else if (value != null) {
       updateMaximumConnects(value);
     }
+
     focusNode.unfocus();
     badge.update((val) {
       if (val != null) {
+        val.maximumConnects = value ?? 0;
         val.isEditing = false;
+        textController.text = val.maximumConnects.toString();
       }
     });
   }
+
 
   @override
   void dispose() {
