@@ -169,25 +169,28 @@ class JobsPage extends StatelessWidget {
                                                                         .all(
                                                                             20.0),
                                                                 child: Center(
-                                                                    child: themeController.themeMode.value ==
-                                                                            ThemeMode
-                                                                                .dark
-                                                                        ? Image
-                                                                            .asset(
-                                                                            'assets/icon/touch_light.png',
-                                                                            height:
-                                                                                60,
-                                                                            width:
-                                                                                60,
-                                                                          )
-                                                                        : Image
-                                                                            .asset(
-                                                                            'assets/icon/touch.png',
-                                                                            height:
-                                                                                60,
-                                                                            width:
-                                                                                60,
-                                                                          )),
+                                                                  child: themeController
+                                                                              .themeMode
+                                                                              .value ==
+                                                                          ThemeMode
+                                                                              .dark
+                                                                      ? Image
+                                                                          .asset(
+                                                                          'assets/icon/touch_light.png',
+                                                                          height:
+                                                                              60,
+                                                                          width:
+                                                                              60,
+                                                                        )
+                                                                      : Image
+                                                                          .asset(
+                                                                          'assets/icon/touch.png',
+                                                                          height:
+                                                                              60,
+                                                                          width:
+                                                                              60,
+                                                                        ),
+                                                                ),
                                                               ),
                                                               Padding(
                                                                 padding:

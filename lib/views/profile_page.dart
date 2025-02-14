@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orbitwork/controllers/profile_controller.dart';
 
+import '../component/profile/add_language_bottomsheet.dart';
+import '../component/profile/add_license_bottomsheet.dart';
 import '../component/profile/add_portfolio_bottomsheet.dart';
 import '../component/profile/availability_badge_bottomsheet.dart';
 import '../component/profile/boost_profile_bottomsheet.dart';
 import '../component/profile/change_hourly_rate_bottomsheet.dart';
+import '../component/profile/edit_language_bottomsheet.dart';
 import '../component/profile/edit_title_bottomsheet.dart';
 import '../component/profile/hours_per_week_bottomsheet.dart';
 import '../component/profile/profile_overview_bottomsheet.dart';
+import '../component/profile/verification_bottomsheet.dart';
+import '../component/profile/video_introduction_bottomsheet.dart';
 import '../controllers/profile_skill_controller.dart';
 import '../routes/app_routes.dart';
 import 'createProfile/skill_search_view.dart';
@@ -507,7 +512,13 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                     onPressed:  () {
-
+                      Get.bottomSheet(
+                        Container(
+                            height: Get.height * 0.9,
+                            child: AddVideoIntroductionSheet()),
+                        isScrollControlled: true,
+                        ignoreSafeArea: false,
+                      );
                     },
                   ),
                 ],
@@ -570,7 +581,13 @@ class ProfilePage extends StatelessWidget {
                           ),
                         ),
                         onPressed:  () {
-
+                          Get.bottomSheet(
+                            Container(
+                                height: Get.height * 0.9,
+                                child: AddLanguageBottomSheet()),
+                            isScrollControlled: true,
+                            ignoreSafeArea: false,
+                          );
                         },
                       ),
                       IconButton(
@@ -586,7 +603,15 @@ class ProfilePage extends StatelessWidget {
                             size: 16,
                           ),
                         ),
-                        onPressed:  () {},
+                        onPressed:  () {
+                          Get.bottomSheet(
+                            Container(
+                                height: Get.height * 0.9,
+                                child: EditLanguagesSheet()),
+                            isScrollControlled: true,
+                            ignoreSafeArea: false,
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -636,7 +661,15 @@ class ProfilePage extends StatelessWidget {
                         size: 16,
                       ),
                     ),
-                    onPressed:  () {},
+                    onPressed:  () {
+                      Get.bottomSheet(
+                        Container(
+                            height: Get.height * 0.9,
+                            child: VerificationBottomsheet()),
+                        isScrollControlled: true,
+                        ignoreSafeArea: false,
+                      );
+                    },
                   ),
                 ],
               ),
@@ -657,7 +690,15 @@ class ProfilePage extends StatelessWidget {
                         size: 16,
                       ),
                     ),
-                    onPressed:  () {},
+                    onPressed:  () {
+                      Get.bottomSheet(
+                        Container(
+                            height: Get.height * 0.9,
+                            child: AddLicenseBottomsheet()),
+                        isScrollControlled: true,
+                        ignoreSafeArea: false,
+                      );
+                    },
                   ),
                 ],
               ),

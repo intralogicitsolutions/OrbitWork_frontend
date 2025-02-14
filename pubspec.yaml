@@ -33,6 +33,7 @@ dependencies:
   path: ^1.9.0
 
   super_tooltip: ^2.0.9
+  lottie: ^3.3.1
 
 dev_dependencies:
   flutter_test:
@@ -47,5 +48,6 @@ flutter:
   assets:
     - assets/icon/
     - assets/images/
+    - assets/lottie/
 
 

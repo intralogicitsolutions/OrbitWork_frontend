@@ -6,6 +6,7 @@ import 'package:orbitwork/views/tabs/profile_view_tab.dart';
 import 'package:path/path.dart';
 import '../controllers/profile_matrics_controller.dart';
 import '../controllers/stats_controller.dart';
+import '../widgets/select_duration_bottomsheet.dart';
 
 class MyStatePage extends StatelessWidget {
   //const MyStatePage({Key? key}) : super(key: key);
@@ -212,7 +213,10 @@ class MyStatePage extends StatelessWidget {
             Obx(() {
               return OutlinedButton(
                 onPressed: () {
-                  showBottomSheet(context);
+                  //showBottomSheet(context);
+                  showDurationBottomSheet(context, (selectedValue) {
+                    controller.selectedDuration.value = selectedValue;
+                  });
                 },
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: Colors.grey),
@@ -305,7 +309,10 @@ class MyStatePage extends StatelessWidget {
             Obx(() {
               return OutlinedButton(
                 onPressed: () {
-                  showBottomSheet(context);
+                 // showBottomSheet(context);
+                  showDurationBottomSheet(context, (selectedValue) {
+                    controller.selectedDuration.value = selectedValue;
+                  });
                 },
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: Colors.grey),
@@ -458,52 +465,6 @@ class MyStatePage extends StatelessWidget {
     );
   }
 
-  // Widget _buildClientRelationshipsSection() {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       const Text(
-  //         'Client relationships',
-  //         style: TextStyle(
-  //           fontSize: 20,
-  //           fontWeight: FontWeight.w500,
-  //         ),
-  //       ),
-  //       const SizedBox(height: 8),
-  //       Text(
-  //         'Client relationships longer than 90 days can positively impact your Job Success Score.',
-  //         style: TextStyle(color: Colors.grey[600]),
-  //       ),TextButton(
-  //         onPressed: () {},
-  //         child: Text(
-  //           'Explore how it works',
-  //           style: TextStyle(color: Colors.green[600]),
-  //         ),
-  //       ),
-  //       const SizedBox(height: 16),
-  //       SizedBox(
-  //         height: 100,
-  //         child: Stack(
-  //           alignment: Alignment.center,
-  //           children: [
-  //             Obx(() => CircularProgressIndicator(
-  //               value: controller.stats.value.clientRelationshipScore / 100,
-  //               backgroundColor: Colors.grey[300],
-  //               color: Colors.blue,
-  //               strokeWidth: 8,
-  //             )),Obx(() => Text(
-  //               '${controller.stats.value.clientRelationshipScore.toInt()}%',
-  //               style: const TextStyle(
-  //                 fontSize: 24,
-  //                 fontWeight: FontWeight.bold,
-  //               ),
-  //             )),
-  //           ],
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
   Widget _buildClientRelationships() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -693,45 +654,45 @@ class MyStatePage extends StatelessWidget {
     );
   }
 
-  void showBottomSheet(BuildContext context) {
-    final theme = Theme.of(context);
-    Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: theme.scaffoldBackgroundColor,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              "Select Duration",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            // Options List
-            Column(
-              children: [
-                "Last 7 days",
-                "Last 30 days",
-                "Last 90 days",
-              ]
-                  .map(
-                    (option) => ListTile(
-                      title: Text(option),
-                      onTap: () {
-                        controller.selectedDuration.value = option;
-                        Get.back(); // Close bottom sheet
-                      },
-                    ),
-                  )
-                  .toList(),
-            ),
-          ],
-        ),
-      ),
-      isScrollControlled: true,
-    );
-  }
+  // void showBottomSheet(BuildContext context) {
+  //   final theme = Theme.of(context);
+  //   Get.bottomSheet(
+  //     Container(
+  //       padding: const EdgeInsets.all(16),
+  //       decoration: BoxDecoration(
+  //         color: theme.scaffoldBackgroundColor,
+  //         borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+  //       ),
+  //       child: Column(
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: [
+  //           const Text(
+  //             "Select Duration",
+  //             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+  //           ),
+  //           const SizedBox(height: 10),
+  //           // Options List
+  //           Column(
+  //             children: [
+  //               "Last 7 days",
+  //               "Last 30 days",
+  //               "Last 90 days",
+  //             ]
+  //                 .map(
+  //                   (option) => ListTile(
+  //                     title: Text(option),
+  //                     onTap: () {
+  //                       controller.selectedDuration.value = option;
+  //                       Get.back(); // Close bottom sheet
+  //                     },
+  //                   ),
+  //                 )
+  //                 .toList(),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //     isScrollControlled: true,
+  //   );
+  // }
 }

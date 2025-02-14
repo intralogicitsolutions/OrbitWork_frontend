@@ -32,7 +32,7 @@ class WorkExperienceController extends GetxController {
   final countries = [
     'Afghanistan', 'Aland Islands', 'Albania', 'Algeria',
     'American Samoa', 'Andorra', 'Angola', 'Anguilla',
-    'Antarctica', 'Antigua and Barbuda', 'Argentina'
+    'Antarctica', 'Antigua and Barbuda', 'Argentina', 'India'
   ];
 
   final filteredCountries = <String>[].obs;
