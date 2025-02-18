@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../component/profile/flagging_bottomsheet.dart';
 import '../controllers/profile_setting_controller.dart';
 
 class ProfileSetting extends StatelessWidget {
@@ -22,6 +23,12 @@ class ProfileSetting extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Obx(() => controller.showWarning.value
+                  ? _buildWarningMessage(context)
+                  : SizedBox()),
+              SizedBox(
+                height: 24,
+              ),
               Text(
                 'My profile',
                 style: TextStyle(
@@ -36,7 +43,7 @@ class ProfileSetting extends StatelessWidget {
                     'View as others see it',
                     style: TextStyle(color: Colors.green),
                   ),
-                  onPressed: () {},
+                  onPressed: () {_showFlagBottomsheet(context);},
                 ),
               ),
               const Text(
@@ -324,30 +331,36 @@ class ProfileSetting extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: ListTile(
-        title: Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.w500),
-        ),
-        subtitle: Text(
-          description,
-          style: TextStyle(color: Colors.grey[600]),
-        ),
-        trailing: Container(
-          width: 20,
-          height: 20,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: isSelected ? Colors.green : Colors.grey.shade300,
-              width: 2,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              title,
+              style: const TextStyle(fontWeight: FontWeight.w500),
             ),
           ),
-          child: isSelected
-              ? const Icon(Icons.circle, color: Colors.green, size: 12)
-              : null,
+          subtitle: Text(
+            description,
+            style: TextStyle(color: Colors.grey[600]),
+          ),
+          trailing: Container(
+            width: 20,
+            height: 20,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: isSelected ? Colors.green : Colors.grey.shade300,
+                width: 2,
+              ),
+            ),
+            child: isSelected
+                ? const Icon(Icons.circle, color: Colors.green, size: 12)
+                : null,
+          ),
+          onTap: () => controller.updateExperienceLevel(title),
         ),
-        onTap: () => controller.updateExperienceLevel(title),
       ),
     );
   }
@@ -662,23 +675,42 @@ class ProfileSetting extends StatelessWidget {
   }
 
   void _showVisibilityBottomSheet(BuildContext context) {
+    final theme = Theme.of(context);
     showModalBottomSheet(
       context: context,
       builder: (context) {
         return Container(
-          padding: EdgeInsets.all(16),
+         padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: theme.scaffoldBackgroundColor,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Select Visibility',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Visibility',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  IconButton(onPressed: () {Get.back();}, icon: Icon(Icons.close))
+                ],
               ),
               Divider(),
               ListTile(
                 title: Text('Public'),
                 onTap: () {
                   controller.updateVisibility('Public');
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: Text('Only Orbitwork users'),
+                onTap: () {
+                  controller.updateVisibility('Only Orbitwork users');
                   Navigator.pop(context);
                 },
               ),
@@ -706,15 +738,22 @@ class ProfileSetting extends StatelessWidget {
           borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
         ),
         child: Column(
-          mainAxisSize: MainAxisSize.min, // Fit content
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Select Project Preference',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Project Preference',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                IconButton(onPressed: () {Get.back();}, icon: Icon(Icons.close))
+              ],
+            ),
             Divider(),
             ...[
               'Both short-term and long-term projects',
-              'Only short-term projects',
-              'Only long-term projects',
+              'Long-term projects (3+ months)',
+              'Short-term projects (less than 3 months)',
             ].map((option) => ListTile(
                   title: Text(option),
                   onTap: () {
@@ -722,6 +761,97 @@ class ProfileSetting extends StatelessWidget {
                     Get.back(); // Close BottomSheet
                   },
                 )),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showFlagBottomsheet(BuildContext context){
+    final theme = Theme.of(context);
+    Get.bottomSheet(
+      Container(
+        height: Get.height * 0.2,
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: theme.scaffoldBackgroundColor,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Select', style: TextStyle(
+                  fontSize: 18, fontWeight: FontWeight.bold
+                ),),
+                IconButton(onPressed: () {Get.back();},
+                    icon: Icon(Icons.close))
+              ],
+            ),
+            Divider(),
+            GestureDetector(
+              onTap: () {
+                Get.bottomSheet(
+                  Container(
+                      height: Get.height * 0.9,
+                      child: FlaggingBottomsheet()),
+                  isScrollControlled: true,
+                  ignoreSafeArea: false,
+                );
+              },
+              child: Row(
+                children: [
+                  Icon(Icons.flag_outlined),
+                  SizedBox(width: 15,),
+                  Text('Flag as inappropriate', style: TextStyle(
+                    fontSize: 16, fontWeight: FontWeight.w500
+                  ),),
+                ],
+              ),
+            )
+          ],
+        ),
+      )
+    );
+  }
+
+  Widget _buildWarningMessage(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 170,
+      decoration: BoxDecoration(
+        color: Color.fromARGB(255, 255, 242, 242),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Center(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          // Aligns content to the center vertically
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Icon(Icons.warning_amber,size: 20, color: Colors.red.shade900,),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                "In compliance with Tax Law in India, Orbitwork withholds 0.1% Tax at Deduction Source (TDS) from your payments. The TDS can be as much as 5% if you haven\'t provided your govt. issued tax id yet. Please click here to add your PAN asap. For more details, read our fAQs.",
+                textAlign: TextAlign.start,
+                overflow: TextOverflow.visible,
+                style: TextStyle(color: Colors.red.shade900),
+              ),
+            ),
+            IconButton(
+              onPressed: controller.dismissWarningText,
+              icon: Icon(
+                Icons.close,
+                color: Colors.red.shade900,
+              ),
+              visualDensity: VisualDensity.compact,
+              padding: EdgeInsets.zero,
+              constraints: BoxConstraints(),
+            ),
           ],
         ),
       ),

@@ -5,6 +5,7 @@ import '../models/profile_setting_model.dart';
 class ProfileController extends GetxController {
   var profile = ProfileModel().obs;
   var isExpanded = false.obs;
+  final showWarning = true.obs;
 
   final experienceLevels = [
     {
@@ -87,5 +88,9 @@ class ProfileController extends GetxController {
 
   void toggleTextVisibility() {
     isExpanded.value = !isExpanded.value; // Toggle the visibility of the full text
+  }
+
+  void dismissWarningText(){
+    showWarning.value = false;
   }
 }

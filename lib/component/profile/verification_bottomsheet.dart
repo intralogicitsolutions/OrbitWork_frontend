@@ -133,6 +133,7 @@ class VerificationBottomsheet extends StatelessWidget {
 
                         const SizedBox(height: 16),
                         RadioListTile(
+                          activeColor: Colors.green,
                           value: false,
                           groupValue: controller.hasServed.value,
                           onChanged: (value) => controller.setHasServed(false),
@@ -152,31 +153,36 @@ class VerificationBottomsheet extends StatelessWidget {
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: TextButton(
-                  onPressed: () => Get.back(),
-                  child: const Text('Cancel', style: TextStyle(color: Colors.green),),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Handle next action
-                    Get.back();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+          Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewPadding.bottom + 16,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => Get.back(),
+                    child: const Text('Cancel', style: TextStyle(color: Colors.green),),
                   ),
-                  child: const Text('Next'),
                 ),
-              ),
-            ],
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Handle next action
+                      Get.back();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                      //padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                    ),
+                    child: const Text('Next'),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
