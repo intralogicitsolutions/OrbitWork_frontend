@@ -17,7 +17,9 @@ import 'package:orbitwork/views/createProfile/profile_setup.dart';
 import 'package:orbitwork/views/createProfile/select_category.dart';
 import 'package:orbitwork/views/createProfile/set_user_rate.dart';
 import 'package:orbitwork/views/createProfile/skill_section.dart';
+import 'package:orbitwork/views/createProfile/specialized_profile_tab/specialized_profile_1.dart';
 import 'package:orbitwork/views/createProfile/write_an_overview.dart';
+import 'package:orbitwork/views/get_paid.dart';
 import 'package:orbitwork/views/help_and_support.dart';
 import 'package:orbitwork/views/job_details_page.dart';
 import 'package:orbitwork/views/jobs_page.dart';
@@ -25,6 +27,7 @@ import 'package:orbitwork/views/login.dart';
 import 'package:orbitwork/views/membership_and_connects.dart';
 import 'package:orbitwork/views/my_home_page.dart';
 import 'package:orbitwork/views/my_stats_page.dart';
+import 'package:orbitwork/views/my_teams_page.dart';
 import 'package:orbitwork/views/onboarding.dart';
 import 'package:orbitwork/views/password_security_page.dart';
 import 'package:orbitwork/views/privacy_preferences_page.dart';
@@ -40,6 +43,7 @@ import 'package:orbitwork/widgets/create_profile_container.dart';
 import 'package:orbitwork/widgets/profile_setup_container.dart';
 
 import '../views/createProfile/freelancing_setup.dart';
+import '../widgets/specialized_profile_container.dart';
 
 class AppPages {
   static final routes = [
@@ -66,6 +70,8 @@ class AppPages {
     GetPage(name: AppRoutes.privacyPreferences, page: () => PrivacyPreferences()),
     GetPage(name: AppRoutes.profilePage, page: () => ProfilePage(),),
     GetPage(name: AppRoutes.connectsHistory, page: () => ConnectsHistory(),),
+    GetPage(name: AppRoutes.myTeams, page: () => MyTeamsPage(),),
+    GetPage(name: AppRoutes.getPaid, page: () => GetPaidPage(),),
 
     /// Create User Profile ///
 
@@ -83,6 +89,7 @@ class AppPages {
     GetPage(name: AppRoutes.setUserRate, page: () => SetUserRate(),),
     GetPage(name: AppRoutes.photoAndLocation, page: () => PhotoAndLocation(),),
     GetPage(name: AppRoutes.previewProfile, page: () => PreviewProfile(),),
+    GetPage(name: AppRoutes.specializedProfile, page: () => SpecializedProfileContainer(),),
 
     GetPage(name: AppRoutes.createProfileContainer, page: () => CreateProfileContainer(),)
   ];

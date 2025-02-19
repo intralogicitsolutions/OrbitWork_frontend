@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../models/profile_setting_model.dart';
+import '../routes/app_routes.dart';
 
 class ProfileController extends GetxController {
   var profile = ProfileModel().obs;
@@ -79,6 +80,7 @@ class ProfileController extends GetxController {
   }
 
   void addSpecializedProfile() {
+    Get.toNamed(AppRoutes.specializedProfile);
     if (profile.value.publishedProfiles < profile.value.maxProfiles) {
       profile.update((val) {
         val?.publishedProfiles++;

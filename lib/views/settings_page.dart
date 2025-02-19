@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../component/add_extra_layres_security_bottomsheet.dart';
 import '../routes/app_routes.dart';
 
 class SettingPage extends StatelessWidget {
@@ -43,7 +44,13 @@ class SettingPage extends StatelessWidget {
             SettingsTile(
               icon: Icons.account_balance_wallet,
               title: "Tax information",
-              onTap: () => print("Tax information"),
+              onTap: () {
+                Get.bottomSheet(
+                  AddExtraLayersSecurityBottomsheet(),
+                  isScrollControlled: true,
+                  ignoreSafeArea: false,
+                );
+              },
             ),
             SettingsTile(
               icon: Icons.file_copy,
@@ -62,12 +69,12 @@ class SettingPage extends StatelessWidget {
             SettingsTile(
               icon: Icons.payment,
               title: "Get paid",
-              onTap: () => print("Get paid"),
+              onTap: () =>  Get.toNamed(AppRoutes.getPaid),
             ),
             SettingsTile(
               icon: Icons.group,
               title: "My teams",
-              onTap: () => print("My teams"),
+              onTap: () => Get.toNamed(AppRoutes.myTeams),
             ),
             SettingsTile(
               icon: Icons.security,

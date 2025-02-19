@@ -2,7 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../component/profile/change_preference_bottomsheet.dart';
 import '../component/profile/flagging_bottomsheet.dart';
+import '../component/profile/select_categories_botomsheet.dart';
 import '../controllers/profile_setting_controller.dart';
 
 class ProfileSetting extends StatelessWidget {
@@ -405,7 +407,15 @@ class ProfileSetting extends StatelessWidget {
                   ),
                 ),
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.bottomSheet(
+                      Container(
+                          height: Get.height,
+                          child: SelectCategoriesBottomsheet()),
+                      isScrollControlled: true,
+                      ignoreSafeArea: false,
+                    );
+                  },
                   icon: Icon(
                     Icons.edit_outlined,
                     color: Colors.green,
@@ -655,7 +665,16 @@ class ProfileSetting extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           OutlinedButton(
-            onPressed: () => controller.toggleAIPreference(),
+            onPressed: () {
+              controller.toggleAIPreference();
+            Get.bottomSheet(
+              Container(
+                  height: Get.height * 0.95,
+                  child: ChangePreferenceBottomsheet()),
+              isScrollControlled: true,
+              ignoreSafeArea: false,
+            );
+            },
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.green,
               side: const BorderSide(color: Colors.green),

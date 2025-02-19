@@ -25,7 +25,11 @@ class AppRoutes{
   static const String privacyPreferences = '/privacypreferences';
   static const String profilePage = '/profilePage';
   static const String connectsHistory = '/connectsHistory';
+  static const String myTeams = '/myTeams';
+  static const String getPaid = '/getPaid';
+
   ///Create User Profile///
+
   static const String getStarted = '/getstarted';
   static const String profileSetupContainer = '/profilesetupcontainer';
   static const String profileCreation = '/profilecreation';
@@ -40,6 +44,7 @@ class AppRoutes{
   static const String setUserRate = '/setUserRate';
   static const String photoAndLocation = '/photoAndLocation';
   static const String previewProfile = '/previewProfile';
+  static const String specializedProfile = '/specializedProfile';
 
   static const String createProfileContainer = '/createProfileContainer';
 }
