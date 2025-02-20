@@ -27,6 +27,10 @@ class AppRoutes{
   static const String connectsHistory = '/connectsHistory';
   static const String myTeams = '/myTeams';
   static const String getPaid = '/getPaid';
+  static const String directToLocalBank = '/directToLocalBank';
+  static const String addBankAccount = '/addBankAccount';
+  static const String closeAccount = '/closeAccount';
+  static const String createClientAccount = '/createClientAccount';
 
   ///Create User Profile///
 

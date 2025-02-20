@@ -282,7 +282,7 @@ class SubmitProposalPage extends StatelessWidget {
             children: [
               Icon(Icons.shield, color: Colors.orange),
               SizedBox(width: 8),
-              Text('Includes Orbitwork Fixed-Price Protection', style: TextStyle( color: theme.scaffoldBackgroundColor),),
+              Text('Includes Orbitwork Fixed-Price Protection', style: TextStyle( color: theme.secondaryHeaderColor),),
             ],
           ),
         ),

@@ -3,44 +3,6 @@ import 'package:get/get.dart';
 
 import '../../controllers/profile/hours_per_week_controller.dart';
 
-// class HoursPerWeekBottomsheet extends StatelessWidget{
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       child: Column(
-//         children: [
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//             children: [
-//               Text('Availability', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
-//               IconButton(onPressed: () {
-//                 Get.back();
-//               }, icon: Icon(Icons.close))
-//             ],
-//           ),
-//           SizedBox(
-//             height: 24,
-//           ),
-//           Text('Hours per week', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),),
-//           SizedBox(height: 16,),
-//           Text('Knowing how much you can work helps Orbitwork find the right jobs for you.', style: TextStyle(
-//             fontSize: 14, color: Colors.grey
-//           ),),
-//           SizedBox(height: 24,),
-//           Text('I can currently work',style: TextStyle(
-//            fontSize: 14, fontWeight: FontWeight.w400
-//           ),),
-//           SizedBox(height: 24,),
-//           Text('Contract-to-hire', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),),
-//           SizedBox(height: 16,),
-//           Text('This means you\'ll start with a contract and may later explore a full-time option')
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-
 class HoursPerWeekBottomsheet extends StatelessWidget {
   final controller = Get.put(HoursPerWeekController());
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/contact_info_controller.dart';
+import '../routes/app_routes.dart';
 
 class ContactInfoPage extends StatelessWidget {
   final ContactInfoController controller = Get.put(ContactInfoController());
@@ -156,7 +157,7 @@ class ContactInfoPage extends StatelessWidget {
             height: 16,
           ),
           OutlinedButton(onPressed: () {
-
+            Get.toNamed(AppRoutes.createClientAccount);
           }, child: Text(buttonText,
           style: TextStyle(color: Colors.green,
           ),

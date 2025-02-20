@@ -113,7 +113,7 @@ class SettingPage extends StatelessWidget {
             SettingsTile(
               title: "Close account",
               subtitle: "This will permanently close your account.",
-              onTap: () => {},
+              onTap: () => Get.toNamed(AppRoutes.closeAccount),
             ),
             SettingsTile(
               title: "Delete personal data",
@@ -183,7 +183,7 @@ class SettingsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading:icon != null ?  Icon(icon ?? null) : null,
-      title: Text(title),
+      title: Text(title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
       subtitle: subtitle != null ? Text(subtitle?? '') : null,
       trailing: trailingIcon != null ?  Icon(trailingIcon ?? null) : Icon(Icons.arrow_forward_ios, size: 16),
       onTap: onTap,

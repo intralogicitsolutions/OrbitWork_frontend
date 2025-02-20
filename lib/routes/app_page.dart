@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
 import 'package:orbitwork/routes/app_routes.dart';
+import 'package:orbitwork/views/add_bank_account.dart';
 import 'package:orbitwork/views/add_billing_method_page.dart';
 import 'package:orbitwork/views/billing_and_payments.dart';
 import 'package:orbitwork/views/chat_page.dart';
+import 'package:orbitwork/views/close_account.dart';
 import 'package:orbitwork/views/connects_history.dart';
 import 'package:orbitwork/views/contact_info_page.dart';
 import 'package:orbitwork/views/createProfile/add_education.dart';
@@ -19,6 +21,8 @@ import 'package:orbitwork/views/createProfile/set_user_rate.dart';
 import 'package:orbitwork/views/createProfile/skill_section.dart';
 import 'package:orbitwork/views/createProfile/specialized_profile_tab/specialized_profile_1.dart';
 import 'package:orbitwork/views/createProfile/write_an_overview.dart';
+import 'package:orbitwork/views/create_client_account.dart';
+import 'package:orbitwork/views/direct_to_local_bank.dart';
 import 'package:orbitwork/views/get_paid.dart';
 import 'package:orbitwork/views/help_and_support.dart';
 import 'package:orbitwork/views/job_details_page.dart';
@@ -72,6 +76,10 @@ class AppPages {
     GetPage(name: AppRoutes.connectsHistory, page: () => ConnectsHistory(),),
     GetPage(name: AppRoutes.myTeams, page: () => MyTeamsPage(),),
     GetPage(name: AppRoutes.getPaid, page: () => GetPaidPage(),),
+    GetPage(name: AppRoutes.directToLocalBank, page: () => DirectToLocalBank(wireTransfer: Get.arguments,),),
+    GetPage(name: AppRoutes.addBankAccount, page: () => AddBankAccount(),),
+    GetPage(name: AppRoutes.closeAccount, page: () => CloseAccount(),),
+    GetPage(name: AppRoutes.createClientAccount, page: () => CreateClientAccount()),
 
     /// Create User Profile ///
 

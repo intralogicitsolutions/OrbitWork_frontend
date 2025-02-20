@@ -9,15 +9,21 @@ class AddExtraLayersSecurityBottomsheet extends StatelessWidget{
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Row(
-         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(onPressed: () {Get.back();}, icon: Icon(Icons.close)),
-            Text('Add extra layers of security', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),),
-            IconButton(onPressed: () {}, icon: Icon(Icons.more_vert_rounded))
-          ],
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(70.0),
+        child: AppBar(
+          automaticallyImplyLeading: false,
+          title: Padding(
+            padding: const EdgeInsets.only(top: 38.0),
+            child: Row(
+             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(onPressed: () {Get.back();}, icon: Icon(Icons.close)),
+                Text('Add extra layers of security', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),),
+                IconButton(onPressed: () {}, icon: Icon(Icons.more_vert_rounded))
+              ],
+            ),
+          ),
         ),
       ),
       body: Column(
