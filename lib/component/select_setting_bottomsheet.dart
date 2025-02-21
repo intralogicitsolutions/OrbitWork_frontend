@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/availability_badge_controller.dart';
+import 'availability_badge_work_bottomsheet.dart';
 import 'connect_counter.dart';
 
 class BadgeBottomSheet extends StatelessWidget {
@@ -101,10 +102,20 @@ class BadgeBottomSheet extends StatelessWidget {
                   minimumSize: Size.zero,
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Get.bottomSheet(
+                      Container(
+                          height: Get.height * 0.8,
+                          child: AvailabilityBadgeWorkBottomsheet()),
+                      isDismissible: true,
+                      isScrollControlled: true);
+                },
                 child: Text(
                   'How does this work?',
-                  style: TextStyle(color: Colors.green),
+                  style: TextStyle(
+                      color: Colors.green,
+                      decorationColor: theme.primaryColor,
+                      decoration: TextDecoration.underline),
                 ),
               ),
               SizedBox(height: 16),

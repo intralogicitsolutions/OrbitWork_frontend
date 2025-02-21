@@ -55,23 +55,22 @@ class AddBankAccount extends StatelessWidget {
               ),
               _buildTextfield('Account holder name'),
               Obx(() {
-                  return _buildTextfield(
-                    'Account Type',
-                    readOnly: true,
-                    controllerText: controller.selectAccountType.value,
-                    suffix: Icon(Icons.keyboard_arrow_down),
-                    onTap: () {
-                      Get.bottomSheet(
-                          Container(
-                            height: Get.height * 0.6,
-                            child: SelectBankAccountBottomsheet(),
-                          ),
-                          isScrollControlled: true,
-                          isDismissible: true);
-                    },
-                  );
-                }
-              ),
+                return _buildTextfield(
+                  'Account Type',
+                  readOnly: true,
+                  controllerText: controller.selectAccountType.value,
+                  suffix: Icon(Icons.keyboard_arrow_down),
+                  onTap: () {
+                    Get.bottomSheet(
+                        Container(
+                          height: Get.height * 0.6,
+                          child: SelectBankAccountBottomsheet(),
+                        ),
+                        isScrollControlled: true,
+                        isDismissible: true);
+                  },
+                );
+              }),
               _buildTextfield('Routing number'),
               _buildTextfield('Account number'),
               _buildTextfield('Confirm account number'),
@@ -201,8 +200,7 @@ class AddBankAccount extends StatelessWidget {
         SizedBox(height: 8),
         TextField(
           readOnly: readOnly,
-          controller:
-              TextEditingController(text: controllerText),
+          controller: TextEditingController(text: controllerText),
           onTap: readOnly ? onTap : null,
           decoration: InputDecoration(
             hintText: hintText ?? '',

@@ -2,7 +2,9 @@ import 'package:get/get.dart';
 import 'package:orbitwork/routes/app_routes.dart';
 import 'package:orbitwork/views/add_bank_account.dart';
 import 'package:orbitwork/views/add_billing_method_page.dart';
+import 'package:orbitwork/views/agency_profile.dart';
 import 'package:orbitwork/views/billing_and_payments.dart';
+import 'package:orbitwork/views/buy_connects.dart';
 import 'package:orbitwork/views/chat_page.dart';
 import 'package:orbitwork/views/close_account.dart';
 import 'package:orbitwork/views/connects_history.dart';
@@ -32,6 +34,7 @@ import 'package:orbitwork/views/membership_and_connects.dart';
 import 'package:orbitwork/views/my_home_page.dart';
 import 'package:orbitwork/views/my_stats_page.dart';
 import 'package:orbitwork/views/my_teams_page.dart';
+import 'package:orbitwork/views/notification_settings_page.dart';
 import 'package:orbitwork/views/onboarding.dart';
 import 'package:orbitwork/views/password_security_page.dart';
 import 'package:orbitwork/views/privacy_preferences_page.dart';
@@ -80,6 +83,9 @@ class AppPages {
     GetPage(name: AppRoutes.addBankAccount, page: () => AddBankAccount(),),
     GetPage(name: AppRoutes.closeAccount, page: () => CloseAccount(),),
     GetPage(name: AppRoutes.createClientAccount, page: () => CreateClientAccount()),
+    GetPage(name: AppRoutes.agencyProfile, page: () => AgencyProfile()),
+    GetPage(name: AppRoutes.notificationSettings, page: () => NotificationSettings(),),
+    GetPage(name: AppRoutes.buyConnects, page: () => BuyConnects(),),
 
     /// Create User Profile ///
 

@@ -31,6 +31,9 @@ class AppRoutes{
   static const String addBankAccount = '/addBankAccount';
   static const String closeAccount = '/closeAccount';
   static const String createClientAccount = '/createClientAccount';
+  static const String agencyProfile = '/agencyProfile';
+  static const String notificationSettings = '/notificationSettings';
+  static const String buyConnects = '/buyConnects';
 
   ///Create User Profile///
 

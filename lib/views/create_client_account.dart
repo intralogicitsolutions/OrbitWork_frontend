@@ -31,7 +31,7 @@ class CreateClientAccount extends StatelessWidget{
                    SizedBox(height: 24,),
                    Text('Setup a client account if you want to post jobs and hire talents.'),
                    SizedBox(height: 12,),
-                   Text('Company Name', style: TextStyle(fontSize: 16),),
+                   Text('Company Name', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
                    SizedBox(height: 10,),
                    Container(
                      height: 40,
@@ -47,14 +47,14 @@ class CreateClientAccount extends StatelessWidget{
                    SizedBox(height: 24,),
                    Row(
                      children: [
-                       OutlinedButton(onPressed: () {
-
-                       },
+                       OutlinedButton(onPressed: () {},
                            style: OutlinedButton.styleFrom(
                              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
                              side: BorderSide.none,
                            ),
-                           child: Text('Cancel')),
+                           child: Text('Cancel',style: TextStyle(
+                             color: theme.primaryColor
+                           ),)),
                        ElevatedButton(onPressed: () {},
                            style: ElevatedButton.styleFrom(
                                elevation: 0,
@@ -70,11 +70,10 @@ class CreateClientAccount extends StatelessWidget{
                    )
                  ],
                ),
-             )
+             ),
            ],
         ),
       ),
     );
   }
-
 }

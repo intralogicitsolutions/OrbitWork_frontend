@@ -106,7 +106,7 @@ class SettingPage extends StatelessWidget {
             SettingsTile(
               icon: Icons.notifications_none,
               title: "Notifiaction settings",
-              onTap: () => {},
+              onTap: () => {Get.toNamed(AppRoutes.notificationSettings)},
             ),
 
             SectionTitle(title: "Account management and control"),

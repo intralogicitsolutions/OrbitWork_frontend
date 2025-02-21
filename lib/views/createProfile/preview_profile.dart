@@ -74,6 +74,7 @@ class PreviewProfile extends GetView<PreviewProfileController> {
                           onPressed: () {},
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green,
+                            minimumSize: const Size(double.infinity, 40),
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
@@ -401,7 +402,7 @@ class PreviewProfile extends GetView<PreviewProfileController> {
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
-                          minimumSize: const Size(double.infinity, 48),
+                          minimumSize: const Size(double.infinity, 40),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
