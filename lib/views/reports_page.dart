@@ -66,9 +66,9 @@ class ReportsPage extends StatelessWidget {
       ),
       body: Obx(() {
         if (controller.selectedTab.value == 0) {
-          return OverviewTab();
+          return OverviewTab(showAppbar: false,);
         } else {
-          return TransactionHistoryTab();
+          return TransactionHistoryTab(showAppbar: false,);
         }
       }),
     );

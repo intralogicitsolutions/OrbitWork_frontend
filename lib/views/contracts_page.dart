@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:orbitwork/component/earnings_available_bottomsheet.dart';
 import 'package:orbitwork/widgets/custom_appbar.dart';
+
+import '../component/backend_dev_work_bottomsheet.dart';
+import '../routes/app_routes.dart';
 
 class ContractsPage extends StatelessWidget {
   @override
@@ -47,7 +52,15 @@ class ContractsPage extends StatelessWidget {
                       ),
                     ),
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.bottomSheet(
+                            Container(
+                              height: Get.height * 0.4,
+                                child: EarningsAvailableBottomsheet()),
+                          isScrollControlled: true,
+                          isDismissible: true
+                        );
+                      },
                       icon: Icon(
                         Icons.more_horiz_sharp,
                         color: Colors.green,
@@ -139,7 +152,15 @@ class ContractsPage extends StatelessWidget {
                       ),
                     ),
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.bottomSheet(
+                            Container(
+                                height: Get.height * 0.4,
+                                child: BackendDevWorkBottomsheet()),
+                            isScrollControlled: true,
+                            isDismissible: true
+                        );
+                      },
                       icon: Icon(
                         Icons.more_horiz_sharp,
                         color: Colors.green,
@@ -172,7 +193,7 @@ class ContractsPage extends StatelessWidget {
                         fontSize: 10,
                         fontStyle: FontStyle.normal),
                   ),
-                  onPressed: () {},
+                  onPressed: () { Get.toNamed(AppRoutes.membershipPlans);},
                   child: Text(
                     'Active',
                     style:

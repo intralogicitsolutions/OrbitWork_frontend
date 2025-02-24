@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orbitwork/component/added_badge_bottomsheet.dart';
 import '../controllers/availability_badge_controller.dart';
 import 'availability_badge_work_bottomsheet.dart';
 import 'connect_counter.dart';
@@ -73,6 +74,12 @@ class BadgeBottomSheet extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 16),
+              Center(
+                child: Text('Your profile will get this new badge',style: TextStyle(
+                  fontSize: 16, fontWeight: FontWeight.w500
+                ), ),
+              ),
+              SizedBox(height: 16,),
               Text(
                 'You had no profile views in the last 7 days.',
                 style: TextStyle(color: Colors.grey[600]),
@@ -95,7 +102,7 @@ class BadgeBottomSheet extends StatelessWidget {
                 'The price to turn on the badge can change, so we\'ll turn the badge off automatically if the price exceeds your maximum.',
                 style: TextStyle(color: Colors.grey[600]),
               ),
-              SizedBox(height: 16),
+              //SizedBox(height: 16),
               TextButton(
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.zero,
@@ -105,7 +112,7 @@ class BadgeBottomSheet extends StatelessWidget {
                 onPressed: () {
                   Get.bottomSheet(
                       Container(
-                          height: Get.height * 0.8,
+                         height: Get.height * 0.8,
                           child: AvailabilityBadgeWorkBottomsheet()),
                       isDismissible: true,
                       isScrollControlled: true);
@@ -114,6 +121,7 @@ class BadgeBottomSheet extends StatelessWidget {
                   'How does this work?',
                   style: TextStyle(
                       color: Colors.green,
+                      fontWeight: FontWeight.bold,
                       decorationColor: theme.primaryColor,
                       decoration: TextDecoration.underline),
                 ),
@@ -170,7 +178,15 @@ class BadgeBottomSheet extends StatelessWidget {
                   SizedBox(width: 16),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: controller.turnOnBadge,
+                      //onPressed: controller.turnOnBadge,
+                      onPressed: () {
+                        Get.bottomSheet(
+                            Container(
+                                height: Get.height * 0.5,
+                                child: AddedBadgeBottomsheet()),
+                            isDismissible: true,
+                            isScrollControlled: true);
+                      },
                       child: Text('Turn on'),
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(

@@ -34,6 +34,10 @@ class AppRoutes{
   static const String agencyProfile = '/agencyProfile';
   static const String notificationSettings = '/notificationSettings';
   static const String buyConnects = '/buyConnects';
+  static const String transactionHistory = '/transactionHistory';
+  static const String overView = '/overView';
+  static const String membershipPlans = '/membershipPlans';
+  static const String workroomTimesheet = '/workroomTimesheet';
 
   ///Create User Profile///
 

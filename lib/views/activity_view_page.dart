@@ -45,8 +45,11 @@ class ActivityView extends StatelessWidget {
                               children: [
                                 Expanded(
                                   flex: 3,
-                                  child: Text('No new Notification',
-                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                    child: Text('No new Notification',
+                                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),),
+                                  ),
                                 ),
                                 Expanded(
                                   flex: 1,

@@ -106,7 +106,12 @@ class AvailabilityBadgeWorkBottomsheet extends StatelessWidget {
                         style: TextStyle(
                             color: theme.primaryColor,
                             decoration: TextDecoration.underline,
-                            decorationColor: theme.primaryColor)),
+                            decorationColor: theme.primaryColor),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Get.toNamed(AppRoutes.buyConnects);
+                        },
+                    ),
                     TextSpan(text: ' if you need them.'),
                   ])),
               SizedBox(
@@ -138,7 +143,12 @@ class AvailabilityBadgeWorkBottomsheet extends StatelessWidget {
                         style: TextStyle(
                             color: theme.primaryColor,
                             decoration: TextDecoration.underline,
-                            decorationColor: theme.primaryColor)),
+                            decorationColor: theme.primaryColor),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Get.toNamed(AppRoutes.buyConnects);
+                        },
+                    ),
                     TextSpan(
                         text:
                             ' or wait until the beginning of each month when we send you some for free.',

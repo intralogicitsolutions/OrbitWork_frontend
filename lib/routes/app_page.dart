@@ -31,6 +31,7 @@ import 'package:orbitwork/views/job_details_page.dart';
 import 'package:orbitwork/views/jobs_page.dart';
 import 'package:orbitwork/views/login.dart';
 import 'package:orbitwork/views/membership_and_connects.dart';
+import 'package:orbitwork/views/membership_plans.dart';
 import 'package:orbitwork/views/my_home_page.dart';
 import 'package:orbitwork/views/my_stats_page.dart';
 import 'package:orbitwork/views/my_teams_page.dart';
@@ -46,10 +47,13 @@ import 'package:orbitwork/views/signup.dart';
 import 'package:orbitwork/views/createProfile/skill_section_page.dart';
 import 'package:orbitwork/views/submit_proposal_page.dart';
 import 'package:orbitwork/views/tax_forms_page.dart';
+import 'package:orbitwork/views/transaction_history_tab.dart';
+import 'package:orbitwork/views/workroom_timesheet.dart';
 import 'package:orbitwork/widgets/create_profile_container.dart';
 import 'package:orbitwork/widgets/profile_setup_container.dart';
 
 import '../views/createProfile/freelancing_setup.dart';
+import '../views/overview_tab.dart';
 import '../widgets/specialized_profile_container.dart';
 
 class AppPages {
@@ -86,6 +90,10 @@ class AppPages {
     GetPage(name: AppRoutes.agencyProfile, page: () => AgencyProfile()),
     GetPage(name: AppRoutes.notificationSettings, page: () => NotificationSettings(),),
     GetPage(name: AppRoutes.buyConnects, page: () => BuyConnects(),),
+    GetPage(name: AppRoutes.transactionHistory, page: () => TransactionHistoryTab(showAppbar: Get.arguments,),),
+    GetPage(name: AppRoutes.overView, page: () => OverviewTab(showAppbar: Get.arguments,),),
+    GetPage(name: AppRoutes.membershipPlans, page: () => MembershipPlans(),),
+    GetPage(name: AppRoutes.workroomTimesheet, page: () => WorkRoomTimeSheet(),),
 
     /// Create User Profile ///
 

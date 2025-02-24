@@ -27,6 +27,7 @@ class ProposalController extends GetxController {
   var archivedProposalsCount = 15.obs;
   var archivedInvitesCount = 3.obs;
 
+
   @override
   void onInit() {
     super.onInit();
@@ -144,5 +145,4 @@ class ProposalController extends GetxController {
   void selectChip(String chipLabel) {
     selectedChip.value = chipLabel;
   }
-
 }
