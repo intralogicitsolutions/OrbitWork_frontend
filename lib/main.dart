@@ -3,10 +3,12 @@
   import 'package:orbitwork/routes/app_page.dart';
   import 'package:orbitwork/routes/app_routes.dart';
 
+import 'comms/global/global_binding.dart';
 import 'controllers/theme_controller.dart';
 
   void main() {
     Get.put(ThemeController());
+    GlobalBindings().dependencies();
     runApp(const MyApp());
   }
 
@@ -19,19 +21,11 @@ import 'controllers/theme_controller.dart';
         final themeController = Get.find<ThemeController>();
       return GetMaterialApp(
         title: 'Orbitwork',
-        // theme: ThemeData.light(),
-        // darkTheme: ThemeData.dark(),
-        // themeMode: themeController.themeMode.value,
         theme: themeController.lightTheme,
         darkTheme: themeController.darkTheme,
         themeMode: themeController.themeMode.value,
-        // theme: ThemeData(
-        //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        //   useMaterial3: true,
-        // ),
         initialRoute: AppRoutes.onboarding,
         getPages: AppPages.routes,
-        // home: SignUpPage(),
         debugShowCheckedModeBanner: false,
       );
       });

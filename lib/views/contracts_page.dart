@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orbitwork/component/earnings_available_bottomsheet.dart';
+import 'package:orbitwork/controllers/contracts_controller.dart';
 import 'package:orbitwork/widgets/custom_appbar.dart';
 
 import '../component/backend_dev_work_bottomsheet.dart';
 import '../routes/app_routes.dart';
+import '../widgets/warning_message.dart';
 
 class ContractsPage extends StatelessWidget {
+  final ContractController controller = Get.put(ContractController());
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -18,6 +21,14 @@ class ContractsPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              buildWarningMessage(context),
+              Obx(() => controller.isShowing.value
+                  ? _showNotice()
+                  : SizedBox()),
+              Obx(() => controller.isVisible.value
+                  ? _showUpgradePlan()
+                  : SizedBox()),
+             // _showUpgradePlan(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -26,8 +37,8 @@ class ContractsPage extends StatelessWidget {
                     children: [
                       Text(
                         'Earnings available now:',
-                        style:
-                            TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w500),
                       ),
                       Text(
                         '\$0.00',
@@ -55,11 +66,10 @@ class ContractsPage extends StatelessWidget {
                       onPressed: () {
                         Get.bottomSheet(
                             Container(
-                              height: Get.height * 0.4,
+                                height: Get.height * 0.4,
                                 child: EarningsAvailableBottomsheet()),
-                          isScrollControlled: true,
-                          isDismissible: true
-                        );
+                            isScrollControlled: true,
+                            isDismissible: true);
                       },
                       icon: Icon(
                         Icons.more_horiz_sharp,
@@ -158,8 +168,7 @@ class ContractsPage extends StatelessWidget {
                                 height: Get.height * 0.4,
                                 child: BackendDevWorkBottomsheet()),
                             isScrollControlled: true,
-                            isDismissible: true
-                        );
+                            isDismissible: true);
                       },
                       icon: Icon(
                         Icons.more_horiz_sharp,
@@ -193,20 +202,30 @@ class ContractsPage extends StatelessWidget {
                         fontSize: 10,
                         fontStyle: FontStyle.normal),
                   ),
-                  onPressed: () { Get.toNamed(AppRoutes.membershipPlans);},
+                  onPressed: () {},
                   child: Text(
                     'Active',
-                    style:
-                        TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16),
                   ),
                 ),
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               RichText(
                 text: const TextSpan(
-                  style: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.w400),
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w400),
                   children: [
-                    TextSpan(text: '0.00 hrs, \$0.00 ',  style: TextStyle(color: Colors.green),),
+                    TextSpan(
+                      text: '0.00 hrs, \$0.00 ',
+                      style: TextStyle(color: Colors.green),
+                    ),
                     TextSpan(
                       text: 'this week',
                     ),
@@ -214,17 +233,31 @@ class ContractsPage extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 5,),
+              SizedBox(
+                height: 5,
+              ),
               Text('Rate: \$0.00/hr, 12 hrs weekly limit'),
-              SizedBox(height: 12,),
-              Text('Sep 26,2024 - Present', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.grey),),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 12,
+              ),
+              Text(
+                'Sep 26,2024 - Present',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey),
+              ),
+              SizedBox(
+                height: 10,
+              ),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: OutlinedButton(
                   onPressed: () {},
                   child: const Text(
-                    'See timesheet', style: TextStyle(color: Colors.green),),
+                    'See timesheet',
+                    style: TextStyle(color: Colors.green),
+                  ),
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(color: Colors.green),
                     shape: RoundedRectangleBorder(
@@ -235,6 +268,179 @@ class ContractsPage extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _showUpgradePlan() {
+    return Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              gradient: LinearGradient(
+                colors: [Colors.lightGreen.shade100, Colors.lime.shade300],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              )),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0, right: 4.0),
+                    child: Icon(
+                      Icons.local_offer_outlined,
+                    ),
+                  ),
+                  Text(
+                    'Exclusive Freelancer Plus perk',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  Spacer(),
+                  IconButton(onPressed: () {
+                    controller.hideUpgradePlan();
+                  }, icon: Icon(Icons.close)),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Container(
+                    padding: const EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        color: Colors.white),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Join Freelancer Plus, and work smarter with 20% off an anual Microdoft 365 subsription. Limited time only.',
+                          style: TextStyle(fontWeight: FontWeight.w300),
+                        ),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(AppRoutes.membershipPlans);
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                'Upgrade plan',
+                                style: TextStyle(
+                                    decoration: TextDecoration.underline),
+                              ),
+                              Icon(Icons.arrow_forward)
+                            ],
+                          ),
+                        )
+                      ],
+                    )),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 16,
+        )
+      ],
+    );
+  }
+
+  Widget _showNotice() {
+    return Column(
+      children: [
+        Container(
+            decoration: BoxDecoration(color: Color(0xFFFFF8E1)),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    color: Color(0xFF81770B),
+                  ),
+                  SizedBox(
+                    width: 8.0,
+                  ),
+                  Expanded(
+                    child: RichText(
+                        text: TextSpan(
+                            style:
+                                TextStyle(color: Color(0xFF81770B), height: 1.5, fontSize: 16),
+                            children: [
+                          TextSpan(
+                              text:
+                                  'All freelancers are required to complete a '),
+                          TextSpan(
+                              text: 'W9 or a W-8BEN',
+                              style: TextStyle(
+                                  decoration: TextDecoration.underline)),
+                          TextSpan(text: ' from to withdraw money.')
+                        ])),
+                  ),
+                  SizedBox(
+                    width: 8.0,
+                  ),
+                  SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: IconButton(
+                      onPressed: () {controller.dismissWarningText();},
+                      icon: Icon(
+                        Icons.close,
+                        color: Color(0xFF81770B),
+                      ),
+                      constraints: BoxConstraints(),
+                      padding: EdgeInsets.zero,
+                      visualDensity: VisualDensity.compact,
+                    ),
+                  )
+                ],
+              ),
+            )),
+        SizedBox(
+          height: 16,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNewProject(){
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(8)
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Text('There are no active contracts.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+              fontSize: 24, fontWeight: FontWeight.w500
+            ),),
+            SizedBox(height: 16,),
+            Text('Contracts you\'re actively working on will appear here.', textAlign: TextAlign.center,),
+            SizedBox(height: 16,),
+            ElevatedButton(onPressed: () {
+            },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  backgroundColor: Colors.green,
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+                ),
+                child: Text('Search for new projects', style: TextStyle(
+                  color: Colors.white
+            ),))
+
+          ],
         ),
       ),
     );

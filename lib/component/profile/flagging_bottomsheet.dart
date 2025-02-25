@@ -17,7 +17,10 @@ class FlaggingBottomsheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      color: theme.scaffoldBackgroundColor,
+      decoration: BoxDecoration(
+        color: theme.scaffoldBackgroundColor,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -43,11 +46,6 @@ class FlaggingBottomsheet extends StatelessWidget {
               SizedBox(
                 height: 24,
               ),
-              // Text('Person is requesting payment outside of Orbitwork'),
-              // Text('Person is attempting to buy or use my Orbitwork account'),
-              // Text('Person in the profile is not the person working on Orbitwork'),
-              // Text('Profile looks fake or contains stolen/plagiarized content'),
-              // Text('Something else'),
 
               Obx(() => Wrap(
                 spacing: 8,
@@ -81,19 +79,6 @@ class FlaggingBottomsheet extends StatelessWidget {
                     }).toList(),
                   )),
 
-              // Column(
-              //   children: reasons.map((reason) {
-              //     return Obx(() => RadioListTile<String>(
-              //       title: Text(reason),
-              //       value: reason,
-              //       groupValue: controller.selectedReason.value,
-              //       onChanged: (value) {
-              //         controller.selectedReason.value = value!;
-              //       },
-              //     ));
-              //   }).toList(),
-              // ),
-
               SizedBox(
                 height: 24,
               ),
@@ -104,25 +89,6 @@ class FlaggingBottomsheet extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
-              // Obx(() {
-              //     return TextField(
-              //       decoration: InputDecoration(
-              //         border: OutlineInputBorder(
-              //           borderRadius: BorderRadius.all(Radius.circular(8)),
-              //         ),
-              //         hintText: 'Share additional details',
-              //         hintStyle: TextStyle(
-              //           fontSize: 12, color: Colors.grey[600]
-              //         ),
-              //         contentPadding: EdgeInsets.symmetric(
-              //           horizontal: 16,
-              //           vertical: 12,
-              //         ),
-              //       ),
-              //       maxLines: 4,
-              //       onChanged: controller.updateCharacterCount,
-              //     );
-              //   }
               TextField(
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
@@ -136,7 +102,7 @@ class FlaggingBottomsheet extends StatelessWidget {
                 maxLines: 4,
                 onChanged: controller.updateCharacterCount,
               ),
-              // ),
+
               Obx(() {
                 return Align(
                     alignment: Alignment.bottomRight,

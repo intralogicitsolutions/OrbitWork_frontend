@@ -1,12 +1,14 @@
 import 'package:get/get.dart';
 
+import '../models/contract_activity_model.dart';
 import '../models/day_timesheet_model.dart';
 import '../models/timesheet_transaction_model.dart';
 
 class TimesheetController extends GetxController {
   var selectedTab = 0.obs;
+  var isExpanded = false.obs;
 
-  final RxString userName = 'Harshad'.obs;
+  final RxString userName = 'Abc'.obs;
   final RxString userRole = 'Cofounderslab Admin'.obs;
   final RxString location = 'United States'.obs;
   final RxString lastWorked = '49 minutes ago'.obs;
@@ -33,7 +35,21 @@ class TimesheetController extends GetxController {
   final RxDouble earningThisWeek = 0.0.obs;
   final RxDouble contractRate = 0.0.obs;
   final RxDouble weekTracked = 0.0.obs;
-  final RxInt weeklyLimit = 40.obs;
+  final RxInt weeklylimit = 40.obs;
+
+
+  final Rx<String> contractType = "Hourly".obs;
+  final Rx<String> rate = "\$00.00 /hr".obs;
+  final Rx<String> rateIncrease = "None".obs;
+  final Rx<String> weeklyLimit = "40 hrs/week".obs;
+  final Rx<String> manualTime = "Manual time not allowed".obs;
+  final Rx<String> startDate = "Apr 22, 2021".obs;
+  final Rx<String> verifiedName = "Abc".obs;
+  final Rx<String> contractId = "123456789".obs;
+
+
+  final RxList<ContractActivity> activities = <ContractActivity>[].obs;
+  var isShowDetails = false.obs;
 
 
   @override
@@ -41,6 +57,7 @@ class TimesheetController extends GetxController {
     super.onInit();
     initializeWeeklyTimesheet();
     initializeTransactions();
+    initializeActivity();
   }
 
   void changeTab(int index) {
@@ -74,5 +91,14 @@ class TimesheetController extends GetxController {
     last30DaysAmount.value = 2000.00;
     sinceStartAmount.value = 5000.00;
   }
+
+  void initializeActivity(){
+    activities.value = [
+      ContractActivity(date: 'Oct 16, 2024', description: 'Cofounderslab Admin gave you a bouns of \$0.00'),
+      ContractActivity(date: 'Sep 26, 2024', description: 'You accepted Cofounderslab Admin\'s offer at 10 per hour')
+
+    ];
+  }
+
 
 }

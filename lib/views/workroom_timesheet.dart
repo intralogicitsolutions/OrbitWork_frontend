@@ -4,8 +4,10 @@ import 'package:orbitwork/views/tabs/contract_details_tab.dart';
 import 'package:orbitwork/views/tabs/overView_tab.dart';
 import 'package:orbitwork/views/tabs/timesheet_tab.dart';
 
+import '../component/workroom_timesheet_bottomsheet.dart';
 import '../controllers/workroom_timesheet_controller.dart';
 import '../models/timesheet_transaction_model.dart';
+import '../routes/app_routes.dart';
 
 class WorkRoomTimeSheet extends StatelessWidget {
   final TimesheetController controller = Get.put(TimesheetController());
@@ -32,9 +34,9 @@ class WorkRoomTimeSheet extends StatelessWidget {
                 case 0:
                   return OverViewPage();
                 case 1:
-                  return TimesheetPage();
+                  return TimesheetPage(showAppbar: false,);
                 case 2:
-                  return ContractDetailsPage();
+                  return ContractDetailsPage(showAppbar: false,);
                 default:
                   return TimesheetPage();
               }
@@ -79,11 +81,21 @@ class WorkRoomTimeSheet extends StatelessWidget {
                 children: [
                   IconButton(
                     icon: Icon(Icons.chat_bubble_outline, color: Colors.white),
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.toNamed(AppRoutes.message);
+                    },
                   ),
                   IconButton(
                     icon: Icon(Icons.more_vert, color: Colors.white),
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.bottomSheet(
+                          Container(
+                              height: Get.height * 0.4,
+                              child: WorkroomTimesheetBottomsheet()),
+                          isScrollControlled: true,
+                          isDismissible: true
+                      );
+                    },
                   ),
                 ],
               ),

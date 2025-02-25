@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import 'dart:ui' as ui;
+import '../component/flag_inappropriate_bottomsheet.dart';
 import '../controllers/clients_history_controller.dart';
 import '../controllers/job_details_controller.dart';
 import '../controllers/jobs_controller.dart';
@@ -552,7 +553,7 @@ class JobDetailsView extends StatelessWidget {
                                                         .isExpanded.value
                                                     ? Icons.keyboard_arrow_up
                                                     : Icons
-                                                        .keyboard_arrow_down, color: theme.scaffoldBackgroundColor,),
+                                                        .keyboard_arrow_down, color: theme.secondaryHeaderColor,),
                                                 backgroundColor:
                                                     Colors.grey.shade200,
                                                 shape: RoundedRectangleBorder(
@@ -899,11 +900,22 @@ class JobDetailsView extends StatelessWidget {
                                 SizedBox(
                                   width: 10,
                                 ),
-                                Text(
-                                  'Flag as inappropriate',
-                                  style: TextStyle(
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.w500),
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.bottomSheet(
+                                      Container(
+                                          height: Get.height * 0.8,
+                                          child: FlagInappropriateBottomsheet()),
+                                      isScrollControlled: true,
+                                      ignoreSafeArea: false,
+                                    );
+                                  },
+                                  child: Text(
+                                    'Flag as inappropriate',
+                                    style: TextStyle(
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.w500),
+                                  ),
                                 )
                               ],
                             )

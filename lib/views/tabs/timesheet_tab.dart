@@ -5,10 +5,20 @@ import '../../controllers/workroom_timesheet_controller.dart';
 import '../../models/timesheet_transaction_model.dart';
 
 class TimesheetPage extends StatelessWidget{
+  final bool? showAppbar;
   final TimesheetController controller = Get.put(TimesheetController());
+
+  TimesheetPage({Key? key,  this.showAppbar = false,}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
    return Scaffold(
+     appBar: showAppbar == true ? AppBar(
+       title: Text('Timesheet', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),),
+       actions: [
+         IconButton(onPressed: () {}, icon: Icon(Icons.more_vert_rounded))
+       ],
+     ): null,
      body: SingleChildScrollView(
        child: Column(
          crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,7 +109,7 @@ class TimesheetPage extends StatelessWidget{
           Text(
             hours,
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 20,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -150,8 +160,8 @@ class TimesheetPage extends StatelessWidget{
                 Obx(() => Text(
                   '\$${controller.totalAmount.value}',
                   style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
                   ),
                 )),
                 SizedBox(height: 5),

@@ -32,6 +32,7 @@ import 'package:orbitwork/views/jobs_page.dart';
 import 'package:orbitwork/views/login.dart';
 import 'package:orbitwork/views/membership_and_connects.dart';
 import 'package:orbitwork/views/membership_plans.dart';
+import 'package:orbitwork/views/messages_page.dart';
 import 'package:orbitwork/views/my_home_page.dart';
 import 'package:orbitwork/views/my_stats_page.dart';
 import 'package:orbitwork/views/my_teams_page.dart';
@@ -46,8 +47,11 @@ import 'package:orbitwork/views/settings_page.dart';
 import 'package:orbitwork/views/signup.dart';
 import 'package:orbitwork/views/createProfile/skill_section_page.dart';
 import 'package:orbitwork/views/submit_proposal_page.dart';
+import 'package:orbitwork/views/tabs/contract_details_tab.dart';
+import 'package:orbitwork/views/tabs/timesheet_tab.dart';
 import 'package:orbitwork/views/tax_forms_page.dart';
 import 'package:orbitwork/views/transaction_history_tab.dart';
+import 'package:orbitwork/views/view_offer_page.dart';
 import 'package:orbitwork/views/workroom_timesheet.dart';
 import 'package:orbitwork/widgets/create_profile_container.dart';
 import 'package:orbitwork/widgets/profile_setup_container.dart';
@@ -94,6 +98,11 @@ class AppPages {
     GetPage(name: AppRoutes.overView, page: () => OverviewTab(showAppbar: Get.arguments,),),
     GetPage(name: AppRoutes.membershipPlans, page: () => MembershipPlans(),),
     GetPage(name: AppRoutes.workroomTimesheet, page: () => WorkRoomTimeSheet(),),
+    GetPage(name: AppRoutes.viewOffer, page: () => ViewOffer(),),
+    GetPage(name: AppRoutes.contractDetails, page: () => ContractDetailsPage(showAppbar: Get.arguments,),),
+    GetPage(name: AppRoutes.timeSheet, page: () => TimesheetPage(showAppbar: Get.arguments,),),
+    GetPage(name: AppRoutes.message, page: () => MessagesPage(),),
+
 
     /// Create User Profile ///
 
