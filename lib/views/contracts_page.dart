@@ -88,6 +88,10 @@ class ContractsPage extends StatelessWidget {
               SizedBox(
                 height: 12,
               ),
+              _buildNewProject(),
+              SizedBox(height: 12,),
+              _buildDirectContracts(),
+              SizedBox(height: 12,),
               SizedBox(
                 height: 40,
                 child: TextField(
@@ -440,6 +444,45 @@ class ContractsPage extends StatelessWidget {
                   color: Colors.white
             ),))
 
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDirectContracts(){
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.grey[100],
+          borderRadius: BorderRadius.circular(8)
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Direct contracts',
+              style: TextStyle(
+              fontSize: 24, fontWeight: FontWeight.w500
+            ),),
+            SizedBox(height: 16,),
+            Text('Create simple contracts with your non-Orbitwork clients, protected in Escrow, leading to quick payment.', ),
+            SizedBox(height: 16,),
+            Center(
+              child: ElevatedButton(onPressed: () {
+                Get.toNamed(AppRoutes.directContracts);
+              },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    backgroundColor: Colors.green,
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+                  ),
+                  child: Text('Create a direct contract', style: TextStyle(
+                      color: Colors.white
+                  ),)),
+            )
           ],
         ),
       ),

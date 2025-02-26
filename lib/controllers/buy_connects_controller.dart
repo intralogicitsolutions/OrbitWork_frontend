@@ -1,9 +1,12 @@
 import 'package:get/get.dart';
 
+import '../routes/app_routes.dart';
+
 class BuyConnectsController extends GetxController{
   final showWarning = true.obs;
   final RxString selectConnects = '100 for \$15.00'.obs;
   final isBottomSheetOpen = false.obs;
+  var hasBoughtConnects = false.obs;
 
   void dismissWarningText(){
     showWarning.value = false;
@@ -29,5 +32,10 @@ class BuyConnectsController extends GetxController{
         return false;
     }
     return true;
+  }
+
+  void buyConnects() {
+    hasBoughtConnects.value = true;
+    Get.back();
   }
 }

@@ -1,11 +1,18 @@
+import 'package:flutter/src/widgets/container.dart';
 import 'package:get/get.dart';
 
 import '../comms/transaction_type.dart';
+import '../component/filter_transaction_bottomsheet.dart';
 import '../models/transaction_model.dart';
 
 class TransactionController extends GetxController {
   var transactions = <Transaction>[].obs;
   RxBool isLoading = true.obs;
+  final RxBool newDesign = true.obs;
+  final RxDouble availableBalance = 0.00.obs;
+  final RxDouble pendingBalance = 0.00.obs;
+  // final RxList transactions = [].obs;
+
 
   @override
   void onInit() {
@@ -49,4 +56,18 @@ class TransactionController extends GetxController {
     ];
     isLoading.value = false;
   }
+
+  void toggleDesign() {
+    newDesign.value = !newDesign.value;
+  }
+
+  void showFilters() {
+    Get.bottomSheet(
+        Container(
+          height: Get.height * 0.7,
+            child: FilterTranscationBottomsheet()),
+      isScrollControlled: true,
+    );
+  }
+
 }

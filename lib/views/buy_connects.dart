@@ -1,7 +1,10 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orbitwork/component/number_of_connects_bottomsheet.dart';
 import 'package:orbitwork/controllers/buy_connects_controller.dart';
+
+import '../routes/app_routes.dart';
 
 class BuyConnects extends StatelessWidget {
   final BuyConnectsController controller = Get.put(BuyConnectsController());
@@ -123,7 +126,9 @@ class BuyConnects extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            onPressed: () {}, child: Text('Apply', style: TextStyle(
+                            onPressed: () {
+                              controller.buyConnects();
+                            }, child: Text('Apply', style: TextStyle(
                           color: theme.primaryColor,
                         ),)),
                       ),
@@ -169,7 +174,12 @@ class BuyConnects extends StatelessWidget {
                         text: 'Upgrade Plan',
                         style: TextStyle(
                             decoration: TextDecoration.underline,
-                            decorationColor: theme.secondaryHeaderColor))
+                            decorationColor: theme.secondaryHeaderColor),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Get.toNamed(AppRoutes.membershipPlans); // Call the controller method
+                        },
+                    )
                   ])),
             ),
             Image.asset(

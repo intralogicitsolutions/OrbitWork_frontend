@@ -1,12 +1,16 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:orbitwork/comms/global/global_tooltip.dart';
 import 'package:shimmer/shimmer.dart';
 import 'dart:ui' as ui;
 import '../component/flag_inappropriate_bottomsheet.dart';
+import '../controllers/buy_connects_controller.dart';
 import '../controllers/clients_history_controller.dart';
 import '../controllers/job_details_controller.dart';
 import '../controllers/jobs_controller.dart';
+import '../controllers/profile_setting_controller.dart';
 import '../models/job_model.dart';
 import '../routes/app_routes.dart';
 import '../widgets/custom_button.dart';
@@ -18,7 +22,8 @@ class JobDetailsView extends StatelessWidget {
   final JobDetailsController controller = Get.put(JobDetailsController());
   final ClientsHistoryController jobController =
       Get.put(ClientsHistoryController());
-  final GlobalKey _textKey = GlobalKey();
+  final ProfileController profileController = Get.put(ProfileController());
+  final BuyConnectsController buyConnectsController = Get.put(BuyConnectsController());
 
   JobDetailsView({Key? key, required this.job}) : super(key: key);
 
@@ -129,13 +134,27 @@ class JobDetailsView extends StatelessWidget {
                             SizedBox(
                               width: 10,
                             ),
-                               Expanded(
-                                child: Text(
-                                  'Specialized profiles can help you better highlight your expertise when submitting proposals to jobs like these.',
-                                  //controller.jobDetails.value?.expertise ?? '',
-                                  style: TextStyle(color: Colors.green),
-                                ),
-                              )
+                               Expanded(child: RichText(text: TextSpan(
+                                 style: TextStyle(
+                                   color: Get.theme.secondaryHeaderColor, height: 1.5
+                                 ),
+                                 children: [
+                                   TextSpan(
+                                     text: 'Specialized profiles can help you better highlight your expertise when submitting proposals to jobs like these.'
+                                   ),
+                                   TextSpan(
+                                     text: 'Create a specialized profile', style: TextStyle(
+                                     color: Get.theme.primaryColor, decoration: TextDecoration.underline,
+                                     decorationColor: Get.theme.primaryColor,
+                                   ),
+                                     recognizer: TapGestureRecognizer()
+                                       ..onTap = () {
+                                         profileController.addSpecializedProfile(); // Call the controller method
+                                       },
+                                   )
+                                 ]
+                               ))),
+
                           ],
                         ),
 
@@ -363,10 +382,9 @@ class JobDetailsView extends StatelessWidget {
                                 Text('Proposals: '),
                                 Row(
                                   children: [
-                                    Icon(
-                                      Icons.help_outline,
-                                      size: 16,
-                                      color: Colors.green,
+                                    GlobalTooltip(text: 'This range includes relevant proposals, but does not include proposals, but does not include proposals that are withdrawn, declined or archived. Please note that all proposals are accessible to clients on their applicants page.',
+                                    iconColor: Get.theme.primaryColor,
+                                    iconSize: 16,
                                     ),
                                     SizedBox(
                                       width: 2,
@@ -382,10 +400,9 @@ class JobDetailsView extends StatelessWidget {
                                 Text('Last viewed by client: '),
                                 Row(
                                   children: [
-                                    Icon(
-                                      Icons.help_outline,
-                                      size: 16,
-                                      color: Colors.green,
+                                    GlobalTooltip(text: 'This is when the client last reviewed or interacted with the applicants for this job.',
+                                    iconSize: 16,
+                                      iconColor: Get.theme.primaryColor,
                                     ),
                                     SizedBox(
                                       width: 2,
@@ -687,7 +704,7 @@ class JobDetailsView extends StatelessWidget {
                                                         .isJobsExpanded.value
                                                     ? Icons.keyboard_arrow_up
                                                     : Icons
-                                                        .keyboard_arrow_down,  color: theme.scaffoldBackgroundColor,),
+                                                        .keyboard_arrow_down,  color: theme.secondaryHeaderColor,),
                                                 backgroundColor:
                                                     Colors.grey.shade200,
                                                 shape: RoundedRectangleBorder(
@@ -939,11 +956,22 @@ class JobDetailsView extends StatelessWidget {
                 child: Row(
                   children: [
                     Expanded(
-                      child: CustomButton(
-                        'Apply now',
-                        onPressed: () {
-                          Get.toNamed(AppRoutes.submitProposal);
-                        },
+                      child: Obx(() {
+                          return CustomButton(
+                            buyConnectsController.hasBoughtConnects.value ?
+                            'Apply now':
+                            'Buy Connects to apply',
+                            onPressed: () {
+                              if (buyConnectsController.hasBoughtConnects.value) {
+                                Get.toNamed(AppRoutes.submitProposal);
+                              } else {
+                                Get.toNamed(AppRoutes.buyConnects);
+                              }
+                              //Get.toNamed(AppRoutes.submitProposal);
+                              //Get.toNamed(AppRoutes.buyConnects);
+                            },
+                          );
+                        }
                       ),
                     ),
                     SizedBox(width: 16),

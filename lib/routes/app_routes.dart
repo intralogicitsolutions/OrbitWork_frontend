@@ -42,6 +42,7 @@ class AppRoutes{
   static const String contractDetails = '/contractDetails';
   static const String timeSheet = '/timeSheet';
   static const String message = '/message';
+  static const String directContracts = '/directContracts';
 
   ///Create User Profile///
 

@@ -24,6 +24,7 @@ import 'package:orbitwork/views/createProfile/skill_section.dart';
 import 'package:orbitwork/views/createProfile/specialized_profile_tab/specialized_profile_1.dart';
 import 'package:orbitwork/views/createProfile/write_an_overview.dart';
 import 'package:orbitwork/views/create_client_account.dart';
+import 'package:orbitwork/views/direct_contracts_page.dart';
 import 'package:orbitwork/views/direct_to_local_bank.dart';
 import 'package:orbitwork/views/get_paid.dart';
 import 'package:orbitwork/views/help_and_support.dart';
@@ -102,6 +103,7 @@ class AppPages {
     GetPage(name: AppRoutes.contractDetails, page: () => ContractDetailsPage(showAppbar: Get.arguments,),),
     GetPage(name: AppRoutes.timeSheet, page: () => TimesheetPage(showAppbar: Get.arguments,),),
     GetPage(name: AppRoutes.message, page: () => MessagesPage(),),
+    GetPage(name: AppRoutes.directContracts, page: () => DirectContracts(),),
 
 
     /// Create User Profile ///

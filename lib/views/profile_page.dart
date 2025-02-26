@@ -247,8 +247,10 @@ class ProfilePage extends StatelessWidget {
                               SizedBox(
                                 height: 24,
                               ),
-                              Text(
-                                  'Add a project. Talent are hired 9x more often if they\'ve published a portfolio.')
+                              Expanded(
+                                child: Text(
+                                    'Add a project. Talent are hired 9x more often if they\'ve published a portfolio.'),
+                              )
                             ],
                           ),
                         ),

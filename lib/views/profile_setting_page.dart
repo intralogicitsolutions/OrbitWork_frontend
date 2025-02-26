@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orbitwork/comms/global/global_tooltip.dart';
 
 import '../component/profile/change_preference_bottomsheet.dart';
 import '../component/profile/flagging_bottomsheet.dart';
@@ -148,10 +149,9 @@ class ProfileSetting extends StatelessWidget {
                   SizedBox(
                     width: 5,
                   ),
-                  Icon(
-                    Icons.help_outline,
-                    size: 16,
-                  )
+                  GlobalTooltip(text: 'Don\'t worry, your selection won\'t affect how or when we display your profile to clients.',
+                  iconSize: 16,
+                  ),
                 ],
               ),
               SizedBox(
@@ -198,10 +198,9 @@ class ProfileSetting extends StatelessWidget {
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                   ),
                   SizedBox(width: 5),
-                  Icon(
-                    Icons.help_outline,
-                    size: 16,
-                  )
+                  GlobalTooltip(text: 'Please note that by checking this option, you will not show up in search results if a client chooses to filter the results by earnings.',
+                  iconSize: 16,
+                  ),
                 ],
               ),
               Obx(

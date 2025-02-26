@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orbitwork/comms/global/global_tooltip.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
 import '../../controllers/profile/boost_profile_controller.dart';
@@ -8,7 +9,7 @@ import '../../widgets/custom_tooltip.dart';
 
 class BoostProfileBottomsheet extends StatelessWidget {
   final controller = Get.put(BoostProfileController());
-  final tooltipController = Get.put(TooltipController());
+  // final tooltipController = Get.put(TooltipController());
   final SuperTooltipController _tooltipController = SuperTooltipController();
 
   @override
@@ -186,16 +187,9 @@ class BoostProfileBottomsheet extends StatelessWidget {
               Row(
                 children: [
                   Text('Bid per click'),
-                  // IconButton(
-                  //   onPressed: () {},
-                  //   icon: Icon(Icons.help_outline),
-                  // ),
                   Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: CustomTooltip(
-                      message: 'Bids help you reach the top of search results, and higher bids increase your chances.',
-                      child: Icon(Icons.help_outline),
-                    ),
+                    padding: const EdgeInsets.all(8.0),
+                    child: GlobalTooltip(text: 'Bids help you reach the top of search results, and higher bids increase your chances.'),
                   ),
                 ],
               ),
@@ -218,36 +212,10 @@ class BoostProfileBottomsheet extends StatelessWidget {
               Row(
                 children: [
                   Text('Limit'),
-                  SuperTooltip(
-                    controller: _tooltipController,
-                   popupDirection: TooltipDirection.up, // Show above the icon
-                    backgroundColor: Colors.white, // White background
-                    shadowColor: Colors.transparent, // Soft shadow
-                    borderRadius: 8.0,
-                    showCloseButton: false, // Close button inside tooltip
-                    hasShadow: false, // Enable shadow
-                    content: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Set a daily or total limit for spending on bids.',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ),
-                    child: IconButton(
-                      onPressed: () {
-                        if (_tooltipController.isVisible) {
-                          _tooltipController.hideTooltip();
-                        } else {
-                          _tooltipController.showTooltip();
-                        }
-                      },
-                      icon: Icon(Icons.help_outline),
-                    ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GlobalTooltip(text: 'Set a daily or total limit for spending on bids.'),
                   ),
-                  // IconButton(
-                  //   onPressed: () {},
-                  //   icon: Icon(Icons.help_outline),
-                  // ),
                 ],
               ),
               // Container(
