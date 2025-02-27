@@ -65,6 +65,7 @@ class CountryBottomsheet extends StatelessWidget{
               itemBuilder: (context, index) {
                 final country = controller.filteredCountries[index];
                 return Obx(() => RadioListTile<String>(
+                  activeColor: Get.theme.primaryColor,
                   value: country,
                   groupValue: controller.selectedCountry.value,
                   onChanged: (value) => controller.updateCountry(value!),

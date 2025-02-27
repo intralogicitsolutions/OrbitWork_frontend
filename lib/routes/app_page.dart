@@ -5,6 +5,7 @@ import 'package:orbitwork/views/add_billing_method_page.dart';
 import 'package:orbitwork/views/agency_profile.dart';
 import 'package:orbitwork/views/billing_and_payments.dart';
 import 'package:orbitwork/views/buy_connects.dart';
+import 'package:orbitwork/views/buy_more_page.dart';
 import 'package:orbitwork/views/chat_page.dart';
 import 'package:orbitwork/views/close_account.dart';
 import 'package:orbitwork/views/connects_history.dart';
@@ -17,11 +18,9 @@ import 'package:orbitwork/views/createProfile/get_started.dart';
 import 'package:orbitwork/views/createProfile/photo_and_location.dart';
 import 'package:orbitwork/views/createProfile/preview_profile.dart';
 import 'package:orbitwork/views/createProfile/profile_creation_page.dart';
-import 'package:orbitwork/views/createProfile/profile_setup.dart';
 import 'package:orbitwork/views/createProfile/select_category.dart';
 import 'package:orbitwork/views/createProfile/set_user_rate.dart';
 import 'package:orbitwork/views/createProfile/skill_section.dart';
-import 'package:orbitwork/views/createProfile/specialized_profile_tab/specialized_profile_1.dart';
 import 'package:orbitwork/views/createProfile/write_an_overview.dart';
 import 'package:orbitwork/views/create_client_account.dart';
 import 'package:orbitwork/views/direct_contracts_page.dart';
@@ -57,7 +56,6 @@ import 'package:orbitwork/views/workroom_timesheet.dart';
 import 'package:orbitwork/widgets/create_profile_container.dart';
 import 'package:orbitwork/widgets/profile_setup_container.dart';
 
-import '../views/createProfile/freelancing_setup.dart';
 import '../views/overview_tab.dart';
 import '../widgets/specialized_profile_container.dart';
 
@@ -104,6 +102,7 @@ class AppPages {
     GetPage(name: AppRoutes.timeSheet, page: () => TimesheetPage(showAppbar: Get.arguments,),),
     GetPage(name: AppRoutes.message, page: () => MessagesPage(),),
     GetPage(name: AppRoutes.directContracts, page: () => DirectContracts(),),
+    GetPage(name: AppRoutes.buyMore, page: () => BuyMorePage(),),
 
 
     /// Create User Profile ///

@@ -4,10 +4,13 @@ import 'package:orbitwork/views/tabs/impressions_tab.dart';
 import 'package:orbitwork/views/tabs/invites_tab.dart';
 import 'package:orbitwork/views/tabs/profile_view_tab.dart';
 import 'package:path/path.dart';
+import '../component/Explore_work_bottomsheet.dart';
+import '../component/badges_bottomsheet.dart';
 import '../component/job_success_score_bottomsheet.dart';
 import '../component/score_range_bottomsheet.dart';
 import '../controllers/profile_matrics_controller.dart';
 import '../controllers/stats_controller.dart';
+import '../routes/app_routes.dart';
 import '../widgets/select_duration_bottomsheet.dart';
 
 class MyStatePage extends StatelessWidget {
@@ -505,12 +508,20 @@ class MyStatePage extends StatelessWidget {
           ),
         ),
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Get.bottomSheet(
+                ExploreWorkBottomsheet(),
+              isScrollControlled: true,
+              isDismissible: true
+            );
+          },
           child: Text(
             'Explore how it works',
             style: TextStyle(
               color: Colors.green[700],
               fontSize: 16,
+              decoration: TextDecoration.underline,
+              decorationColor: Colors.green[700]
             ),
           ),
         ),
@@ -612,7 +623,9 @@ class MyStatePage extends StatelessWidget {
                   height: 8,
                 ),
                 OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.toNamed(AppRoutes.buyMore);
+                  },
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(color: Colors.grey),
                     shape: RoundedRectangleBorder(
@@ -661,7 +674,12 @@ class MyStatePage extends StatelessWidget {
               ),
               //SizedBox(height: 8,),
               TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.bottomSheet(BadgesBottomsheet(),
+                    ignoreSafeArea: false,
+                    isScrollControlled: true,
+                    isDismissible: true);
+                  },
                   child: Text(
                     'Earn Top Rated Plus',
                     style: TextStyle(
@@ -673,46 +691,4 @@ class MyStatePage extends StatelessWidget {
       ),
     );
   }
-
-// void showBottomSheet(BuildContext context) {
-//   final theme = Theme.of(context);
-//   Get.bottomSheet(
-//     Container(
-//       padding: const EdgeInsets.all(16),
-//       decoration: BoxDecoration(
-//         color: theme.scaffoldBackgroundColor,
-//         borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-//       ),
-//       child: Column(
-//         mainAxisSize: MainAxisSize.min,
-//         children: [
-//           const Text(
-//             "Select Duration",
-//             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-//           ),
-//           const SizedBox(height: 10),
-//           // Options List
-//           Column(
-//             children: [
-//               "Last 7 days",
-//               "Last 30 days",
-//               "Last 90 days",
-//             ]
-//                 .map(
-//                   (option) => ListTile(
-//                     title: Text(option),
-//                     onTap: () {
-//                       controller.selectedDuration.value = option;
-//                       Get.back(); // Close bottom sheet
-//                     },
-//                   ),
-//                 )
-//                 .toList(),
-//           ),
-//         ],
-//       ),
-//     ),
-//     isScrollControlled: true,
-//   );
-// }
 }

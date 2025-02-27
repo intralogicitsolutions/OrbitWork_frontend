@@ -349,13 +349,16 @@ class TransactionHistoryTab extends StatelessWidget {
                     Text('On',
                       style: TextStyle(fontSize: 16),
                    ),
-                    Obx(() => Switch(
-                      value: controller.newDesign.value,
-                      onChanged: (val) => controller.toggleDesign(),
-                      activeColor: Colors.white,
-                      activeTrackColor: Colors.black,
-                      inactiveThumbColor: Colors.white,
-                      inactiveTrackColor: Colors.grey.shade300,
+                    Obx(() => Transform.scale(
+                      scale: 0.7,
+                      child: Switch(
+                        value: controller.newDesign.value,
+                        onChanged: (val) => controller.toggleDesign(),
+                        activeColor: Colors.white,
+                        activeTrackColor: Colors.black,
+                        inactiveThumbColor: Colors.white,
+                        inactiveTrackColor: Colors.grey.shade300,
+                      ),
                     )),
                   ],
                 ),

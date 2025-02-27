@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orbitwork/component/earnings_available_bottomsheet.dart';
@@ -382,7 +383,10 @@ class ContractsPage extends StatelessWidget {
                           TextSpan(
                               text: 'W9 or a W-8BEN',
                               style: TextStyle(
-                                  decoration: TextDecoration.underline)),
+                                  decoration: TextDecoration.underline),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => Get.toNamed(AppRoutes.getPaid),
+                          ),
                           TextSpan(text: ' from to withdraw money.')
                         ])),
                   ),

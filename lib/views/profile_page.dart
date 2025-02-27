@@ -18,6 +18,7 @@ import '../component/profile/profile_overview_bottomsheet.dart';
 import '../component/profile/testimonials_bottomsheet.dart';
 import '../component/profile/verification_bottomsheet.dart';
 import '../component/profile/video_introduction_bottomsheet.dart';
+import '../component/view_profile_bottomsheet.dart';
 import '../controllers/profile_skill_controller.dart';
 import '../routes/app_routes.dart';
 import 'createProfile/skill_search_view.dart';
@@ -69,6 +70,87 @@ class ProfilePage extends StatelessWidget {
               SizedBox(
                 height: 24,
               ),
+              // Obx(() => controller.showDraft.value
+              //     ? _showDraftProfile(controller)
+              //     : SizedBox()),
+              Obx(() {
+                String work = controller.selectedWork.value;
+                if (controller.draftStatus[work] == true) {
+                  return _showDraftProfile(controller);
+                }
+                return SizedBox();
+              }),
+              // Obx(() => controller.showDraft.value && !controller.isPublished.value
+              //     ? _showDraftProfile(controller)
+              //     : SizedBox()),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('View profile', style: TextStyle(
+                    fontSize: 18, fontWeight: FontWeight.w500
+                  ),),
+                  IconButton(
+                    icon: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.green),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.edit_outlined,
+                        color: theme.primaryColor,
+                        size: 16,
+                      ),
+                    ),
+                    onPressed: () {
+                      Get.bottomSheet(
+                        Container(
+                            height: Get.height * 0.9,
+                            child: EditTitleBottomsheet()),
+                        isScrollControlled: true,
+                        ignoreSafeArea: false,
+                      );
+                    },
+                  ),
+                ],
+              ),
+              Container(
+                height: 40,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black54),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: InkWell(
+                  onTap: () {
+                    Get.bottomSheet(
+                      Container(
+                          height: Get.height * 0.4,
+                          child: ViewProfileBottomsheet()),
+                      isScrollControlled: true,
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      // Center items
+                      children: [
+                         Obx(() {
+                             return Text(controller.selectedWork.value
+                                // workController.selectedCountry.value.isEmpty
+                                //     ? 'All work'
+                                //     : workController.selectedCountry.value,
+                              );
+                           }
+                         ),
+                        const SizedBox(width: 5),
+                        const Icon(Icons.keyboard_arrow_down, size: 20),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 12,),
               Row(
                 children: [
                   Expanded(
@@ -1197,5 +1279,32 @@ class ProfilePage extends StatelessWidget {
         ),
       ),
     ));
+  }
+
+  Widget _showDraftProfile(ProfilePageController controller){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('This is a draft profile', style: TextStyle(
+          fontSize: 18, fontWeight: FontWeight.w500
+        ),),
+        SizedBox(height: 12,),
+        Text('Review your profile before publishing, particularly the Work History where projects were automatically updated.'),
+        SizedBox(height: 12,),
+        Container(
+          width: Get.width,
+          child: ElevatedButton(onPressed: () {controller.publishProfile();},
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                backgroundColor: Colors.green,
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+              ),
+              child: Text('Publish', style: TextStyle(color: Colors.white),)),
+        ),
+        Divider(height: 32,),
+      ],
+    );
   }
 }

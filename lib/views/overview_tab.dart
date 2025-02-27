@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../component/avilable_bottomsheet.dart';
+import '../component/in_review_bottomsheet.dart';
+import '../component/pending_bottomsheet.dart';
+import '../component/work_in_progress_bottomsheet.dart';
+
 class OverviewTab extends StatelessWidget {
   final bool? showAppbar;
   OverviewTab({Key? key, this.showAppbar = false, }) : super(key: key);
@@ -25,7 +30,9 @@ class OverviewTab extends StatelessWidget {
               ),
               subtitle: Text('\$0.00'),
               trailing: Icon(Icons.keyboard_arrow_right),
-              onTap: () {},
+              onTap: () {
+                _showBottomSheet(index);
+              },
             );
           },
           separatorBuilder: (context, index) {
@@ -49,6 +56,25 @@ class OverviewTab extends StatelessWidget {
         return 'Available';
       default:
         return '';
+    }
+  }
+
+  void _showBottomSheet(int index){
+    switch (index) {
+      case 0:
+        Get.bottomSheet(WorkInProgressBottomsheet());
+        break;
+      case 1:
+        Get.bottomSheet(InReviewBottomsheet());
+        break;
+      case 2:
+        Get.bottomSheet(PendingBottomsheet());
+        break;
+      case 3:
+        Get.bottomSheet(AvilableBottomsheet());
+        break;
+      default:
+        break;
     }
   }
 }

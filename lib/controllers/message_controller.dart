@@ -7,6 +7,13 @@ class MessageController extends GetxController {
   var searchQuery = ''.obs;
   RxBool isLoading = true.obs;
 
+  var filterSelected = "".obs;
+  final isFilterMenuVisible = false.obs;
+
+  var selectedFilter = 0.obs;
+  var isContractExpanded = false.obs;
+  var isOtherExpanded = false.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -44,5 +51,25 @@ class MessageController extends GetxController {
           message.title.toLowerCase().contains(query.toLowerCase()))
           .toList();
     }
+  }
+
+  void toggleFilterMenu() {
+    isFilterMenuVisible.value = !isFilterMenuVisible.value;
+  }
+
+
+
+  void toggleContract() {
+    isContractExpanded.value = !isContractExpanded.value;
+  }
+
+  void toggleOther() {
+    isOtherExpanded.value = !isOtherExpanded.value;
+  }
+
+  void setSelectedFilter(int value) {
+    selectedFilter.value = value;
+    print("Selected Filter: $value");
+    // Handle filtering logic here
   }
 }
