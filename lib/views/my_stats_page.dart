@@ -202,7 +202,9 @@ class MyStatePage extends StatelessWidget {
             )),
         const SizedBox(height: 16),
         OutlinedButton(
-          onPressed: () {},
+          onPressed: () {
+            Get.toNamed(AppRoutes.jobSuccessInsights);
+          },
           child: const Text(
             'View insights',
             style: TextStyle(color: Colors.green),

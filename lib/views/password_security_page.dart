@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../component/set_question_answer_bottomsheet.dart';
+import '../component/setup_password_bottomsheet.dart';
+import '../component/setup_verification_bottomsheet.dart';
 import '../controllers/password_and_security_controller.dart';
 
 class PasswordAndSecurity extends StatelessWidget {
@@ -43,9 +46,18 @@ class PasswordAndSecurity extends StatelessWidget {
                             EdgeInsets.zero, // Removes the horizontal space
                       ),
                       onPressed: controller.changePassword,
-                      child: Text(
-                        'Change password',
-                        style: TextStyle(color: Colors.green),
+                      child: GestureDetector(
+                        onTap: () {
+                          Get.bottomSheet(
+                            SetupPasswordBottomSheet(),
+                            isScrollControlled: true,
+                            ignoreSafeArea: false
+                          );
+                        },
+                        child: Text(
+                          'Change password',
+                          style: TextStyle(color: Colors.green),
+                        ),
                       ),
                     ),
                   ],
@@ -87,7 +99,13 @@ class PasswordAndSecurity extends StatelessWidget {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                   ),
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.bottomSheet(
+                            SetupVerificationBottomsheet(),
+                            isScrollControlled: true,
+                            ignoreSafeArea: false
+                        );
+                      },
                       icon: Icon(
                         Icons.settings,
                         color: Colors.green,
@@ -168,12 +186,21 @@ class PasswordAndSecurity extends StatelessWidget {
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.zero, // Removes the horizontal space
                 ),
-                child: Text(
-                  'Update question and answer',
-                  style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      decorationColor: Colors.green,
-                      color: Colors.green),
+                child: GestureDetector(
+                  onTap: () {
+                    Get.bottomSheet(
+                        setQuestionAnswerBottomsheet(),
+                        isScrollControlled: true,
+                        ignoreSafeArea: false
+                    );
+                  },
+                  child: Text(
+                    'Update question and answer',
+                    style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        decorationColor: Colors.green,
+                        color: Colors.green),
+                  ),
                 ),
               ),
             ],

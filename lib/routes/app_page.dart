@@ -28,6 +28,7 @@ import 'package:orbitwork/views/direct_to_local_bank.dart';
 import 'package:orbitwork/views/get_paid.dart';
 import 'package:orbitwork/views/help_and_support.dart';
 import 'package:orbitwork/views/job_details_page.dart';
+import 'package:orbitwork/views/job_success_insights.dart';
 import 'package:orbitwork/views/jobs_page.dart';
 import 'package:orbitwork/views/login.dart';
 import 'package:orbitwork/views/membership_and_connects.dart';
@@ -103,6 +104,7 @@ class AppPages {
     GetPage(name: AppRoutes.message, page: () => MessagesPage(),),
     GetPage(name: AppRoutes.directContracts, page: () => DirectContracts(),),
     GetPage(name: AppRoutes.buyMore, page: () => BuyMorePage(),),
+    GetPage(name: AppRoutes.jobSuccessInsights, page: () => JobSuccessInsights(),),
 
 
     /// Create User Profile ///

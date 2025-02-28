@@ -44,6 +44,7 @@ class AppRoutes{
   static const String message = '/message';
   static const String directContracts = '/directContracts';
   static const String buyMore = '/buyMore';
+  static const String jobSuccessInsights = '/jobSuccessInsights';
 
   ///Create User Profile///
 

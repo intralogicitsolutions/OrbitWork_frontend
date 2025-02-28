@@ -4,12 +4,13 @@ import 'package:get/get.dart';
 import '../controllers/badges_controller.dart';
 
 class BadgesBottomsheet extends StatelessWidget {
-  const BadgesBottomsheet({Key? key}) : super(key: key);
+  final controller = Get.put(BadgesController());
+   BadgesBottomsheet({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // Initialize controller
-    final controller = Get.put(BadgesController());
+   // final controller = Get.put(BadgesController());
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -67,22 +68,26 @@ class BadgesBottomsheet extends StatelessWidget {
                 const SizedBox(height: 24),
 
                 // Badge Items
-                _buildBadgeItem(
+                Obx(() => _buildBadgeItem(
                   icon: Icons.arrow_upward,
                   iconColor: Colors.green,
                   title: 'Rising Talent',
                   backgroundColor: Colors.white,
-                  borderColor: Colors.green,
-                ),
+                  borderColor: controller.selectedBadge.value == 'Rising Talent'
+                      ? Colors.green
+                      : Colors.grey[300]!,
+                )),
                 const SizedBox(height: 16),
 
-                _buildBadgeItem(
+                Obx(() => _buildBadgeItem(
                   icon: Icons.star,
                   iconColor: Colors.blue,
                   title: 'Top Rated',
                   backgroundColor: Colors.white,
-                  borderColor: Colors.grey[300]!,
-                ),
+                  borderColor: controller.selectedBadge.value == 'Top Rated'
+                      ? Colors.green
+                      : Colors.grey[300]!,
+                )),
                 const SizedBox(height: 16),
 
                 _buildBadgeItem(
@@ -95,13 +100,15 @@ class BadgesBottomsheet extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                _buildBadgeItem(
+                Obx(() => _buildBadgeItem(
                   icon: Icons.workspace_premium,
                   iconColor: Colors.amber,
                   title: 'Expert-Vetted',
                   backgroundColor: Colors.white,
-                  borderColor: Colors.grey[300]!,
-                ),
+                  borderColor: controller.selectedBadge.value == 'Expert-Vetted'
+                      ? Colors.green
+                      : Colors.grey[300]!,
+                )),
                 const SizedBox(height: 32),
 
                 // Requirements section
@@ -115,17 +122,19 @@ class BadgesBottomsheet extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // Requirements list with dynamically updated statuses
-                Obx(() => _buildRequirementItem(
-                  isComplete: controller.isProfileComplete.value,
-                  text: '100% complete profile',
-                )),
-                const SizedBox(height: 16),
-
-                Obx(() => _buildRequirementItem(
-                  isComplete: controller.noAccountHolds.value,
-                  text: 'No account holds in the last 90 days',
-                )),
+                //_showRisingTalent(),
+                Obx(() {
+                  switch (controller.selectedBadge.value) {
+                    case 'Rising Talent':
+                      return _showRisingTalent();
+                    case 'Top Rated':
+                      return _showTopRated();
+                    case 'Expert-Vetted':
+                      return _showExpertVetted();
+                    default:
+                      return _showRisingTalent();
+                  }
+                }),
               ],
             ),
           ),
@@ -171,6 +180,70 @@ class BadgesBottomsheet extends StatelessWidget {
     );
   }
 
+  Widget _showRisingTalent(){
+    return Column(
+      children: [
+        Obx(() => _buildRequirementItem(
+          isComplete: controller.isProfileComplete.value,
+          text: '100% complete profile',
+        )),
+        const SizedBox(height: 16),
+
+        Obx(() => _buildRequirementItem(
+          isComplete: controller.noAccountHolds.value,
+          text: 'No account holds in the last 90 days',
+        )),
+      ],
+    );
+  }
+
+  Widget _showTopRated(){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Obx(() => _buildRequirementItem(
+          isComplete: controller.jobSuccessScore.value,
+          text: 'At least 90% Job Success Score',
+        )),
+        const SizedBox(height: 16),
+
+        Obx(() => _buildRequirementItem(
+          isComplete: controller.isProfileComplete.value,
+          text: '100% complete profile',
+        )),
+        const SizedBox(height: 16),
+
+        Obx(() => _buildRequirementItem(
+          isComplete: controller.noAccountHolds.value,
+          text: 'No account holds in the last 90 days',
+        )),
+        const SizedBox(height: 16,),
+
+        const Text(
+          'Eligible weeks',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text('0 of 16')
+      ],
+    );
+  }
+
+  Widget _showExpertVetted(){
+    return Column(
+      children: [
+        Obx(() => _buildRequirementItem(
+          isComplete: controller.expertPrescreening.value,
+          text: 'Expert Prescreening',
+        )),
+      ],
+    );
+  }
+
   // Helper widget for badge items
   Widget _buildBadgeItem({
     required IconData icon,
@@ -210,7 +283,7 @@ class BadgesBottomsheet extends StatelessWidget {
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
         onTap: () {
-
+          controller.selectedBadge.value = title;
         },
       ),
     );
