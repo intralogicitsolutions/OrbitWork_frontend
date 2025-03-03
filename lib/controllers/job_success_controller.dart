@@ -15,6 +15,7 @@ class JobSuccessController extends GetxController {
   final ineligibleJobsCount = RxInt(0);
   final selectedJobTab = RxInt(0);
 
+
   final benefits = RxList<Map<String, dynamic>>([
     {
       'title': 'Boost your visibility',
@@ -35,6 +36,15 @@ class JobSuccessController extends GetxController {
 
   double get clientProgress => clientsCount.value / clientsRequired.value;
   double get jobsProgress => jobsCount.value / jobsRequired.value;
+
+  List<String> tabTitles = [
+    'Score requirements',
+    'Client satisfaction',
+    'Long-term relationships',
+    'Higher earnings',
+    'Contract length',
+    'Ineligible jobs',
+  ];
 }
 
 
@@ -600,7 +610,7 @@ class BenefitCard extends StatelessWidget {
                   title,
                   style: TextStyle(
                     fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 SizedBox(height: 4),
