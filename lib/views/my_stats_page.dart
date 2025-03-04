@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orbitwork/views/tabs/impressions_tab.dart';
@@ -6,6 +7,7 @@ import 'package:orbitwork/views/tabs/profile_view_tab.dart';
 import 'package:path/path.dart';
 import '../component/Explore_work_bottomsheet.dart';
 import '../component/badges_bottomsheet.dart';
+import '../component/complete_your_profile_bottomsheet.dart';
 import '../component/job_success_score_bottomsheet.dart';
 import '../component/score_range_bottomsheet.dart';
 import '../controllers/profile_matrics_controller.dart';
@@ -99,10 +101,14 @@ class MyStatePage extends StatelessWidget {
         // const SizedBox(height: 8),
         Center(
           child: TextButton(
-            onPressed: () {},
-            child: const Text(
+            onPressed: () {
+              Get.toNamed(AppRoutes.transactionHistory, arguments: true);
+            },
+            child: Text(
               'Transaction history',
-              style: TextStyle(color: Colors.green),
+              style: TextStyle(color: Get.theme.primaryColor, decoration: TextDecoration.underline,
+              decorationColor: Get.theme.primaryColor
+              ),
             ),
           ),
         ),
@@ -378,6 +384,8 @@ class MyStatePage extends StatelessWidget {
         const SizedBox(height: 10),
         _buildAvailabilityBadgeInfo(context),
         const SizedBox(height: 10),
+        _buildCompleteProfile(context),
+        const SizedBox(height: 10),
         const Divider(height: 32),
         _buildClientRelationships(),
         const Divider(height: 32),
@@ -401,7 +409,7 @@ class MyStatePage extends StatelessWidget {
           Expanded(
             child: RichText(
               text: TextSpan(
-                style: TextStyle(fontSize: 12, color: theme.hintColor),
+                style: TextStyle(fontSize: 14, color: theme.hintColor),
                 children: [
                   TextSpan(
                       text:
@@ -409,6 +417,50 @@ class MyStatePage extends StatelessWidget {
                   TextSpan(
                     text: 'Search jobs',
                     style: TextStyle(color: Colors.green),
+                  ),
+                  // TextSpan(text: ', you can signal to clients that you\'re ready for new work now '),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCompleteProfile(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+      decoration: BoxDecoration(
+        color: theme.hoverColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.lightbulb_outline, color: Colors.green),
+          const SizedBox(width: 12),
+          Expanded(
+            child: RichText(
+              text: TextSpan(
+                style: TextStyle(fontSize: 14, color: theme.hintColor),
+                children: [
+                  TextSpan(
+                      text:
+                      'Freelancers with complete, quality profiles are 4.5 times more likely to get hired by clients.'),
+                  TextSpan(
+                    text: 'Complete your profile',
+                    style: TextStyle(color: Colors.green),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                      Get.bottomSheet(
+                          Container(
+                            height: Get.height * 0.7,
+                              child: CompleteProfileBottomSheet()),
+                        isScrollControlled: true,
+                        isDismissible: true
+                      );
+                      },
                   ),
                   // TextSpan(text: ', you can signal to clients that you\'re ready for new work now '),
                 ],
@@ -456,7 +508,9 @@ class MyStatePage extends StatelessWidget {
               ],
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.toNamed(AppRoutes.myProposalsPage);
+              },
               child:
                   Text('My proposals', style: TextStyle(color: Colors.green)),
             ),

@@ -50,6 +50,7 @@ class MonthBottomSheet extends GetView<WorkExperienceController> {
                 return ListTile(
                   leading: Obx(
                         () => Radio<MonthModel>(
+                          activeColor: Get.theme.primaryColor,
                       value: month,
                       groupValue: controller.selectedMonth.value,
                       onChanged: (MonthModel? value) {

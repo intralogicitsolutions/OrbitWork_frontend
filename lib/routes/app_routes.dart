@@ -45,6 +45,7 @@ class AppRoutes{
   static const String directContracts = '/directContracts';
   static const String buyMore = '/buyMore';
   static const String jobSuccessInsights = '/jobSuccessInsights';
+  static const String myProposalsPage = '/myProposalsPage';
 
   ///Create User Profile///
 

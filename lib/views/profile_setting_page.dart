@@ -6,10 +6,13 @@ import 'package:orbitwork/comms/global/global_tooltip.dart';
 import '../component/profile/change_preference_bottomsheet.dart';
 import '../component/profile/flagging_bottomsheet.dart';
 import '../component/profile/select_categories_botomsheet.dart';
+import '../component/switch_specialty_bottomsheet.dart';
+import '../controllers/profile/specialized_profile_controller.dart';
 import '../controllers/profile_setting_controller.dart';
 
 class ProfileSetting extends StatelessWidget {
   final ProfileController controller = Get.put(ProfileController());
+  final SpecializedProfileController specializedController = Get.put(SpecializedProfileController());
 
   @override
   Widget build(BuildContext context) {
@@ -566,7 +569,87 @@ class ProfileSetting extends StatelessWidget {
           //     ),
           //   ),
           // ),
-          const SizedBox(height: 16),
+          Obx(() {
+              return specializedController.isReviewMode.value ?
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('${specializedController.title.value} - Draft', style: TextStyle(
+                      fontSize: 18
+                    ),),
+                    Container(
+                      width: 35,
+                      height: 35,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: theme.dividerColor,
+                          // color: Colors.black,
+                          width: 1,
+                        ),
+                      ),
+                      child: IconButton(
+                          onPressed: () {
+                            Get.bottomSheet(
+                              Container(
+                                height: Get.height * 0.25,
+                                decoration: BoxDecoration(
+                                  color: Get.theme.scaffoldBackgroundColor,
+                                  borderRadius: BorderRadius.vertical(top: Radius.circular(20))
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Select', style: TextStyle(
+                                            fontSize: 20, fontWeight: FontWeight.w500
+                                          ),),
+                                          IconButton(onPressed: () {
+                                            Get.back();
+                                          }, icon: Icon(Icons.close))
+                                        ],
+                                      ),
+                                      SizedBox(height: 16,),
+                                      Text('Edit', style: TextStyle(
+                                        fontSize: 16, fontWeight: FontWeight.w500
+                                      ),),
+                                      SizedBox(height: 24,),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.bottomSheet(
+                                              SwitchSpecialtyBottomsheet(),
+                                            isScrollControlled: true,
+                                            ignoreSafeArea: false
+                                          );
+                                        },
+                                        child: Text('Switch Specialty', style: TextStyle(
+                                          fontSize: 16, fontWeight: FontWeight.w500
+                                        ),),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
+                            );
+                          },
+                          icon: Icon(
+                            Icons.more_horiz,
+                            color: Colors.green,
+                            size: 15,
+                          )),
+                    ),
+                  ],
+                ),
+              ) : SizedBox();
+            }
+          ),
+        const SizedBox(height: 16),
           OutlinedButton(
             onPressed: () => controller.addSpecializedProfile(),
             style: OutlinedButton.styleFrom(

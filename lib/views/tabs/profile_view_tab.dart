@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../../controllers/profile_matrics_controller.dart';
 import '../../models/profile_metrics_model.dart';
+import '../../routes/app_routes.dart';
 
 
 class ProfileViewsTab extends GetView<ProfileMetricsController> {
@@ -86,7 +87,7 @@ class ProfileViewsTab extends GetView<ProfileMetricsController> {
           ],
         ),
         InkWell(
-          onTap: () {},
+          onTap: () {Get.toNamed(AppRoutes.profilePage);},
           child: const Text(
             'My profile',
             style: TextStyle(

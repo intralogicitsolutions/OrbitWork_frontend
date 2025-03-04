@@ -127,57 +127,6 @@ class AddPortfolioBottomsheet extends StatelessWidget{
   }
 
 
-
-  // Widget _buildContentActions() {
-  //   return Container(
-  //     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 40),
-  //     decoration: BoxDecoration(
-  //       border: Border.all(color: Colors.grey.shade300),
-  //       borderRadius: BorderRadius.circular(8),
-  //     ),
-  //     child: Column(
-  //       children: [
-  //         Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //           children: [
-  //             _buildActionButton(
-  //               icon: Icons.image,
-  //               label: 'Image',
-  //               onTap: () => _showImagePickerOptions(),
-  //             ),
-  //             _buildActionButton(
-  //               icon: Icons.videocam,
-  //               label: 'Video',
-  //               onTap: () => controller.pickImage(ImageSource.gallery),
-  //             ),
-  //             _buildActionButton(
-  //               icon: Icons.text_fields,
-  //               label: 'Text',
-  //               onTap: () {_showTextEditor();},
-  //             ),
-  //             _buildActionButton(
-  //               icon: Icons.link,
-  //               label: 'Link',
-  //               onTap: () {_showWebLinkBottomSheet();},
-  //             ),
-  //             _buildActionButton(
-  //               icon: Icons.file_present,
-  //               label: 'File',
-  //               onTap: () => controller.pickDocument(),
-  //             ),
-  //             _buildActionButton(
-  //               icon: Icons.music_note,
-  //               label: 'Music',
-  //               onTap: () => controller.pickAudio(),
-  //             ),
-  //           ],
-  //         ),
-  //         SizedBox(height: 8),
-  //         Text('Add content'),
-  //       ],
-  //     ),
-  //   );
-  // }
   Widget _buildContentActions() {
     return DottedBorderContainerRectangle(
       onTap: () {

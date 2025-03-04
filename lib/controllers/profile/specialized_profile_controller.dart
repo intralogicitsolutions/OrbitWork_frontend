@@ -6,10 +6,12 @@ class SpecializedProfileController extends GetxController {
   final RxInt currentStep = 0.obs;
   final totalSteps = 5;
   final RxList<String> selectedSkills = <String>[].obs;
-  final RxString title = ''.obs;
+  final RxString title = 'Mobile app developer'.obs;
   final RxString profileOverview = ''.obs;
   final RxInt maxCharacters = 5000.obs;
   int get charactersLeft => maxCharacters.value - profileOverview.value.length;
+
+  final RxBool isReviewMode = false.obs;
 
 
   final devices = ['Smartphone', 'Tablet'];
@@ -89,6 +91,14 @@ class SpecializedProfileController extends GetxController {
 
   void setTitle(String value) {
     title.value = value;
+  }
+
+  void enableReviewMode() {
+    isReviewMode.value = true;
+  }
+
+  void disableReviewMode() {
+    isReviewMode.value = false;
   }
 
   void setProfileOverview(String value) {

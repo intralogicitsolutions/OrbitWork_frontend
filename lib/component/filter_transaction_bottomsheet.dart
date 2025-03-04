@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orbitwork/component/show_filter_selection_bottomsheet.dart';
 
 import '../controllers/filter_transaction_controller.dart';
 
@@ -143,19 +144,38 @@ class FilterTranscationBottomsheet extends StatelessWidget{
           onChanged = (val) {};
       }
 
-      return Container(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<String>(
-            value: value,
-            isExpanded: true,
-            icon: Icon(Icons.keyboard_arrow_down),
-            items: _getDropdownItems(type),
-            onChanged: onChanged,
+      // return Container(
+      //   padding: EdgeInsets.symmetric(horizontal: 16),
+      //   decoration: BoxDecoration(
+      //     border: Border.all(color: Colors.grey.shade300),
+      //     borderRadius: BorderRadius.circular(8),
+      //   ),
+      //   child: DropdownButtonHideUnderline(
+      //     child: DropdownButton<String>(
+      //       value: value,
+      //       isExpanded: true,
+      //       icon: Icon(Icons.keyboard_arrow_down),
+      //       items: _getDropdownItems(type),
+      //       onChanged: onChanged,
+      //     ),
+      //   ),
+      // );
+      return InkWell(
+        onTap: () {
+          showSelectionBottomSheet(type, onChanged);
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey.shade300),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(value),
+              Icon(Icons.keyboard_arrow_down),
+            ],
           ),
         ),
       );

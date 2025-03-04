@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orbitwork/comms/global/global_tooltip.dart';
+import 'package:orbitwork/component/show_category_bottomsheet.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
 import '../../controllers/profile/boost_profile_controller.dart';
 import '../../controllers/tooltip_controller.dart';
 import '../../widgets/custom_tooltip.dart';
+import '../show_speciality_bottomsheet.dart';
 
 class BoostProfileBottomsheet extends StatelessWidget {
   final controller = Get.put(BoostProfileController());
-  // final tooltipController = Get.put(TooltipController());
-  final SuperTooltipController _tooltipController = SuperTooltipController();
 
   @override
   Widget build(BuildContext context) {
@@ -125,24 +125,44 @@ class BoostProfileBottomsheet extends StatelessWidget {
               SizedBox(
                 height: 16,
               ),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  // Optional: Background color
-                  border: Border.all(color: Colors.grey, width: 1),
-                  // Border color and width
-                  borderRadius: BorderRadius.circular(8), // Rounded corners
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Select a category',
-                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                    ),
-                    Icon(Icons.keyboard_arrow_down_outlined)
-                  ],
+              GestureDetector(
+                onTap: () {
+                  Get.bottomSheet(
+                      Container(
+                          height: Get.height * 0.9,
+                          child: ShowCategoryBottomsheet()),
+                      isScrollControlled: true,
+                      isDismissible: true);
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    // Optional: Background color
+                    border: Border.all(color: Colors.grey, width: 1),
+                    // Border color and width
+                    borderRadius: BorderRadius.circular(8), // Rounded corners
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Text(
+                      //   'Select a category',
+                      //   style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                      // ),
+                      Obx(() => Text(
+                            controller.selectedCategory.value ??
+                                'Select a category',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: controller.selectedCategory.value != null
+                                  ? Colors.black
+                                  : Colors.grey[600],
+                            ),
+                          )),
+                      Icon(Icons.keyboard_arrow_down_outlined)
+                    ],
+                  ),
                 ),
               ),
               SizedBox(
@@ -155,28 +175,76 @@ class BoostProfileBottomsheet extends StatelessWidget {
               SizedBox(
                 height: 16,
               ),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  // Optional: Background color
-                  // border: Border.all(color: Colors.grey, width: 1), // Border color and width
-                  borderRadius: BorderRadius.circular(8), // Rounded corners
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Select a speciality',
-                      style: TextStyle(color: Colors.grey[500]),
+              Obx(() => GestureDetector(
+                    onTap: controller.selectedCategory.value != null
+                        ? () {
+                            Get.bottomSheet(
+                              Container(
+                                  height: Get.height * 0.9,
+                                  child: ShowSpecialityBottomsheet()),
+                              isDismissible: true,
+                              isScrollControlled: true,
+                            );
+                          }
+                        : null,
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: controller.selectedCategory.value != null
+                            ? Colors.white
+                            : Colors.grey[200],
+                        border: controller.selectedCategory.value != null
+                            ? Border.all(color: Colors.grey, width: 1)
+                            : null,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            controller.selectedSpeciality.value ??
+                                'Select a speciality',
+                            style: TextStyle(
+                              color: controller.selectedCategory.value != null
+                                  ? (controller.selectedSpeciality.value != null
+                                      ? Colors.black
+                                      : Colors.grey[600])
+                                  : Colors.grey[500],
+                            ),
+                          ),
+                          Icon(
+                            Icons.keyboard_arrow_down_outlined,
+                            color: controller.selectedCategory.value != null
+                                ? Colors.black
+                                : Colors.grey[500],
+                          ),
+                        ],
+                      ),
                     ),
-                    Icon(
-                      Icons.keyboard_arrow_down_outlined,
-                      color: Colors.grey[500],
-                    ),
-                  ],
-                ),
-              ),
+                  )),
+              // Container(
+              //   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+              //   decoration: BoxDecoration(
+              //     color: Colors.grey[200],
+              //     // Optional: Background color
+              //     // border: Border.all(color: Colors.grey, width: 1), // Border color and width
+              //     borderRadius: BorderRadius.circular(8), // Rounded corners
+              //   ),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       Text(
+              //         'Select a speciality',
+              //         style: TextStyle(color: Colors.grey[500]),
+              //       ),
+              //       Icon(
+              //         Icons.keyboard_arrow_down_outlined,
+              //         color: Colors.grey[500],
+              //       ),
+              //     ],
+              //   ),
+              // ),
               SizedBox(
                 height: 24,
               ),
@@ -189,7 +257,9 @@ class BoostProfileBottomsheet extends StatelessWidget {
                   Text('Bid per click'),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: GlobalTooltip(text: 'Bids help you reach the top of search results, and higher bids increase your chances.'),
+                    child: GlobalTooltip(
+                        text:
+                            'Bids help you reach the top of search results, and higher bids increase your chances.'),
                   ),
                 ],
               ),
@@ -214,35 +284,12 @@ class BoostProfileBottomsheet extends StatelessWidget {
                   Text('Limit'),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: GlobalTooltip(text: 'Set a daily or total limit for spending on bids.'),
+                    child: GlobalTooltip(
+                        text:
+                            'Set a daily or total limit for spending on bids.'),
                   ),
                 ],
               ),
-              // Container(
-              //   padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-              //   decoration: BoxDecoration(
-              //     border: Border.all(color: Colors.grey.shade300),
-              //     borderRadius: BorderRadius.circular(8),
-              //   ),
-              //   child: Row(
-              //     children: [
-              //       Expanded(
-              //         child: Obx(() => _SelectableButton(
-              //           text: 'Daily',
-              //           isSelected: controller.isDailySelected.value,
-              //           onTap: () => controller.toggleDailyTotal(true),
-              //         )),
-              //       ),
-              //       Expanded(
-              //         child: Obx(() => _SelectableButton(
-              //           text: 'Total',
-              //           isSelected: !controller.isDailySelected.value,
-              //           onTap: () => controller.toggleDailyTotal(false),
-              //         )),
-              //       ),
-              //     ],
-              //   ),
-              // ),
               Row(
                 children: [
                   Expanded(

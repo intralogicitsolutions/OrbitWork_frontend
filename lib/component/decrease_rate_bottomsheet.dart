@@ -99,7 +99,7 @@ class DecreaseRateBottomsheet extends StatelessWidget{
                 ),
               ),
               child: const Text(
-                'Cancel',
+                ' Cancel',
                 style: TextStyle(
                   color: Colors.green,
                   fontSize: 16,

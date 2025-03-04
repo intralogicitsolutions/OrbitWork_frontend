@@ -52,7 +52,9 @@ class ProfilePage extends StatelessWidget {
                   ),
                   Column(
                     children: [
-                      Text('User Name'),
+                      Text('User name',style: TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.w500
+                      ), ),
                       Row(
                         children: [
                           Icon(Icons.location_on_outlined),

@@ -73,8 +73,13 @@ class SpecializedProfileContainer extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       // Implement next step logic
-                      controller.nextStep();
-                      //Get.to(() => SpecializedProfileStep3());
+                      if (controller.currentStep.value == 4) {
+                        controller.enableReviewMode(); // Enable review mode
+                        Get.back(); // Navigate back
+                      } else {
+                        controller.nextStep();
+                      }
+                      //controller.nextStep();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,

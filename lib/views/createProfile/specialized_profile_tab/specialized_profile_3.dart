@@ -10,19 +10,6 @@ class SpecializedProfileStep3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //       //   leading: IconButton(
-      //       //     icon: Icon(Icons.close),
-      //       //     onPressed: () => Get.back(),
-      //       //   ),
-      //       //   title: Text('Create a Specialized Pr...'),
-      //       //   actions: [
-      //       //     IconButton(
-      //       //       icon: Icon(Icons.more_vert),
-      //       //       onPressed: () {},
-      //       //     ),
-      //       //   ],
-      //       // ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
@@ -62,7 +49,7 @@ class SpecializedProfileStep3 extends StatelessWidget {
 
             // Title input field
             TextField(
-              controller: TextEditingController(text: 'Mobile app developer'),
+              controller: TextEditingController(text: controller.title.value),
               onChanged: (value) => controller.setTitle(value),
               decoration: InputDecoration(
                 border: OutlineInputBorder(

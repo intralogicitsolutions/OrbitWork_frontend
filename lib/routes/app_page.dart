@@ -35,6 +35,7 @@ import 'package:orbitwork/views/membership_and_connects.dart';
 import 'package:orbitwork/views/membership_plans.dart';
 import 'package:orbitwork/views/messages_page.dart';
 import 'package:orbitwork/views/my_home_page.dart';
+import 'package:orbitwork/views/my_proposals_page.dart';
 import 'package:orbitwork/views/my_stats_page.dart';
 import 'package:orbitwork/views/my_teams_page.dart';
 import 'package:orbitwork/views/notification_settings_page.dart';
@@ -105,6 +106,7 @@ class AppPages {
     GetPage(name: AppRoutes.directContracts, page: () => DirectContracts(),),
     GetPage(name: AppRoutes.buyMore, page: () => BuyMorePage(),),
     GetPage(name: AppRoutes.jobSuccessInsights, page: () => JobSuccessInsights(),),
+    GetPage(name: AppRoutes.myProposalsPage, page: () => Myproposalpage(),),
 
 
     /// Create User Profile ///
