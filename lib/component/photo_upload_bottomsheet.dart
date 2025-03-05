@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../comms/url_launcher_helper.dart';
 import '../controllers/photo_and_location_controller.dart';
 import '../widgets/dotted_border_container.dart';
 
@@ -277,7 +278,7 @@ class PhotoUploadSheet extends GetView<PhotoAndLocationController> {
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        // Handle learn more tap
+                        UrlLauncherHelper.openUrl('https://www.google.com');
                       },
                   ),
                 ],

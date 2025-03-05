@@ -436,6 +436,7 @@ class ContractsPage extends StatelessWidget {
             Text('Contracts you\'re actively working on will appear here.', textAlign: TextAlign.center,),
             SizedBox(height: 16,),
             ElevatedButton(onPressed: () {
+              Get.toNamed(AppRoutes.jobSearch);
             },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(

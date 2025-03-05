@@ -1,6 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../comms/url_launcher_helper.dart';
 import '../controllers/membership_and_connects_controller.dart';
 
 class MembershipAndConnects extends StatelessWidget {
@@ -101,6 +103,8 @@ class MembershipAndConnects extends StatelessWidget {
                           decoration: TextDecoration.underline,
                           decorationColor: Colors.green,
                         ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => UrlLauncherHelper.openUrl('https://www.google.com'),
                       ),
                       TextSpan(text: '.'),
                     ],

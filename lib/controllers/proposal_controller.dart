@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/chip_data.dart';
 import '../models/proposal_model.dart';
@@ -144,5 +145,14 @@ class ProposalController extends GetxController {
 
   void selectChip(String chipLabel) {
     selectedChip.value = chipLabel;
+  }
+
+  void openGoogleChrome() async {
+    final Uri url = Uri.parse('https://www.google.com');
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      Get.snackbar('Error', 'Could not open the link');
+    }
   }
 }

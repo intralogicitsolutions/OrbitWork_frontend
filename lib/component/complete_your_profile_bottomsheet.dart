@@ -7,6 +7,7 @@ import 'package:orbitwork/component/profile/other_experience_bottomsheet.dart';
 import 'package:orbitwork/component/profile/profile_overview_bottomsheet.dart';
 import 'package:orbitwork/component/profile/video_introduction_bottomsheet.dart';
 
+import '../comms/url_launcher_helper.dart';
 import '../controllers/stats_controller.dart';
 import '../routes/app_routes.dart';
 
@@ -61,7 +62,7 @@ class CompleteProfileBottomSheet extends StatelessWidget {
                   SizedBox(height: 10),
                   TextButton(
                     onPressed: () {
-                      // Handle learn more action
+                      UrlLauncherHelper.openUrl('https://www.google.com');
                     },
                     child: Text(
                       "Learn more",

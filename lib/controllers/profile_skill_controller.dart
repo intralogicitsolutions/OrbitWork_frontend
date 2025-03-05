@@ -3,6 +3,12 @@ import 'package:get/get.dart';
 import '../models/skill_model.dart';
 
 class ProfileSkillController extends GetxController {
+  final name = 'User Name'.obs;
+  final location = 'Rajkot, India'.obs;
+  final hourlyRate = '\$40.00/hr'.obs;
+  final expertise = 'Expertise in building cross-platform mobile applications using flutter. Proficient in flutter widgets, state management (provider, riverpod, block), and using firebase'.obs;
+  //final skills = ['Android App Development'].obs;
+
   var selectedSkills = <Skill>[].obs;
   var suggestedSkills = <Skill>[].obs;
   final maxSkills = 15;

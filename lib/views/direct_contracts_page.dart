@@ -1,5 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../comms/url_launcher_helper.dart';
 
 class DirectContracts extends StatelessWidget {
   @override
@@ -146,7 +149,10 @@ class DirectContracts extends StatelessWidget {
                   TextSpan(text: 'Direct Contracts', style: TextStyle(
                     color: Get.theme.primaryColor, decoration: TextDecoration.underline,
                     decorationColor: Get.theme.primaryColor,
-                  ),),
+                  ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () => UrlLauncherHelper.openUrl('https://www.google.com'),
+                  ),
                 ],
               ),),
             ],

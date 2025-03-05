@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../comms/url_launcher_helper.dart';
 import '../controllers/contact_info_controller.dart';
 import '../routes/app_routes.dart';
 
@@ -412,9 +413,12 @@ class ContactInfoPage extends StatelessWidget {
         SizedBox(
           height: 12,
         ),
-        Text(
-          'Learn more',
-          style: TextStyle(color: theme.primaryColor),
+        GestureDetector(
+          onTap: () => UrlLauncherHelper.openUrl('https://www.google.com'),
+          child: Text(
+            'Learn more',
+            style: TextStyle(color: theme.primaryColor),
+          ),
         ),
         SizedBox(
           height: 24,

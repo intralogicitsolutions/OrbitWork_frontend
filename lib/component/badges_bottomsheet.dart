@@ -1,6 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../comms/url_launcher_helper.dart';
 import '../controllers/badges_controller.dart';
 
 class BadgesBottomsheet extends StatelessWidget {
@@ -60,7 +62,8 @@ class BadgesBottomsheet extends StatelessWidget {
                           color: Colors.green,
                           fontWeight: FontWeight.bold,
                         ),
-                        // Add onTap handler if needed
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => UrlLauncherHelper.openUrl('https://www.google.com'),
                       ),
                     ],
                   ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../comms/url_launcher_helper.dart';
 import '../controllers/workroom_timesheet_controller.dart';
 import '../routes/app_routes.dart';
 
@@ -146,10 +147,14 @@ class ViewOffer extends StatelessWidget{
 
                             Text('However, if you log time over the weekly limit you and your client originally agreed to, it won\'t be invoiced to your client, but they can see it in you Work Diary. You can negotiate a bonus payment for that time, if your client agrees.'),
                             SizedBox(height: 16,),
-                            Text('Learn more about hourly contracts', style: TextStyle(
-                              color: theme.primaryColor, decoration: TextDecoration.underline,
-                              decorationColor: theme.primaryColor
-                            ),),
+                            GestureDetector(
+                              onTap: () => UrlLauncherHelper.openUrl('https://www.google.com'),
+                              child: Text('Learn more about hourly contracts', style: TextStyle(
+                                color: theme.primaryColor, decoration: TextDecoration.underline,
+                                decorationColor: theme.primaryColor
+                              ),
+                              ),
+                            ),
                           ],
                         ),
                       ) : SizedBox();

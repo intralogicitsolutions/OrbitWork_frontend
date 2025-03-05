@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orbitwork/component/select_all_speciality_bottomsheet.dart';
 
+import '../controllers/speciality_controller.dart';
+
 class SwitchSpecialtyBottomsheet extends StatelessWidget {
+  final SpecialityController controller = Get.put(SpecialityController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,22 +50,25 @@ class SwitchSpecialtyBottomsheet extends StatelessWidget {
                     ),
                     Container(
                       height: 40,
-                      child: TextField(
-                        onTap: () {
-                          Get.bottomSheet(
-                              SelectAllSpecialtyBottomsheet(),
-                              ignoreSafeArea: false,
-                              isScrollControlled: true
+                      child: Obx(() {
+                          return TextField(
+                            onTap: () {
+                              Get.bottomSheet(
+                                  SelectAllSpecialtyBottomsheet(),
+                                  ignoreSafeArea: false,
+                                  isScrollControlled: true
+                              );
+                            },
+                            readOnly: true,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8)),
+                                hintText: controller.selectedSpecialty.value != '' ? controller.selectedSpecialty.value : 'Select a specialty',
+                                suffixIcon: Icon(Icons.keyboard_arrow_down),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 12)),
                           );
-                        },
-                        readOnly: true,
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                            hintText: 'Select a specialty',
-                            suffixIcon: Icon(Icons.keyboard_arrow_down),
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 12)),
+                        }
                       ),
                     )
                   ],

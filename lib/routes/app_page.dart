@@ -25,9 +25,11 @@ import 'package:orbitwork/views/createProfile/write_an_overview.dart';
 import 'package:orbitwork/views/create_client_account.dart';
 import 'package:orbitwork/views/direct_contracts_page.dart';
 import 'package:orbitwork/views/direct_to_local_bank.dart';
+import 'package:orbitwork/views/freelancer_profile.dart';
 import 'package:orbitwork/views/get_paid.dart';
 import 'package:orbitwork/views/help_and_support.dart';
 import 'package:orbitwork/views/job_details_page.dart';
+import 'package:orbitwork/views/job_search_page.dart';
 import 'package:orbitwork/views/job_success_insights.dart';
 import 'package:orbitwork/views/jobs_page.dart';
 import 'package:orbitwork/views/login.dart';
@@ -44,7 +46,9 @@ import 'package:orbitwork/views/password_security_page.dart';
 import 'package:orbitwork/views/privacy_preferences_page.dart';
 import 'package:orbitwork/views/profile_page.dart';
 import 'package:orbitwork/views/profile_setting_page.dart';
+import 'package:orbitwork/views/project_list_page.dart';
 import 'package:orbitwork/views/reports_page.dart';
+import 'package:orbitwork/views/saved_job.dart';
 import 'package:orbitwork/views/settings_page.dart';
 import 'package:orbitwork/views/signup.dart';
 import 'package:orbitwork/views/createProfile/skill_section_page.dart';
@@ -107,6 +111,10 @@ class AppPages {
     GetPage(name: AppRoutes.buyMore, page: () => BuyMorePage(),),
     GetPage(name: AppRoutes.jobSuccessInsights, page: () => JobSuccessInsights(),),
     GetPage(name: AppRoutes.myProposalsPage, page: () => Myproposalpage(),),
+    GetPage(name: AppRoutes.projectList, page: () => ProjectListPage(),),
+    GetPage(name: AppRoutes.freelancerProfile, page: () => FreelancerProfilePage(),),
+    GetPage(name: AppRoutes.jobSearch, page: () => JobSearch(),),
+    GetPage(name: AppRoutes.savedJob, page: () => SavedJobPage(),),
 
 
     /// Create User Profile ///

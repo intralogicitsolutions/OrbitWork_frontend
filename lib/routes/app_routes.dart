@@ -46,6 +46,10 @@ class AppRoutes{
   static const String buyMore = '/buyMore';
   static const String jobSuccessInsights = '/jobSuccessInsights';
   static const String myProposalsPage = '/myProposalsPage';
+  static const String projectList = '/projectList';
+  static const String freelancerProfile = '/freelancerProfile';
+  static const String jobSearch = '/jobSearch';
+  static const String savedJob = '/savedJob';
 
   ///Create User Profile///
 

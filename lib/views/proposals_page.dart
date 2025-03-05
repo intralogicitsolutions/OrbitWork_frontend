@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/proposal_controller.dart';
+import '../comms/url_launcher_helper.dart';
 import '../component/select_setting_bottomsheet.dart';
 import '../models/chip_data.dart';
 import '../widgets/custom_appbar.dart';
@@ -266,7 +267,8 @@ class ProposalsPage extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                // Button action
+               // controller.openGoogleChrome();
+                UrlLauncherHelper.openUrl('https://www.google.com');
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: theme.primaryColor,

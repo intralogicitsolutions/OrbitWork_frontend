@@ -1,4 +1,7 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
+import '../comms/url_launcher_helper.dart';
 
 class AgencyProfile extends StatelessWidget{
   @override
@@ -45,7 +48,9 @@ class AgencyProfile extends StatelessWidget{
                         color: theme.primaryColor,
                         decoration: TextDecoration.underline,
                         decorationColor: theme.primaryColor
-                      )
+                      ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => UrlLauncherHelper.openUrl('https://www.google.com'),
                       )
                     ]
                   ),),

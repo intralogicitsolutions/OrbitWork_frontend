@@ -1,6 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../comms/url_launcher_helper.dart';
 import '../../component/add_todo_bottomsheet.dart';
 import '../../component/decrease_rate_bottomsheet.dart';
 import '../../component/upload_file_bottomsheet.dart';
@@ -60,7 +62,10 @@ class OverViewPage extends StatelessWidget {
                             'You will get paid for these hours on Monday.(Orbitwork\'s billing timezone) '),
                     TextSpan(
                         text: 'Learn more',
-                        style: TextStyle(color: theme.primaryColor))
+                        style: TextStyle(color: theme.primaryColor),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => UrlLauncherHelper.openUrl('https://www.google.com'),
+                    )
                   ])),
               Divider(
                 height: 32,

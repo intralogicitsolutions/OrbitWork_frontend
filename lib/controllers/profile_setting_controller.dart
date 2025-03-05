@@ -5,7 +5,6 @@ import '../routes/app_routes.dart';
 
 class ProfileController extends GetxController {
   var profile = ProfileModel().obs;
-  var isExpanded = false.obs;
   final showWarning = true.obs;
 
   final experienceLevels = [
@@ -86,10 +85,6 @@ class ProfileController extends GetxController {
         val?.publishedProfiles++;
       });
     }
-  }
-
-  void toggleTextVisibility() {
-    isExpanded.value = !isExpanded.value; // Toggle the visibility of the full text
   }
 
   void dismissWarningText(){

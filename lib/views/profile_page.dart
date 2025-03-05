@@ -52,16 +52,22 @@ class ProfilePage extends StatelessWidget {
                   ),
                   Column(
                     children: [
-                      Text('User name',style: TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.w500
-                      ), ),
+                      Obx(() {
+                          return Text(profileSkillController.name.value, style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w500
+                          ), );
+                        }
+                      ),
                       Row(
                         children: [
                           Icon(Icons.location_on_outlined),
                           SizedBox(
                             width: 5,
                           ),
-                          Text('Rajkot,India'),
+                          Obx(() {
+                              return Text(profileSkillController.location.value,);
+                            }
+                          ),
                         ],
                       ),
                       Text('7:11 pm local time')
@@ -433,7 +439,9 @@ class ProfilePage extends StatelessWidget {
               Align(
                 alignment: Alignment.center,
                 child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.toNamed(AppRoutes.projectList);
+                  },
                   style: OutlinedButton.styleFrom(
                     padding: EdgeInsets.symmetric(horizontal: 60),
                     side: BorderSide(color: theme.primaryColor),

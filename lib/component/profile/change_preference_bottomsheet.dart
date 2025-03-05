@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../comms/url_launcher_helper.dart';
 import '../../controllers/profile/change_preference_controller.dart';
 
 class ChangePreferenceBottomsheet extends StatelessWidget {
@@ -79,13 +80,14 @@ class ChangePreferenceBottomsheet extends StatelessWidget {
                     ),
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {UrlLauncherHelper.openUrl('https://www.google.com');},
                     child: Text(
                       'Learn more',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.green,
+                        color: Get.theme.primaryColor,
                         decoration: TextDecoration.underline,
+                        decorationColor: Get.theme.primaryColor
                       ),
                     ),
                   ),

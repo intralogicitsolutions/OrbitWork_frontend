@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orbitwork/views/createProfile/specialized_profile_tab/specialized_profile_5.dart';
 
+import '../../../comms/url_launcher_helper.dart';
 import '../../../controllers/profile/specialized_profile_controller.dart';
 
 class SpecializedProfileStep4 extends StatelessWidget {
@@ -63,7 +64,7 @@ class SpecializedProfileStep4 extends StatelessWidget {
 
               // Learn more link
               TextButton(
-                onPressed: () {},
+                onPressed: () {UrlLauncherHelper.openUrl('https://www.google.com');},
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.zero,
                   minimumSize: Size.zero,

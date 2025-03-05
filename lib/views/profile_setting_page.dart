@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orbitwork/comms/global/global_tooltip.dart';
 
+import '../comms/url_launcher_helper.dart';
 import '../component/profile/change_preference_bottomsheet.dart';
 import '../component/profile/flagging_bottomsheet.dart';
 import '../component/profile/select_categories_botomsheet.dart';
 import '../component/switch_specialty_bottomsheet.dart';
 import '../controllers/profile/specialized_profile_controller.dart';
 import '../controllers/profile_setting_controller.dart';
+import '../routes/app_routes.dart';
 
 class ProfileSetting extends StatelessWidget {
   final ProfileController controller = Get.put(ProfileController());
@@ -49,7 +51,10 @@ class ProfileSetting extends StatelessWidget {
                     'View as others see it',
                     style: TextStyle(color: Colors.green),
                   ),
-                  onPressed: () {_showFlagBottomsheet(context);},
+                  onPressed: () {
+                    Get.toNamed(AppRoutes.freelancerProfile);
+                    //_showFlagBottomsheet(context);
+                    },
                 ),
               ),
               const Text(
@@ -230,37 +235,25 @@ class ProfileSetting extends StatelessWidget {
                 ),
               ),
 
-              // const Text(
-              //   'This setting hides historical earnings on your profile. Your earnings will still be visible when you submit proposals or accept invitations to interview.',
-              //   style: TextStyle(color: Colors.grey),
-              // ),
-              // TextButton(
-              //   child: const Text('Learn more',
-              //       style: TextStyle(color: Colors.green)),
-              //   onPressed: () {},
-              // ),
 
-              Obx(() => Text(
-                    'This setting hides historical earnings on your profile. Your earnings will still be visible when you submit proposals or accept invitations to interview.' +
-                        (controller.isExpanded.value ? '' : '...'),
+
+               Text(
+                    'This setting hides historical earnings on your profile. Your earnings will still be visible when you submit proposals or accept invitations to interview.'
+                ,
                     style: TextStyle(color: Colors.grey),
-                    maxLines: controller.isExpanded.value ? null : 3,
-                    overflow: controller.isExpanded.value
-                        ? TextOverflow.visible
-                        : TextOverflow.ellipsis,
-                  )),
-              Obx(() {
-                return TextButton(
+                    // maxLines: controller.isExpanded.value ? null : 3,
+                    // overflow: controller.isExpanded.value
+                    //     ? TextOverflow.visible
+                    //     : TextOverflow.ellipsis,
+                  ),
+              GestureDetector(
+                  onTap: () => UrlLauncherHelper.openUrl('https://www.google.com'),
                   child: Text(
-                    controller.isExpanded.value ? 'Show less' : 'Learn more',
+                     'Learn more',
                     style: TextStyle(color: Colors.green),
                   ),
-                  onPressed: () {
-                    // Toggle the expanded state
-                    controller.isExpanded.value = !controller.isExpanded.value;
-                  },
-                );
-              }),
+                ),
+
 
               const SizedBox(height: 20),
               _buildExperienceLevel(context),
@@ -506,34 +499,16 @@ class ProfileSetting extends StatelessWidget {
                 ),
               )),
           const SizedBox(height: 16),
-          // RichText(
-          //   text: TextSpan(
-          //      children: [
-          //        TextSpan(text: 'Create up to two different versions of your profile to more effectively highlight your individual specialties.',
-          //          style: TextStyle(fontSize: 14, color: Colors.black),),
-          //        TextSpan(text: ' Learn more',style: TextStyle(
-          //          color: Colors.green,
-          //          fontSize: 14,
-          //        ),)
-          //      ]
-          //
-          //   ),
-          //   // child: const Text(
-          //   //   'Create up to two different versions of your profile to more effectively highlight your individual specialties.',
-          //   //   style: TextStyle(fontSize: 14),
-          //   // ),
-          // ),
-          Obx(() {
-            return Column(
+
+
+             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 RichText(
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: controller.isExpanded.value
-                            ? 'Create up to two different versions of your profile to more effectively highlight your individual specialties. This text will be expanded and show more details about how profiles can be specialized.'
-                            : 'Create up to two different versions of your profile to more effectively highlight your individual specialties.',
+                        text: 'Create up to two different versions of your profile to more effectively highlight your individual specialties.',
                         style: TextStyle(fontSize: 14, color: theme.secondaryHeaderColor),
                       ),
                       TextSpan(
@@ -543,18 +518,18 @@ class ProfileSetting extends StatelessWidget {
                           fontSize: 14,
                         ),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () => controller.toggleTextVisibility(),
+                          ..onTap = () => UrlLauncherHelper.openUrl('https://www.google.com'),
                       ),
                     ],
                   ),
-                  maxLines: controller.isExpanded.value ? null : 3,
-                  overflow: controller.isExpanded.value
-                      ? TextOverflow.visible
-                      : TextOverflow.ellipsis,
+                  // maxLines: controller.isExpanded.value ? null : 3,
+                  // overflow: controller.isExpanded.value
+                  //     ? TextOverflow.visible
+                  //     : TextOverflow.ellipsis,
                 ),
               ],
-            );
-          }),
+            ),
+
           // TextButton(
           //   onPressed: () {},
           //   style: TextButton.styleFrom(
@@ -696,33 +671,25 @@ class ProfileSetting extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Obx(() {
-            // Conditionally show the full or truncated text based on isTextExpanded
-            return Column(
+         Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  controller.isExpanded.value
-                      ? 'Choose how your Orrbitwork data is used for AI training and improvement. The data you provide helps improve AI models.'
-                      : 'Choose how your Orrbitwork data is used for AI training and improvement.',
+                Text('Choose how your Orrbitwork data is used for AI training and improvement.',
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 14,
                   ),
-                  maxLines: controller.isExpanded.value ? null : 2,
+                  // maxLines: controller.isExpanded.value ? null : 2,
                   // Allow unlimited lines when expanded
-                  overflow: controller.isExpanded.value
-                      ? TextOverflow.visible
-                      : TextOverflow.ellipsis, // Add ellipsis when not expanded
                 ),
                 TextButton(
-                  onPressed: controller.toggleTextVisibility,
+                  onPressed: ()=> UrlLauncherHelper.openUrl('https://www.google.com'),
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.zero,
                     alignment: Alignment.centerLeft,
                   ),
                   child: Text(
-                    controller.isExpanded.value ? 'Show less' : 'Learn more',
+                    'Learn more',
                     style: TextStyle(
                       color: Colors.green,
                       fontSize: 14,
@@ -730,8 +697,7 @@ class ProfileSetting extends StatelessWidget {
                   ),
                 ),
               ],
-            );
-          }),
+            ),
           const SizedBox(height: 8),
           ListTile(
             contentPadding: EdgeInsets.zero,

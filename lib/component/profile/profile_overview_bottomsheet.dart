@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orbitwork/controllers/profile/profile_overview_controller.dart';
 
+import '../../comms/url_launcher_helper.dart';
+
 class PofileOverviewBottomsheet extends StatelessWidget {
   final ProfileOverviewController controller = Get.put(ProfileOverviewController());
   final TextEditingController textController = TextEditingController();
@@ -53,12 +55,15 @@ class PofileOverviewBottomsheet extends StatelessWidget {
                         SizedBox(
                           height: 12,
                         ),
-                        Text(
-                          'Learn more about building your profile',
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: theme.primaryColor),
+                        GestureDetector(
+                          onTap: () => UrlLauncherHelper.openUrl('https://www.google.com'),
+                          child: Text(
+                            'Learn more about building your profile',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: theme.primaryColor),
+                          ),
                         ),
                         SizedBox(height: 24,),
                         Text('Profile overview'),

@@ -1,6 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../comms/url_launcher_helper.dart';
 import '../controllers/get_paid_controller.dart';
 import '../models/withdrawal_method.dart';
 
@@ -188,6 +190,8 @@ class WithdrawalMethodBottomSheet extends StatelessWidget {
                                 decoration: TextDecoration.underline,
                                 color: Colors.brown[400],
                               ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () => UrlLauncherHelper.openUrl('https://www.google.com'),
                             ),
                             const TextSpan(text: '.'),
                           ],

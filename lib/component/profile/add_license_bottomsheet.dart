@@ -1,6 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orbitwork/controllers/profile/add_license_controller.dart';
+
+import '../../comms/url_launcher_helper.dart';
 
 class AddLicenseBottomsheet extends StatelessWidget{
   final AddLicenseController controller = Get.put(AddLicenseController());
@@ -45,7 +48,10 @@ class AddLicenseBottomsheet extends StatelessWidget{
                           decoration: TextDecoration.underline,
                           decorationColor: Colors.green,
                           fontSize: 16
-                        ),),
+                        ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => UrlLauncherHelper.openUrl('https://www.google.com'),
+                        ),
                       ],
                     ),),
                     SizedBox(height: 16,),
