@@ -47,6 +47,16 @@ class TimesheetController extends GetxController {
   final Rx<String> verifiedName = "Abc".obs;
   final Rx<String> contractId = "123456789".obs;
 
+  final Rx<String> status = "Accepted".obs;
+  final Rx<String> jobCategory = "Back-End Development".obs;
+  final Rx<String> offerDate = "Sep 26,2024".obs;
+  final Rx<String> offerExpires = "Oct 3,2024".obs;
+  final Rx<String> manualTimeAllowed = "No".obs;
+  final Rx<String> hourlyrate = "\$00.00 /hr".obs;
+
+  var isOfferExpanded = false.obs;
+  var isAboutClientExpanded = false.obs;
+
 
   final RxList<ContractActivity> activities = <ContractActivity>[].obs;
   var isShowDetails = false.obs;

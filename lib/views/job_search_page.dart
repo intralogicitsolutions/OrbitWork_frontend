@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../component/filter_by_bottomsheet.dart';
 import '../component/save_search_bottomsheet.dart';
 import '../controllers/jobs_controller.dart';
