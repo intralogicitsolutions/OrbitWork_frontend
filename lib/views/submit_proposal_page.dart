@@ -211,7 +211,7 @@ class SubmitProposalPage extends StatelessWidget {
             return SizedBox(
               height: 40,
               child: TextField(
-                enabled: false,
+                //enabled: false,
                 controller: TextEditingController(
                     text: (controller.proposal.value!.bid).toStringAsFixed(2)),
                 decoration: InputDecoration(

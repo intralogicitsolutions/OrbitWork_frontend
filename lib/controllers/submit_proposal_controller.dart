@@ -189,4 +189,5 @@ class SubmitProposalController extends GetxController {
     selectedDuration.value = value;
     Get.back(); // Close BottomSheet after selection
   }
+  
 }

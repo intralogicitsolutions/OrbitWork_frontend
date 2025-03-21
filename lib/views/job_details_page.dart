@@ -118,7 +118,7 @@ class JobDetailsView extends StatelessWidget {
                               );
                             }
                             return Text(
-                              "Posted ${job.postedTimeAgo} ago",
+                              "Posted ${job.createdAt} ago",
                             );
                           }
                         ),
@@ -209,7 +209,7 @@ class JobDetailsView extends StatelessWidget {
                                  height: 20,
                                );
                              }
-                            return Text(job.description);
+                            return Text(job.jobDescription!);
                           }
                         ),
 
@@ -241,7 +241,7 @@ class JobDetailsView extends StatelessWidget {
 
                         _priceAndExperience(
                             Icons.miscellaneous_services_outlined,
-                            '${job.jobType}',
+                            'Intermediate',
                             'Experience Level',context),
 
                         SizedBox(height: 24),

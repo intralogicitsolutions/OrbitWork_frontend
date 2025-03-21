@@ -4,6 +4,7 @@ import '../component/select_reason_bottom_sheet.dart';
 import '../controllers/jobs_controller.dart';
 import '../models/job_model.dart';
 import 'custom_shimmer.dart';
+import 'package:get_time_ago/get_time_ago.dart';
 
 class JobCard extends StatelessWidget {
   final Job job;
@@ -35,8 +36,10 @@ class JobCard extends StatelessWidget {
                       if (controller.isLoading.value) {
                       return CustomShimmer(width: MediaQuery.of(context).size.width *0.3, height: 10,);
                     }
+                      DateTime createdAt = job.createdAt;
+                      String timeAgo = GetTimeAgo.parse(createdAt, locale: 'en');
                       return Text(
-                        "Posted ${job.postedTimeAgo} ago",
+                        "Posted $timeAgo",
                         style: TextStyle(
                           //color: Theme.of(context).textTheme.bodySmall?.color,
                           color: Colors.grey[600],
@@ -183,14 +186,14 @@ class JobCard extends StatelessWidget {
                      }
                     return job.isFixedPrice
                         ? Text(
-                            "Fixed Price - ${job.jobType} - Est. Budget: \$${job.budget}",
+                            "Fixed Price - Intermediate - Est. Budget: \$${job.budget}",
                             style: TextStyle(
                                 fontSize: 12,
                                 //color: Theme.of(context).textTheme.bodySmall?.color
                                 color: Colors.grey.shade600),
                           )
                         : Text(
-                            "Hourly: \$${job.hourlyRateMin} - \$${job.hourlyRateMax} - ${job.jobType} - Est. Time: ${job.estimatedTime}, ${job.hoursPerWeek} hrs/week",
+                            "Hourly: \$${job.hourlyRateMin ?? 0.0} - \$${job.hourlyRateMax ?? 0.0} - Intermediate - Est. Time: ${job.estimatedTime ?? ''}, ${job.hoursPerWeek ?? 0} hrs/week",
                             style: TextStyle(
                                 fontSize: 12,
                                 //color: Theme.of(context).textTheme.bodySmall?.color,
@@ -205,7 +208,7 @@ class JobCard extends StatelessWidget {
                        return CustomShimmer(width: MediaQuery.of(context).size.width *0.7, height: 20,);
                      }
                     return Text(
-                      job.description,
+                      job.jobDescription??'',
                       style: Theme.of(context).textTheme.bodyMedium,
                       // style: const TextStyle(fontSize: 14, color: Colors.black87),
                     );

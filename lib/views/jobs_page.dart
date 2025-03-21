@@ -7,8 +7,6 @@ import '../controllers/theme_controller.dart';
 import '../models/job_model.dart';
 import '../routes/app_routes.dart';
 import '../widgets/custom_appbar.dart';
-import '../widgets/custom_drawer.dart';
-import '../widgets/custom_shimmer.dart';
 import '../widgets/job_card.dart';
 
 class JobsPage extends StatelessWidget {
@@ -322,23 +320,27 @@ class JobsPage extends StatelessWidget {
                       job: Job(
                         title: '',
                         // Placeholder empty data
-                        description: '',
-                        postedTimeAgo: '',
+                        jobDescription: '',
                         location: '',
                         budget: 0,
-                        paymentVerified: '',
+                        isPaymentVerified: true,
                         rating: 0.0,
                         tags: [],
-                        hourlyRateMin: '',
-                        hourlyRateMax: '',
-                        jobType: '',
+                        hourlyRateMin: 0.0,
+                        hourlyRateMax: 0.0,
                         estimatedTime: '',
-                        hoursPerWeek: '',
-                        isFixedPrice: true,
+                        hoursPerWeek: 0,
+                        isFixedPrice: true, id: '', userId: '', proposals: '',
+                        createdAt: DateTime(2025), updatedAt: DateTime(2025),
+                        deletedAt: DateTime(2025), isDeleted: false,
                       ),
                     );
                   }),
                 );
+              }
+
+              if (controller.jobs.isEmpty) {
+                return Center(child: Text("No jobs available"));
               }
 
               // if (controller.isLoading.value) {
@@ -356,6 +358,10 @@ class JobsPage extends StatelessWidget {
               // }
               return Column(
                 children: controller.jobs.map((job) {
+                  print("Jobs List Length: ${controller.jobs.length}");
+                  for (var job in controller.jobs) {
+                    print("Job: ${job.title}, Budget: ${job.budget}");
+                  }
                   return GestureDetector(
                     onTap: () {
                       Get.toNamed(AppRoutes.jobDetails, arguments: job);

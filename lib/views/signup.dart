@@ -132,24 +132,6 @@ class SignUpPage extends StatelessWidget {
               ),
               SizedBox(height: 10),
               CustomDropdown(),
-              // DropdownButtonFormField<String>(
-              //   value: controller.country.value,
-              //   onChanged: (value) => controller.country.value = value!,
-              //   items: ["India", "USA", "UK", "Australia", "Canada"]
-              //       .map((country) => DropdownMenuItem(
-              //     value: country,
-              //     child: Text(country),
-              //   ))
-              //       .toList(),
-              //   decoration: InputDecoration(
-              //     labelText: "Country",
-              //     filled: true,
-              //     fillColor: Colors.white,
-              //     border: OutlineInputBorder(
-              //       borderRadius: BorderRadius.circular(12),
-              //     ),
-              //   ),
-              // ),
               SizedBox(height: 10),
               Obx(() => CheckboxListTile(
                 value: controller.sendEmails.value,
@@ -193,8 +175,10 @@ class SignUpPage extends StatelessWidget {
               )),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: controller.submitForm,
-                child: Text(
+                onPressed: controller.isLoading.value ? null : controller.signUpUser,
+                //onPressed: controller.submitForm,
+                child: controller.isLoading.value
+                  ? CircularProgressIndicator(color: Colors.white) :Text(
                   "Sign Up",
                   style: TextStyle(color: Colors.white),
                 ),
