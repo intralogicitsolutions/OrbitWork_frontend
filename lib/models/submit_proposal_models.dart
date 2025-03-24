@@ -5,12 +5,12 @@ class SubmitProposalModel {
   final String category;
   final String postedDate;
   final String description;
-  final double budget;
-    double bid;
-    double serviceFee;
-    double finalAmount;
-   String duration;
-   String coverLetter;
+  // final double budget;
+  //   double bid;
+  //   double serviceFee;
+  //   double finalAmount;
+  //  String duration;
+  //  String coverLetter;
 
 
   SubmitProposalModel({
@@ -20,12 +20,12 @@ class SubmitProposalModel {
     required this.category,
     required this.postedDate,
     required this.description,
-    required this.budget,
-    required this.bid,
-    required this.serviceFee,
-    required this.finalAmount,
-    required this.duration,
-    required this.coverLetter,
+    // required this.budget,
+    // required this.bid,
+    // required this.serviceFee,
+    // required this.finalAmount,
+    // required this.duration,
+    // required this.coverLetter,
   });
 }
 

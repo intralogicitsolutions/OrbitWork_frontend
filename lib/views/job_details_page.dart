@@ -963,7 +963,7 @@ class JobDetailsView extends StatelessWidget {
                             'Buy Connects to apply',
                             onPressed: () {
                               if (buyConnectsController.hasBoughtConnects.value) {
-                                Get.toNamed(AppRoutes.submitProposal);
+                                Get.toNamed(AppRoutes.submitProposal, arguments: job);
                               } else {
                                 Get.toNamed(AppRoutes.buyConnects);
                               }

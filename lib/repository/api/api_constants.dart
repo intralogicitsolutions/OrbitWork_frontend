@@ -29,7 +29,7 @@ class ApiConstants {
   static const String GET_JOB_PROPOSAL = "$BASE_URL/job-proposal/get";
   static const String UPDATE_JOB_PROPOSAL = "$BASE_URL/job-proposal/update/:_id";
   static const String DELETE_JOB_PROPOSAL = "$BASE_URL/job-proposal/delete/:_id";
-  static const String GET_JOB_PROPOSAL_DETAIL = "$BASE_URL/job-proposal/get/:_id";
+  static const String GET_JOB_PROPOSAL_DETAIL = "$BASE_URL/job-proposal/get/";
 
   // MESSAGE ROUTES
   static const String MESSAGE_LIST = "$BASE_URL/message/list";

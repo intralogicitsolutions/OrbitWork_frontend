@@ -5,7 +5,7 @@ class UploadFile {
   String? name;
   int? size;
   String? url;
-  String fileType;
+  String? fileType;
   Location? location;
 
   UploadFile({
@@ -13,7 +13,7 @@ class UploadFile {
     this.name,
     this.size,
     this.url,
-    required this.fileType,
+     this.fileType,
     this.location,
   });
 

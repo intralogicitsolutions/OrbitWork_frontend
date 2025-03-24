@@ -34,10 +34,12 @@ dependencies:
   emoji_picker_flutter: ^4.3.0
   google_maps_flutter: ^2.10.0
   path: ^1.9.0
+  socket_io_client: ^3.0.2
 
   super_tooltip: ^2.0.9
   lottie: ^3.3.1
   get_time_ago: ^2.3.0
+  path_provider: ^2.1.5
 
   carousel_slider: ^5.0.0
 

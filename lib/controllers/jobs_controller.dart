@@ -94,34 +94,7 @@ class JobsController extends GetxController {
     return selectedReasons.containsKey(job);
   }
 
-  // Future<void> fetchJobs() async {
-  //   isLoading.value = true;
-  //   String? token = await TokenStorage.getToken();
-  //   try {
-  //     final response = await http.get(
-  //       Uri.parse(ApiConstants.GET_JOB),
-  //       headers: {
-  //         'Authorization': '$token',
-  //       },
-  //     );
-  //     isLoading.value = false;
-  //     if (response.statusCode == 200) {
-  //      // final Map<String, dynamic> data = json.decode(response.body);
-  //       final List<dynamic> jsonData = json.decode(response.body);
-  //       jobs.value = jsonData.map((job) => Job.fromJson(job)).toList();
-  //       print("Api Response: $jsonData");
-  //      // return data['data'] ?? [];
-  //     } else {
-  //       throw Exception("Failed to load jobs: ${response.statusCode}");
-  //     }
-  //   } catch (e) {
-  //     isLoading.value = false;
-  //     print("Error fetching jobs: $e");
-  //     //return [];
-  //   }
-  // }
-
-  Future<void> fetchJobs() async {
+  Future<void> fetchJobs({bool isRefresh = false}) async {
     isLoading.value = true;
     String? token = await TokenStorage.getToken();
 
@@ -142,7 +115,16 @@ class JobsController extends GetxController {
         if (data.containsKey("body") && data["body"] is List) {
           final List<dynamic> jsonData = data["body"]; // Extracting 'body' list
 
-          jobs.value = jsonData.map((job) => Job.fromJson(job)).toList();
+          List<Job> newJobs = jsonData.map((job) => Job.fromJson(job)).toList();
+
+          if (isRefresh) {
+            jobs.value = newJobs; // Replace old jobs on refresh
+          } else {
+            jobs.addAll(newJobs); // Append new jobs
+          }
+          print("API Response: ${json.encode(jsonData)}");
+
+         // jobs.value = jsonData.map((job) => Job.fromJson(job)).toList();
           print("API Response: ${json.encode(jsonData)}");
         } else {
           throw Exception("Invalid API response structure: ${response.body}");
