@@ -48,131 +48,259 @@
 //   }
 // }
 
-import 'dart:io';
+
+
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 
-class ChatBubble extends StatelessWidget {
-  final String message;
-  final bool isSentByMe;
-  final DateTime time;
-  final String? imagePath;
-  final String? filePath;
-  final double? latitude;
-  final double? longitude;
-  final String? id;
+import '../../models/message_model.dart';
 
-  const ChatBubble({
-    Key? key,
-    required this.message,
-    required this.isSentByMe,
-    required this.time,
-    this.imagePath,
-    this.filePath,
-    this.latitude,
-    this.longitude,
-    this.id,
-  }) : super(key: key);
+class ChatBubble extends StatelessWidget {
+  final MessageModel message;
+  final bool isMe;
+
+  ChatBubble({required this.message, required this.isMe});
 
   @override
   Widget build(BuildContext context) {
-    String formattedTime = DateFormat('hh:mm a').format(time);
+    String formattedTime = DateFormat('hh:mm a').format(message.createdAt);
+
     return Align(
-      alignment: isSentByMe ? Alignment.centerRight : Alignment.centerLeft,
+      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.all(12),
         constraints: BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width * 0.7,
         ),
         decoration: BoxDecoration(
-         // color: isSentByMe ? Colors.green.shade400 : Colors.grey.shade500,
+        //  color: isMe ? Colors.green[300] : Colors.grey[300],
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(15),
             topRight: const Radius.circular(15),
-            bottomLeft: isSentByMe ? const Radius.circular(15) : Radius.zero,
-            bottomRight: isSentByMe ? Radius.zero : const Radius.circular(15),
+            bottomLeft: isMe ? const Radius.circular(15) : Radius.zero,
+            bottomRight: isMe ? Radius.zero : const Radius.circular(15),
           ),
           border: Border.all(
-            color: Colors.black.withOpacity(0.3), // Border color
-            width: 1.0, // Border width
+            color: Colors.black.withOpacity(0.3),
+            width: 1.0,
           ),
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min, // Shrinks to fit content
-          crossAxisAlignment: CrossAxisAlignment.end, // Aligns text to bottom
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (imagePath != null)
-              Stack(
-                children: [
-                  SizedBox(
-                    width: 200,
-                    child: Image.file(File(imagePath!), fit: BoxFit.cover),
-                  ),
-                  Positioned(
-                    bottom: 5,
-                    right: 5,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: Colors.black54,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Text(
-                        formattedTime,
-                        style: const TextStyle(fontSize: 12, color: Colors.grey),
-                      ),
-                    ),
-                  ),
-                ],
+            // Image Message
+            if (message.messageType == "image" && message.attachmentId != null) ...[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  message.attachmentId!,
+                  width: 200,
+                  height: 200,
+                  fit: BoxFit.cover,
+                ),
               ),
-            if (filePath != null)
+              const SizedBox(height: 5),
+            ],
+
+            // File Attachment
+            if (message.messageType == "file" && message.attachmentId != null) ...[
               Row(
                 children: [
-                  Icon(Icons.attach_file, color: Colors.blue),
+                  const Icon(Icons.attach_file, color: Colors.blue),
                   const SizedBox(width: 5),
-                  Text(basename(filePath!), style: TextStyle(color: Colors.blue)),
+                  Expanded(
+                    child: Text(
+                      basename(message.attachmentId!),
+                      style: const TextStyle(color: Colors.blue, overflow: TextOverflow.ellipsis),
+                    ),
+                  ),
                 ],
               ),
-            if (latitude != null && longitude != null)
-              Container(
-                width: 200,
-                height: 150,
-                child: GoogleMap(
-                  initialCameraPosition: CameraPosition(
-                    target: LatLng(latitude!, longitude!),
-                    zoom: 14,
-                  ),
-                  markers: {
-                    Marker(
-                      markerId: MarkerId(id!),
-                      position: LatLng(latitude!, longitude!),
-                    ),
-                  },
-                ),
-              ),
+              const SizedBox(height: 5),
+            ],
 
-            if (message.isNotEmpty)...[
-              Flexible(
-                child: Text(
-                  message,
-                  style: const TextStyle(fontSize: 16),
-                  softWrap: true,
-                ),
-              ),
-              SizedBox(width: 5,),
+            // Location Message
+            // if (message.messageType == "location" && message.latitude != null && message.longitude != null) ...[
+            //   SizedBox(
+            //     width: 200,
+            //     height: 150,
+            //     child: ClipRRect(
+            //       borderRadius: BorderRadius.circular(10),
+            //       child: GoogleMap(
+            //         initialCameraPosition: CameraPosition(
+            //           target: LatLng(message.latitude!, message.longitude!),
+            //           zoom: 14,
+            //         ),
+            //         markers: {
+            //           Marker(
+            //             markerId: MarkerId(message.id ?? ""),
+            //             position: LatLng(message.latitude!, message.longitude!),
+            //           ),
+            //         },
+            //       ),
+            //     ),
+            //   ),
+            //   const SizedBox(height: 5),
+            // ],
+
+            // Text Message
+            if (message.message != null && message.message!.isNotEmpty) ...[
               Text(
-                formattedTime,
-                style: const TextStyle(fontSize: 12, color: Colors.grey),
+                message.message!,
+                style: const TextStyle(fontSize: 16),
+                softWrap: true,
               ),
-            ]
+            ],
 
+            // Timestamp
+            // Align(
+            //   alignment: Alignment.bottomRight,
+            //   child: Padding(
+            //     padding: const EdgeInsets.only(top: 5),
+            //     child: Text(
+            //       formattedTime,
+            //       style: const TextStyle(fontSize: 12, color: Colors.grey),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
-
       ),
     );
   }
+
 }
+
+
+//
+//
+// import 'dart:io';
+// import 'package:flutter/material.dart';
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'package:intl/intl.dart';
+// import 'package:path/path.dart';
+//
+// class ChatBubble extends StatelessWidget {
+//   final String message;
+//   final bool isSentByMe;
+//   final DateTime time;
+//   final String? imagePath;
+//   final String? filePath;
+//   final double? latitude;
+//   final double? longitude;
+//   final String? id;
+//
+//   const ChatBubble({
+//     Key? key,
+//     required this.message,
+//     required this.isSentByMe,
+//     required this.time,
+//     this.imagePath,
+//     this.filePath,
+//     this.latitude,
+//     this.longitude,
+//     this.id,
+//   }) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     String formattedTime = DateFormat('hh:mm a').format(time);
+//     return Align(
+//       alignment: isSentByMe ? Alignment.centerRight : Alignment.centerLeft,
+//       child: Container(
+//         margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+//         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+//         constraints: BoxConstraints(
+//           maxWidth: MediaQuery.of(context).size.width * 0.7,
+//         ),
+//         decoration: BoxDecoration(
+//          // color: isSentByMe ? Colors.green.shade400 : Colors.grey.shade500,
+//           borderRadius: BorderRadius.only(
+//             topLeft: const Radius.circular(15),
+//             topRight: const Radius.circular(15),
+//             bottomLeft: isSentByMe ? const Radius.circular(15) : Radius.zero,
+//             bottomRight: isSentByMe ? Radius.zero : const Radius.circular(15),
+//           ),
+//           border: Border.all(
+//             color: Colors.black.withOpacity(0.3), // Border color
+//             width: 1.0, // Border width
+//           ),
+//         ),
+//         child: Row(
+//           mainAxisSize: MainAxisSize.min, // Shrinks to fit content
+//           crossAxisAlignment: CrossAxisAlignment.end, // Aligns text to bottom
+//           children: [
+//             if (imagePath != null)
+//               Stack(
+//                 children: [
+//                   SizedBox(
+//                     width: 200,
+//                     child: Image.file(File(imagePath!), fit: BoxFit.cover),
+//                   ),
+//                   Positioned(
+//                     bottom: 5,
+//                     right: 5,
+//                     child: Container(
+//                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+//                       decoration: BoxDecoration(
+//                         color: Colors.black54,
+//                         borderRadius: BorderRadius.circular(5),
+//                       ),
+//                       child: Text(
+//                         formattedTime,
+//                         style: const TextStyle(fontSize: 12, color: Colors.grey),
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             if (filePath != null)
+//               Row(
+//                 children: [
+//                   Icon(Icons.attach_file, color: Colors.blue),
+//                   const SizedBox(width: 5),
+//                   Text(basename(filePath!), style: TextStyle(color: Colors.blue)),
+//                 ],
+//               ),
+//             if (latitude != null && longitude != null)
+//               Container(
+//                 width: 200,
+//                 height: 150,
+//                 child: GoogleMap(
+//                   initialCameraPosition: CameraPosition(
+//                     target: LatLng(latitude!, longitude!),
+//                     zoom: 14,
+//                   ),
+//                   markers: {
+//                     Marker(
+//                       markerId: MarkerId(id!),
+//                       position: LatLng(latitude!, longitude!),
+//                     ),
+//                   },
+//                 ),
+//               ),
+//
+//             if (message.isNotEmpty)...[
+//               Flexible(
+//                 child: Text(
+//                   message,
+//                   style: const TextStyle(fontSize: 16),
+//                   softWrap: true,
+//                 ),
+//               ),
+//               SizedBox(width: 5,),
+//               Text(
+//                 formattedTime,
+//                 style: const TextStyle(fontSize: 12, color: Colors.grey),
+//               ),
+//             ]
+//
+//           ],
+//         ),
+//
+//       ),
+//     );
+//   }
+// }

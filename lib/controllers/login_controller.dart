@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:orbitwork/global/tokenStorage.dart';
 import 'dart:convert';
 
+import '../global/global.dart';
 import '../repository/api/api_constants.dart';
 import '../routes/app_routes.dart';
 
@@ -42,6 +43,8 @@ class LoginController extends GetxController {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       if (data["success"] == 1) {
+        Global.userId = data["body"]["_id"];
+        print('userId ===> ${Global.userId}');
         String token = data["body"]["token"];
         await TokenStorage.saveToken(token);
         print('token ==> ${token}');

@@ -79,7 +79,7 @@ class AppPages {
     GetPage(name: AppRoutes.submitProposal, page: () => SubmitProposalPage(job: Get.arguments,)),
     // GetPage(name: AppRoutes.submitProposal, page: () => SubmitProposalPage()),
     GetPage(name: AppRoutes.myStats, page: () => MyStatePage()),
-    GetPage(name: AppRoutes.chat, page: () => ChatPage(name: Get.arguments,)),
+    GetPage(name: AppRoutes.chat, page: () => ChatPage(name: Get.arguments['name'], receiverId: Get.arguments['receiverId'],)),
     GetPage(name: AppRoutes.billingAndPayments, page: () => BillingAndPayments()),
     GetPage(name: AppRoutes.addBillingMethod, page: () => AddBillingMethod()),
     GetPage(name: AppRoutes.membershipAndConnects, page: () => MembershipAndConnects()),

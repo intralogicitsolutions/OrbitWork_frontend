@@ -1,19 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import '../comms/utills/date_utils.dart';
 import '../component/new_room_bottomsheet.dart';
 import '../controllers/message_controller.dart';
 import '../controllers/room_controller.dart';
+import '../controllers/user_controller.dart';
 import '../routes/app_routes.dart';
 import '../widgets/custom_appbar.dart';
 import '../widgets/custom_shimmer.dart';
 
 class MessagesPage extends StatelessWidget {
   final MessageController controller = Get.put(MessageController());
+  final UserController userController = Get.put(UserController());
 
   String getInitials(String name) {
+    if (name == null || name.trim().isEmpty) {
+      return "?"; // Return a default character if name is empty or null
+    }
     List<String> nameParts = name.split(' ');
-    return nameParts.take(2).map((part) => part[0].toUpperCase()).join();
+    //return nameParts.take(2).map((part) => part[0].toUpperCase()).join();
+    return nameParts
+        .where((part) => part.isNotEmpty) // Ensure no empty strings in the list
+        .take(2)
+        .map((part) => part[0].toUpperCase())
+        .join();
   }
 
   void showNewRoomSheet() {
@@ -283,12 +294,17 @@ class MessagesPage extends StatelessWidget {
                 );
               }
               return ListView.builder(
-                itemCount: controller.filteredMessages.length,
+               // itemCount: controller.filteredMessages.length,
+                itemCount: userController.users.length,
                 itemBuilder: (context, index) {
-                  final message = controller.filteredMessages[index];
+                 // final message = controller.filteredMessages[index];
+                  final user = userController.users[index];
                   return GestureDetector(
                     onTap: () {
-                      Get.toNamed(AppRoutes.chat, arguments: message.name);
+                      Get.toNamed(AppRoutes.chat, arguments: {
+                        'receiverId': user.id,
+                        'name': "${user.firstname} ${user.lastname}",
+                      } );
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -313,14 +329,14 @@ class MessagesPage extends StatelessWidget {
                                         // Ensures the dot can overflow outside the stack
                                         children: [
                                           CircleAvatar(
+                                            backgroundColor:
+                                                Colors.grey.shade400,
                                             child: Text(
-                                              getInitials(message.name),
+                                              getInitials("${user.firstname} ${user.lastname}"),
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.white),
                                             ),
-                                            backgroundColor:
-                                                Colors.grey.shade400,
                                           ),
                                           Positioned(
                                             top: 1,
@@ -361,19 +377,21 @@ class MessagesPage extends StatelessWidget {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              message.name,
+                                        "${user.firstname} ${user.lastname}",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 1,
                                             ),
                                             Text(
-                                              message.title,
+                                            //  message.title,
+                                              "${user.email}",
                                               style: TextStyle(
                                                   color: Colors.grey.shade500),
                                             ),
                                             Text(
-                                              message.lastMessage,
+                                              // message.lastMessage,
+                                              "${user.status}",
                                               style: TextStyle(
                                                   color: theme.hintColor,
                                                   fontWeight: FontWeight.w400),
@@ -385,7 +403,9 @@ class MessagesPage extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  message.date,
+                                  // message.date,
+                                  DateUtilsHelper.formatDate( "${user.createdAt}"),
+                                  //"${user.createdAt}",
                                   style: TextStyle(
                                       color: theme.dividerColor,
                                       fontWeight: FontWeight.w500),

@@ -2,8 +2,8 @@ import 'package:get/get.dart';
 import '../models/message_model.dart';
 
 class MessageController extends GetxController {
-  var messages = <MessageModel>[].obs;
-  var filteredMessages = <MessageModel>[].obs;
+  var messages = <MessagesModel>[].obs;
+  var filteredMessages = <MessagesModel>[].obs;
   var searchQuery = ''.obs;
   RxBool isLoading = true.obs;
 
@@ -23,13 +23,13 @@ class MessageController extends GetxController {
   void fetchMessages() async{
     await Future.delayed(Duration(seconds: 2));
     messages.value = [
-      MessageModel(
+      MessagesModel(
         name: "Quentin Leopold, kfzBlitz24 GmbH",
         title: "Flutter App Developer",
         lastMessage: "You: Quentin Leopold",
         date: "12/27/24",
       ),
-      MessageModel(
+      MessagesModel(
         name: "John Doe",
         title: "React Developer",
         lastMessage: "You: Thanks for the update!",
