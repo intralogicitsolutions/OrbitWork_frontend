@@ -126,19 +126,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import '../component/chat/chat_input_field.dart';
 import '../component/chat/chat_message_bubble.dart';
 import '../controllers/chat_contoller.dart';
 import '../global/global.dart';
 
-
 class ChatPage extends StatelessWidget {
   final String name;
   final String receiverId;
+
   //final ChatController chatController = Get.put(ChatController());
   final ChatController chatController;
+  final ScrollController _scrollController = ScrollController();
 
-  ChatPage({Key? key, required this.receiverId,required this.name}) : chatController = Get.put(ChatController(receiverId: receiverId)),
+  ChatPage({Key? key, required this.receiverId, required this.name})
+      : chatController = Get.put(ChatController(receiverId: receiverId)),
         super(key: key);
 
   @override
@@ -148,17 +151,54 @@ class ChatPage extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: Obx(() => ListView.builder(
-              reverse: true,
-              itemCount: chatController.messages.length,
-              itemBuilder: (context, index) {
-                var message = chatController.messages[index];
-                bool isMe = message.senderId == Global.userId;
-                return ChatBubble(message: message, isMe: isMe);
-              },
-            )),
+            child: Obx(() {
+              return ListView.builder(
+                controller: _scrollController,
+                  reverse: true,
+                  itemCount: chatController.messages.length,
+                  itemBuilder: (context, index) {
+                    var message = chatController.messages[index];
+                    bool isMe = message.senderId == Global.userId;
+
+                    DateTime messageDate = message.createdAt;
+                    String formattedDate =
+                        DateFormat('dd-MM-yyyy').format(messageDate);
+
+                    bool showDateHeader = index ==
+                            chatController.messages.length - 1 ||
+                        DateFormat('dd-MM-yyyy').format(
+                                chatController.messages[index + 1].createdAt) !=
+                            formattedDate;
+                    return Column(
+                      children: [
+                        if (showDateHeader)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Center(
+                              child: Text(
+                                formattedDate,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ChatBubble(message: message, isMe: isMe),
+                      ],
+                    );
+                  },
+                );}),
           ),
-          ChatInputField(receiverId: receiverId,),
+          ChatInputField(
+            receiverId: receiverId,
+            // onMessageSent: () {
+            //   Future.delayed(Duration(milliseconds: 300), () {
+            //     _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+            //   });
+            // },
+          ),
         ],
       ),
     );

@@ -191,16 +191,25 @@
 
 
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:orbitwork/models/upload_file_model.dart';
+
+import '../../comms/enum/message.dart';
 import '../../controllers/chat_contoller.dart';
 
 class ChatInputField extends StatelessWidget {
   final ChatController chatController = Get.find<ChatController>();
+  final TextEditingController textController = TextEditingController();
   final String receiverId;
+  // final VoidCallback? onMessageSent;
 
-  ChatInputField({super.key, required this.receiverId});
+  ChatInputField({super.key, required this.receiverId,});
 
   @override
   Widget build(BuildContext context) {
@@ -214,14 +223,16 @@ class ChatInputField extends StatelessWidget {
         children: [
           IconButton(
             icon: Icon(Icons.attach_file, color: Colors.grey[600]),
-            onPressed: () {
-              // Handle file attachment (image, video, document)
-              print("Attachment Clicked");
-            },
+            // onPressed: () {
+            //   // Handle file attachment (image, video, document)
+            //   print("Attachment Clicked");
+            // },
+            onPressed: () => _showAttachmentOptions(context),
           ),
           Expanded(
             child: TextField(
-              controller: TextEditingController(text: chatController.messageText.value),
+              controller: textController,
+              //controller: TextEditingController(text: chatController.messageText.value),
               onChanged: (text) => chatController.messageText.value = text,
               decoration: InputDecoration(
                 hintText: "Type a message...",
@@ -231,10 +242,138 @@ class ChatInputField extends StatelessWidget {
           ),
           IconButton(
             icon: Icon(Icons.send, color: Colors.green),
-            onPressed: () => chatController.sendMessage(receiverId),
+           onPressed: () {
+             if (textController.text.isNotEmpty) {
+               chatController.sendMessage(receiverId, MessageType.text);
+               textController.clear();
+               // if (onMessageSent != null) {
+               //   onMessageSent!(); // Call the callback after sending
+               // }
+             }
+           },
+           // onPressed: () => chatController.sendMessage(receiverId, MessageType.text),
           ),
         ],
       ),
     );
+  }
+
+  void _showAttachmentOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Camera'),
+              onTap: () async {
+                Get.back();
+                File? file = await _pickImage(ImageSource.camera);
+                if (file != null) {
+                  print('file ==> ${file}');
+                  chatController.uploadAndSendFile(receiverId,file: [file]);
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo),
+              title: const Text('Gallery'),
+              onTap: () async {
+                Get.back();
+                //File? file = await _pickImage(ImageSource.gallery);
+                List<File> file = await _pickMultipleImages();
+                if (file.isNotEmpty) {
+                  print('gallery image path ==> ${file}');
+                  chatController.uploadAndSendFile(receiverId, file: file);
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.audiotrack),
+              title: const Text('Audio'),
+              onTap: () async {
+                Get.back();
+                //File? file = await _pickFile(FileType.audio);
+                List<File> file = await _pickFile(FileType.audio);
+                if (file.isNotEmpty) {
+                  chatController.uploadAndSendFile(receiverId, file: file);
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.videocam),
+              title: const Text('Video'),
+              onTap: () async {
+                Get.back();
+                //File? file = await _pickFile(FileType.video);
+                List<File> file = await _pickFile(FileType.video);
+                if (file.isNotEmpty) {
+                  chatController.uploadAndSendFile(receiverId, file: file);
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.insert_drive_file),
+              title: const Text('Document'),
+              onTap: () async {
+                Get.back();
+                //File? file = await _pickFile(FileType.any);
+                List<File> file = await _pickFile(FileType.any);
+                if (file.isNotEmpty) {
+                  chatController.uploadAndSendFile(receiverId, file: file);
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.location_on),
+              title: const Text('Location'),
+              onTap: () async {
+               // Get.back();
+                // Position? position = await _getCurrentLocation();
+                // if (position != null) {
+                //   chatController.uploadAndSendFile(receiverId, location: Location());
+                // }
+                Position position = await Geolocator.getCurrentPosition(
+                    desiredAccuracy: LocationAccuracy.high);
+
+                chatController.sendLocation(position, receiverId);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<File?> _pickImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    return pickedFile != null ? File(pickedFile.path) : null;
+  }
+
+  Future<List<File>> _pickMultipleImages() async {
+    final List<XFile>? pickedFiles = await ImagePicker().pickMultiImage();
+    return pickedFiles != null ? pickedFiles.map((xFile) => File(xFile.path)).toList() : [];
+  }
+
+  Future<List<File>> _pickFile(FileType fileType) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: fileType,
+      allowMultiple: true,
+    );
+    return result != null ? result.files.map((file) => File(file.path!)).toList() : [];
+  }
+
+  // Future<File?> _pickFile(FileType fileType) async {
+  //   FilePickerResult? result = await FilePicker.platform.pickFiles(type: fileType);
+  //   return result != null ? File(result.files.single.path!) : null;
+  // }
+  Future<Position?> _getCurrentLocation() async {
+    try {
+      return await Geolocator.getCurrentPosition();
+    } catch (e) {
+      print("Location Error: $e");
+      return null;
+    }
   }
 }

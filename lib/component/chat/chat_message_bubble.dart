@@ -48,13 +48,21 @@
 //   }
 // }
 
-
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:orbitwork/component/chat/pdf_view_page.dart';
 import 'package:path/path.dart';
-
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 import '../../models/message_model.dart';
+import 'audio_player.dart';
+import 'full_screeen_video.dart';
+import 'full_screen_image.dart';
 
 class ChatBubble extends StatelessWidget {
   final MessageModel message;
@@ -75,7 +83,7 @@ class ChatBubble extends StatelessWidget {
           maxWidth: MediaQuery.of(context).size.width * 0.7,
         ),
         decoration: BoxDecoration(
-        //  color: isMe ? Colors.green[300] : Colors.grey[300],
+          //  color: isMe ? Colors.green[300] : Colors.grey[300],
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(15),
             topRight: const Radius.circular(15),
@@ -91,59 +99,152 @@ class ChatBubble extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Image Message
-            if (message.messageType == "image" && message.attachmentId != null) ...[
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  message.attachmentId!,
-                  width: 200,
-                  height: 200,
-                  fit: BoxFit.cover,
+            //if (message.messageType == "image" && message.attachmentDetails?.url != null) ...[
+            if (message.messageType == "image" &&
+                message.attachmentDetails != null) ...[
+              for (var file in message.attachmentDetails!)
+                if (file.url != null)
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => FullScreenImage(imageUrl: file.url!));
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.network(
+                        file.url!,
+                        width: 200,
+                        height: 200,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+              const SizedBox(height: 5),
+            ],
+
+            if (message.messageType == "video" &&
+                message.attachmentDetails != null) ...[
+              for (var file in message.attachmentDetails!)
+                if (file.url != null)
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => FullScreenVideo(videoUrl: file.url!));
+                    },
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: 200,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.black12,
+                          ),
+                          child: Icon(Icons.play_circle_fill,
+                              color: Colors.white, size: 50),
+                        ),
+                      ],
+                    ),
+                  )
+            ],
+
+            if (message.messageType == "audio" &&
+                message.attachmentDetails != null) ...[
+              for (var file in message.attachmentDetails!)
+                if (file.url != null)
+                  AudioPlayerWidget(audioUrl: file.url!),
+              const SizedBox(height: 5),
+            ],
+
+            // File Attachment
+            if (message.messageType == "document" &&
+                message.attachmentDetails != null) ...[
+              for (var file in message.attachmentDetails!)
+                if (file.name != null && file.url != null)
+              GestureDetector(
+                onTap: () async {
+                  try {
+                    final url = file.url;
+                    //final originalName = document["originalName"];
+                    final originalName = file.name;
+
+                    if (url != null && originalName != null) {
+                      final directory = await getTemporaryDirectory();
+                      final filePath = "${directory.path}/$originalName";
+
+                      final file = File(filePath);
+                      if (!file.existsSync()) {
+                        final response = await http.get(Uri.parse(url));
+                        if (response.statusCode == 200) {
+                          await file.writeAsBytes(response.bodyBytes);
+                        } else {
+                          throw Exception("Failed to download file");
+                        }
+                      }
+
+                      final result = await OpenFilex.open(filePath);
+                      if (result.type != ResultType.done) {
+                        print('error opening file : ${result.message}');
+                        throw Exception(
+                            "Error opening file: ${result.message}");
+                      }
+                    } else {
+                      throw Exception("Invalid file data");
+                    }
+                  } catch (e) {
+                    print('error : ${e.toString()}');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Error: ${e.toString()}")),
+                    );
+                  }
+                },
+                child: Row(
+                  children: [
+                    const Icon(Icons.attach_file, color: Colors.blue),
+                    const SizedBox(width: 5),
+                    Expanded(
+                      child: Text(
+                        file.name!,
+                        // basename(message.attachmentId!),
+                        style: const TextStyle(
+                            color: Colors.blue,
+                            overflow: TextOverflow.ellipsis),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 5),
             ],
 
-            // File Attachment
-            if (message.messageType == "file" && message.attachmentId != null) ...[
-              Row(
-                children: [
-                  const Icon(Icons.attach_file, color: Colors.blue),
-                  const SizedBox(width: 5),
-                  Expanded(
-                    child: Text(
-                      basename(message.attachmentId!),
-                      style: const TextStyle(color: Colors.blue, overflow: TextOverflow.ellipsis),
+            if (message.messageType == "location" &&
+                message.latitude != null &&
+                message.longitude != null) ...[
+              GestureDetector(
+                onTap: () {
+                  String mapUrl =
+                      "https://www.google.com/maps/search/?api=1&query=${message.latitude},${message.longitude}";
+                  launchUrl(Uri.parse(mapUrl), mode: LaunchMode.externalApplication);
+                },
+                child: Container(
+                  height: 150,
+                  width: 200,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.blue[100],
+                  ),
+                  // child: Center(
+                  //   child: Text("View Location",
+                  //       style: TextStyle(color: Colors.blue)),
+                  // ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.network(
+                      "https://maps.googleapis.com/maps/api/staticmap?center=${message.latitude},${message.longitude}&zoom=15&size=200x150&markers=color:red%7C${message.latitude},${message.longitude}&key=YOUR_GOOGLE_MAPS_API_KEY",
+                      fit: BoxFit.cover,
                     ),
                   ),
-                ],
+                ),
               ),
-              const SizedBox(height: 5),
             ],
-
-            // Location Message
-            // if (message.messageType == "location" && message.latitude != null && message.longitude != null) ...[
-            //   SizedBox(
-            //     width: 200,
-            //     height: 150,
-            //     child: ClipRRect(
-            //       borderRadius: BorderRadius.circular(10),
-            //       child: GoogleMap(
-            //         initialCameraPosition: CameraPosition(
-            //           target: LatLng(message.latitude!, message.longitude!),
-            //           zoom: 14,
-            //         ),
-            //         markers: {
-            //           Marker(
-            //             markerId: MarkerId(message.id ?? ""),
-            //             position: LatLng(message.latitude!, message.longitude!),
-            //           ),
-            //         },
-            //       ),
-            //     ),
-            //   ),
-            //   const SizedBox(height: 5),
-            // ],
 
             // Text Message
             if (message.message != null && message.message!.isNotEmpty) ...[
@@ -153,26 +254,12 @@ class ChatBubble extends StatelessWidget {
                 softWrap: true,
               ),
             ],
-
-            // Timestamp
-            // Align(
-            //   alignment: Alignment.bottomRight,
-            //   child: Padding(
-            //     padding: const EdgeInsets.only(top: 5),
-            //     child: Text(
-            //       formattedTime,
-            //       style: const TextStyle(fontSize: 12, color: Colors.grey),
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),
     );
   }
-
 }
-
 
 //
 //

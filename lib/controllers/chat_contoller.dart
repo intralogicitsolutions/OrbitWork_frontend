@@ -1,11 +1,18 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:orbitwork/controllers/upload_file_controller.dart';
 import 'package:orbitwork/global/global.dart';
 import 'package:orbitwork/repository/api/api_constants.dart';
+import '../comms/enum/message.dart';
 import '../global/tokenStorage.dart';
 import '../models/message_model.dart';
 import '../models/chat_user_model.dart';
+import '../models/upload_file_model.dart';
 import '../socket/socket_service/socket_service.dart';
 import 'package:http/http.dart' as http;
 
@@ -108,36 +115,158 @@ class ChatController extends GetxController {
   final String receiverId;
 
   final socketService = Get.put(SocketService());
+  final uploadController = Get.put(UploadFileController());
 
   ChatController({required this.receiverId});
 
-  void sendMessage(String receiverId) {
-    if (messageText.value.isNotEmpty) {
+  void sendMessage(String receiverId, MessageType type) {
+    if (messageText.value.isNotEmpty  && socketService.socket != null) {
       final message = MessageModel(
         senderId: Global.userId!,
         receiverId: receiverId,
         message: messageText.value,
-        attachmentId: "",
-        messageType: "text",
+        attachmentId: [],
+        messageType: type.toString().split('.').last,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       );
 
       // Pass individual properties, not a JSON object
-      socketService.sendMessage(
-        senderId: message.senderId,
-        receiverId: message.receiverId,
-        message: message.message,
-        attachmentId: message.attachmentId ?? "",
-        messageType: message.messageType ?? "text",
-      );
+      socketService.socket!.emit("chat_message", message.toJson());
+      // socketService.sendMessage(
+      //   senderId: message.senderId,
+      //   receiverId: message.receiverId,
+      //   message: message.message,
+      //  attachmentId: message.attachmentId ?? "",
+      //   messageType: message.messageType,
+      // );
 
 
       // Convert `MessageModel` to JSON before adding to `messages`
       messages.add(message);
-
       messageText.value = "";
     }
+  }
+
+  // Future<void> uploadAndSendFile(File file, String receiverId, MessageType messageType) async {
+  //   String? fileBase64;
+  //   String? fileName = file.path.split('/').last;
+  //   String? fileType = fileName.split('.').last;
+  //
+  //   try {
+  //     // Read the file as bytes and encode it to Base64
+  //     List<int> fileBytes = await file.readAsBytes();
+  //     fileBase64 = base64Encode(fileBytes);
+  //   } catch (e) {
+  //     print("Error encoding file: $e");
+  //     return;
+  //   }
+  //
+  //   // Construct the message model with actual file data
+  //   final message = {
+  //     "senderId": Global.userId!,
+  //     "receiverId": receiverId,
+  //     "message": "",
+  //     "fileName": fileName,
+  //     "fileType": fileType,
+  //    // "fileData": fileBase64,  // Base64 encoded file
+  //     "messageType": messageType.toString().split('.').last, // Adjust based on actual type
+  //     "createdAt": DateTime.now().toIso8601String(),
+  //     "updatedAt": DateTime.now().toIso8601String(),
+  //   };
+  //
+  //   print("Sending message to socket: $message");
+  //
+  //   // Send the message to the socket
+  //   socketService.sendMessage(message);
+  //   messages.add(MessageModel.fromJson(message));
+  //
+  //   // Add the message to the UI
+  // //  messages.add(message);
+  // }
+
+
+  // Future<void> uploadAndSendFile(File file, String receiverId, MessageType messageType) async {
+  //   String fileName = file.path.split('/').last;
+  //   String fileType = fileName.split('.').last;
+  //
+  //   // Convert file to Base64
+  //   List<int> fileBytes = await file.readAsBytes();
+  //   String fileBase64 = base64Encode(fileBytes);
+  //   String base64Image = await convertFileToBase64(file);
+  //
+  //   // Construct the message payload
+  //   final messageData = {
+  //     "sender_id": Global.userId!,
+  //     "receiver_id": receiverId,
+  //     "message": "Check this image",  // Message text
+  //     "files": "data:image/$fileType;base64,$base64Image", // Base64 file
+  //     "message_type": messageType.toString().split('.').last
+  //   };
+  //
+  //   print("Sending message to socket: $messageData");
+  //
+  //   socketService.socket!.emit('chat_message', messageData);
+  //
+  //   // Emit the message over WebSocket
+  //   messages.add(MessageModel.fromJson(messageData));
+  //   //socket!.emit('chat_message', messageData);
+  // }
+
+ Future<void> uploadAndSendFile(String receiverId, {List<File>? file,Location? location})  async {
+   if (file == null || file.isEmpty) return;
+   for (var files in file) {
+     UploadFile? uploadedFile = await uploadController.uploadFile(files);
+     print('uploadFile ==> ${uploadedFile}');
+     if (uploadedFile != null && socketService.socket != null) {
+       final message = MessageModel(
+         senderId: Global.userId!,
+         receiverId: receiverId,
+         message: "",
+         attachmentId: uploadedFile.id != null ? [uploadedFile.id!] : null,
+         // messageType: messageType.toString().split('.').last,
+         messageType: uploadedFile.fileType,
+         createdAt: DateTime.now(),
+         updatedAt: DateTime.now(),
+       );
+
+       Map<String, dynamic> messageData = {
+         "senderId": message.senderId,
+         "receiverId": message.receiverId,
+         "message": message.message,
+         "attachmentId": message.attachmentId ?? "",
+         "messageType": message.messageType,
+       };
+
+       print("Sending message to socket: $messageData");
+
+       // socketService.sendMessage(
+       //   senderId: message.senderId,
+       //   receiverId: message.receiverId,
+       //   message: message.message,
+       //   attachmentId: message.attachmentId ?? "",
+       //   messageType: message.messageType,
+       // );
+       socketService.socket!.emit("chat_message", message.toJson());
+       messages.add(message);
+     }
+   }
+ }
+
+  void sendLocation(Position position, String receiverId,) {
+   // final locationMessage = "Location: ${position.latitude}, ${position.longitude}";
+    final message = MessageModel(
+      senderId: Global.userId!,
+      receiverId: receiverId,
+      messageType: "location",
+      latitude: position.latitude,
+      longitude: position.longitude,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+    socketService.socket!.emit("chat_message", message.toJson());
+    messages.add(message);
+   // sendMessage(receiverId, MessageType.location);
   }
 
   void receiveMessage(Map<String, dynamic> data) {
@@ -157,11 +286,22 @@ class ChatController extends GetxController {
 
       print('url ==> ${ApiConstants.GET_MESSAGE_LIST}?user_id=${Global.userId}');
       print('statuscode ==> ${response.statusCode}');
+      print('Response body: ${response.body}');
       if (response.statusCode == 200) {
         var jsonData = json.decode(response.body);
-        List<dynamic> messageList = jsonData['body'];
 
-        messages.value = messageList.map((msg) => MessageModel.fromJson(msg)).toList();
+        if (jsonData['body'] is List) {
+          messages.value = (jsonData['body'] as List)
+              .map((msg) => MessageModel.fromJson(msg))
+              .toList();
+        } else {
+         // print("Unexpected response format: ${jsonData['body']}");
+          List<dynamic> messageList = jsonData['body'];
+          messages.value = messageList.map((msg) => MessageModel.fromJson(msg)).toList();
+        }
+        // List<dynamic> messageList = jsonData['body'];
+        //
+        // messages.value = messageList.map((msg) => MessageModel.fromJson(msg)).toList();
 
         print('message value ==> ${messages.value}');
       } else {
@@ -176,8 +316,23 @@ class ChatController extends GetxController {
   void onInit() {
     super.onInit();
     fetchMessage(receiverId);
-    socketService.socket.on("chat_message", (data) {
-      messages.add(data);
-    });
+    if (socketService.socket != null) {
+      socketService.socket!.on("chat_message", (data) {
+        print("Received message: $data");
+        receiveMessage(data);
+      });
+    }
+    // socketService.socket!.on("chat_message", (data) {
+    //   print("Received message: $data");
+    //   messages.add(MessageModel.fromJson(data));
+    // });
+  }
+
+  @override
+  void onClose() {
+    if (socketService.socket != null) {
+      socketService.socket!.off("chat_message"); // Remove listener when controller is disposed
+    }
+    super.onClose();
   }
 }

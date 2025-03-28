@@ -34,6 +34,7 @@ class UploadFileController extends GetxController {
       request.headers['Content-Type'] = 'multipart/form-data';
 
       var fileMimeType = lookupMimeType(file.path) ?? 'application/octet-stream';
+      print("Uploading file with MIME type: $fileMimeType");
       request.files.add(await http.MultipartFile.fromPath(
           'files',
           file.path,
@@ -48,15 +49,21 @@ class UploadFileController extends GetxController {
         var jsonResponse = json.decode(response.body);
         uploadedFile.value = UploadFile.fromJson(jsonResponse);
         Get.snackbar("Success", "File uploaded successfully!");
-        return uploadedFile.value;  // ✅ Return uploaded file
+        return uploadedFile.value;  // Return uploaded file
       } else {
         Get.snackbar("Error", "File upload failed!");
-        return null;  // ✅ Return null on failure
+        return null;  //Return null on failure
       }
+    }on http.ClientException catch (e) {
+      print('Client Exception: $e');
+    } on SocketException catch (e) {
+      print('Network Error: $e');
+    } on FormatException catch (e) {
+      print('Response format error: $e');
     } catch (e) {
       print('Exception: $e');
       Get.snackbar("Error", "Exception: $e");
-      return null;  // ✅ Return null in case of an exception
+      return null;  // Return null in case of an exception
     } finally {
       isLoading.value = false;
       if (file.existsSync()) {

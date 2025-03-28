@@ -249,7 +249,7 @@ class SubmitProposalPage extends StatelessWidget {
             );
           }
           return Text(
-            '\$${(controller.jobProposal.value!.serviceFee?.toStringAsFixed(2) ?? '0.00')}',
+            '\$${(controller.jobProposal.value?.serviceFee?.toStringAsFixed(2) ?? '0.00')}',
             style: TextStyle(color: Colors.grey),
           );
         }),
@@ -273,7 +273,7 @@ class SubmitProposalPage extends StatelessWidget {
               ),
               child:
                 Text(
-                  '\$${(controller.jobProposal.value!.finalAmount)?.toStringAsFixed(2)}',
+                  '\$${(controller.jobProposal.value?.finalAmount)?.toStringAsFixed(2)}',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
             );

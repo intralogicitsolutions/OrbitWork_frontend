@@ -1,3 +1,5 @@
+import 'package:orbitwork/models/upload_file_model.dart';
+
 class MessagesModel {
   final String name;
   final String title;
@@ -48,9 +50,12 @@ class MessageModel {
   final String senderId;
   final String? receiverId;
   final String? message;
-  final String? attachmentId;
+  final List<String>? attachmentId;
+  final List<UploadFile>? attachmentDetails;
   final String? roomId;
   final String? messageType;
+  final double? latitude;
+  final double? longitude;
   final DateTime createdAt;
   final DateTime updatedAt;
   final bool isDeleted;
@@ -61,39 +66,79 @@ class MessageModel {
     this.receiverId,
     this.message,
     this.attachmentId,
+    this.attachmentDetails,
     this.roomId,
     this.messageType,
-    required this.createdAt,
+    this.latitude,
+    this.longitude,
+    required dynamic createdAt,
     required this.updatedAt,
     this.isDeleted = false,
     this.status = 1,
-  });
+  }) : createdAt = createdAt is int
+      ? DateTime.fromMillisecondsSinceEpoch(createdAt)
+      : createdAt is String
+      ? DateTime.tryParse(createdAt) ?? DateTime.now()
+      : createdAt;
 
-  /// ✅ Convert JSON to `MessageModel` object
+  ///  Convert JSON to `MessageModel` object
   factory MessageModel.fromJson(Map<String, dynamic> json) {
     return MessageModel(
-      senderId: json["sender_id"],
-      receiverId: json["receiver_id"],
-      message: json["message"],
-      attachmentId: json["attechment_id"],
-      roomId: json["room_id"],
-      messageType: json["message_type"],
-      createdAt: DateTime.parse(json["created_at"]),
-      updatedAt: DateTime.parse(json["updated_at"]),
+      senderId: json["sender_id"] ?? '',
+      receiverId: json["receiver_id"] ??'',
+      message: json["message"] ?? '',
+      // attachmentId: json["attechment_id"] ?? '',
+      // attachmentDetails: (json["attechment_details"] != null && json["attechment_details"].isNotEmpty)
+      //     ? UploadFile.fromJson(json["attechment_details"][0])
+      //     : null,
+
+      attachmentId: json["attechment_id"] is String
+          ? [json["attechment_id"]]
+          : (json["attechment_id"] as List<dynamic>?)?.map((id) => id.toString()).toList(),
+
+      attachmentDetails: json["attechment_details"] is Map<String, dynamic>
+          ? [UploadFile.fromJson(json["attechment_details"])]
+          : (json["attechment_details"] as List<dynamic>?)?.map((item) => UploadFile.fromJson(item)).toList(),
+
+      // attachmentId: (json["attechment_id"] as List<dynamic>?)
+      //     ?.map((id) => id.toString())
+      //     .toList(),
+      // attachmentDetails: (json["attechment_details"] as List<dynamic>?)
+      //     ?.map((item) => UploadFile.fromJson(item))
+      //     .toList(),
+      roomId: json["room_id"] ?? '',
+      messageType: json["message_type"] ?? '',
+
+      latitude: (json["latitude"] is String)
+          ? double.tryParse(json["latitude"])
+          : json["latitude"] as double?,
+
+      longitude: (json["longitude"] is String)
+          ? double.tryParse(json["longitude"])
+          : json["longitude"] as double?,
+
+      // latitude: json["latitude"] ?? '',
+      // longitude: json["longitude"] ?? '',
+      createdAt: json["created_at"] != null ? DateTime.tryParse(json["created_at"]) ?? DateTime.now() : DateTime.now(),
+      updatedAt: json["updated_at"] != null ? DateTime.tryParse(json["updated_at"]) ?? DateTime.now() : DateTime.now(),
       isDeleted: json["is_deleted"] ?? false,
       status: json["status"] ?? 1,
     );
   }
 
-  /// ✅ Convert `MessageModel` object to JSON
+  ///  Convert `MessageModel` object to JSON
   Map<String, dynamic> toJson() {
     return {
       "sender_id": senderId,
       "receiver_id": receiverId,
       "message": message,
       "attechment_id": attachmentId,
+     // "attechment_details": attachmentDetails?.toJson(),
+      "attechment_details": attachmentDetails?.map((e) => e.toJson()).toList(),
       "room_id": roomId,
       "message_type": messageType,
+      "latitude": latitude,
+      "longitude": longitude,
       "created_at": createdAt.toIso8601String(),
       "updated_at": updatedAt.toIso8601String(),
       "is_deleted": isDeleted,
@@ -101,7 +146,7 @@ class MessageModel {
     };
   }
 
-  /// ✅ Convert JSON List to List of `MessageModel`
+  /// Convert JSON List to List of `MessageModel`
   static List<MessageModel> fromJsonList(List<dynamic> jsonList) {
     return jsonList.map((json) => MessageModel.fromJson(json)).toList();
   }

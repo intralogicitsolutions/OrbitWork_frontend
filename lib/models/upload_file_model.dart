@@ -6,7 +6,7 @@ class UploadFile {
   int? size;
   String? url;
   String? fileType;
-  Location? location;
+
 
   UploadFile({
     this.id,
@@ -14,7 +14,7 @@ class UploadFile {
     this.size,
     this.url,
      this.fileType,
-    this.location,
+
   });
 
   // Convert JSON to UploadFile object
@@ -25,7 +25,7 @@ class UploadFile {
       size: json['size'],
       url: json['url'],
       fileType: json['fileType'],
-      location: json['location'] != null ? Location.fromJson(json['location']) : null,
+
     );
   }
 
@@ -37,7 +37,7 @@ class UploadFile {
       'size': size,
       'url': url,
       'fileType': fileType,
-      'location': location?.toJson(),
+
     };
   }
 }
