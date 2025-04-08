@@ -39,6 +39,7 @@ dependencies:
   get_time_ago: ^2.3.0
   path_provider: ^2.1.5
 
+  chat_bubbles: ^1.7.0
   file_picker: ^8.1.7
   google_maps_flutter: ^2.10.0
   geolocator: ^13.0.3
@@ -47,6 +48,9 @@ dependencies:
   just_audio: ^0.9.46
   open_filex: ^4.7.0
   pdfx: ^2.8.0
+  chewie: ^1.11.0
+  ffmpeg_kit_flutter_full_gpl: ^6.0.3
+
 
   carousel_slider: ^5.0.0
 

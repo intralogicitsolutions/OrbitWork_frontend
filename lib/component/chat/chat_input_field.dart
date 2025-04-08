@@ -203,13 +203,25 @@ import 'package:orbitwork/models/upload_file_model.dart';
 import '../../comms/enum/message.dart';
 import '../../controllers/chat_contoller.dart';
 
-class ChatInputField extends StatelessWidget {
-  final ChatController chatController = Get.find<ChatController>();
-  final TextEditingController textController = TextEditingController();
+class ChatInputField extends StatefulWidget {
   final String receiverId;
   // final VoidCallback? onMessageSent;
 
   ChatInputField({super.key, required this.receiverId,});
+
+  @override
+  State<ChatInputField> createState() => _ChatInputFieldState();
+}
+
+class _ChatInputFieldState extends State<ChatInputField> {
+  final ChatController chatController = Get.find<ChatController>();
+  final TextEditingController textController = TextEditingController();
+
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -223,10 +235,6 @@ class ChatInputField extends StatelessWidget {
         children: [
           IconButton(
             icon: Icon(Icons.attach_file, color: Colors.grey[600]),
-            // onPressed: () {
-            //   // Handle file attachment (image, video, document)
-            //   print("Attachment Clicked");
-            // },
             onPressed: () => _showAttachmentOptions(context),
           ),
           Expanded(
@@ -244,7 +252,7 @@ class ChatInputField extends StatelessWidget {
             icon: Icon(Icons.send, color: Colors.green),
            onPressed: () {
              if (textController.text.isNotEmpty) {
-               chatController.sendMessage(receiverId, MessageType.text);
+               chatController.sendMessage(widget.receiverId, MessageType.text);
                textController.clear();
                // if (onMessageSent != null) {
                //   onMessageSent!(); // Call the callback after sending
@@ -272,7 +280,7 @@ class ChatInputField extends StatelessWidget {
                 File? file = await _pickImage(ImageSource.camera);
                 if (file != null) {
                   print('file ==> ${file}');
-                  chatController.uploadAndSendFile(receiverId,file: [file]);
+                  chatController.uploadAndSendFile(widget.receiverId,file: [file]);
                 }
               },
             ),
@@ -285,7 +293,7 @@ class ChatInputField extends StatelessWidget {
                 List<File> file = await _pickMultipleImages();
                 if (file.isNotEmpty) {
                   print('gallery image path ==> ${file}');
-                  chatController.uploadAndSendFile(receiverId, file: file);
+                  chatController.uploadAndSendFile(widget.receiverId, file: file);
                 }
               },
             ),
@@ -297,7 +305,7 @@ class ChatInputField extends StatelessWidget {
                 //File? file = await _pickFile(FileType.audio);
                 List<File> file = await _pickFile(FileType.audio);
                 if (file.isNotEmpty) {
-                  chatController.uploadAndSendFile(receiverId, file: file);
+                  chatController.uploadAndSendFile(widget.receiverId, file: file);
                 }
               },
             ),
@@ -309,7 +317,7 @@ class ChatInputField extends StatelessWidget {
                 //File? file = await _pickFile(FileType.video);
                 List<File> file = await _pickFile(FileType.video);
                 if (file.isNotEmpty) {
-                  chatController.uploadAndSendFile(receiverId, file: file);
+                  chatController.uploadAndSendFile(widget.receiverId, file: file);
                 }
               },
             ),
@@ -321,7 +329,7 @@ class ChatInputField extends StatelessWidget {
                 //File? file = await _pickFile(FileType.any);
                 List<File> file = await _pickFile(FileType.any);
                 if (file.isNotEmpty) {
-                  chatController.uploadAndSendFile(receiverId, file: file);
+                  chatController.uploadAndSendFile(widget.receiverId, file: file);
                 }
               },
             ),
@@ -334,10 +342,15 @@ class ChatInputField extends StatelessWidget {
                 // if (position != null) {
                 //   chatController.uploadAndSendFile(receiverId, location: Location());
                 // }
+                LocationPermission permission = await Geolocator.requestPermission();
+                if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Location permission denied")));
+                  return;
+                }
                 Position position = await Geolocator.getCurrentPosition(
                     desiredAccuracy: LocationAccuracy.high);
 
-                chatController.sendLocation(position, receiverId);
+                chatController.sendLocation(position, widget.receiverId);
               },
             ),
           ],
@@ -365,9 +378,6 @@ class ChatInputField extends StatelessWidget {
   }
 
   // Future<File?> _pickFile(FileType fileType) async {
-  //   FilePickerResult? result = await FilePicker.platform.pickFiles(type: fileType);
-  //   return result != null ? File(result.files.single.path!) : null;
-  // }
   Future<Position?> _getCurrentLocation() async {
     try {
       return await Geolocator.getCurrentPosition();

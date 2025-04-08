@@ -47,6 +47,7 @@ class Message {
 
 
 class MessageModel {
+  final String? messageId;
   final String senderId;
   final String? receiverId;
   final String? message;
@@ -56,12 +57,14 @@ class MessageModel {
   final String? messageType;
   final double? latitude;
   final double? longitude;
+   String messageStatus;
   final DateTime createdAt;
   final DateTime updatedAt;
   final bool isDeleted;
   final int status;
 
   MessageModel({
+    this.messageId,
     required this.senderId,
     this.receiverId,
     this.message,
@@ -71,6 +74,7 @@ class MessageModel {
     this.messageType,
     this.latitude,
     this.longitude,
+    required this.messageStatus,
     required dynamic createdAt,
     required this.updatedAt,
     this.isDeleted = false,
@@ -84,6 +88,7 @@ class MessageModel {
   ///  Convert JSON to `MessageModel` object
   factory MessageModel.fromJson(Map<String, dynamic> json) {
     return MessageModel(
+      messageId: json["_id"] ?? '',
       senderId: json["sender_id"] ?? '',
       receiverId: json["receiver_id"] ??'',
       message: json["message"] ?? '',
@@ -117,6 +122,8 @@ class MessageModel {
           ? double.tryParse(json["longitude"])
           : json["longitude"] as double?,
 
+      messageStatus: json["message_status"] ?? 'sent',
+
       // latitude: json["latitude"] ?? '',
       // longitude: json["longitude"] ?? '',
       createdAt: json["created_at"] != null ? DateTime.tryParse(json["created_at"]) ?? DateTime.now() : DateTime.now(),
@@ -129,6 +136,7 @@ class MessageModel {
   ///  Convert `MessageModel` object to JSON
   Map<String, dynamic> toJson() {
     return {
+      "_id": messageId,
       "sender_id": senderId,
       "receiver_id": receiverId,
       "message": message,
@@ -139,6 +147,7 @@ class MessageModel {
       "message_type": messageType,
       "latitude": latitude,
       "longitude": longitude,
+      "message_status": messageStatus,
       "created_at": createdAt.toIso8601String(),
       "updated_at": updatedAt.toIso8601String(),
       "is_deleted": isDeleted,

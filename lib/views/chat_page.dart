@@ -171,21 +171,28 @@ class ChatPage extends StatelessWidget {
                             formattedDate;
                     return Column(
                       children: [
-                        if (showDateHeader)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Center(
-                              child: Text(
-                                formattedDate,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ChatBubble(message: message, isMe: isMe),
+                        // if (showDateHeader)
+                        //   Padding(
+                        //     padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        //     child: Center(
+                        //       child: Text(
+                        //         formattedDate,
+                        //         style: TextStyle(
+                        //           fontSize: 14,
+                        //           fontWeight: FontWeight.bold,
+                        //           color: Colors.grey[600],
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+
+                        //ChatBubble(message: message, isMe: isMe),
+                        ChatMessageBubble(
+                          message: message,
+                          isMe: isMe,
+                          showDateHeader: showDateHeader,
+                        ),
+
                       ],
                     );
                   },
@@ -193,11 +200,6 @@ class ChatPage extends StatelessWidget {
           ),
           ChatInputField(
             receiverId: receiverId,
-            // onMessageSent: () {
-            //   Future.delayed(Duration(milliseconds: 300), () {
-            //     _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-            //   });
-            // },
           ),
         ],
       ),
