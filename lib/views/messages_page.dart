@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:orbitwork/controllers/chat_contoller.dart';
 import '../comms/utills/date_utils.dart';
 import '../component/new_room_bottomsheet.dart';
+import '../controllers/chat_list_controller.dart';
 import '../controllers/message_controller.dart';
 import '../controllers/room_controller.dart';
 import '../controllers/user_controller.dart';
@@ -10,9 +12,15 @@ import '../routes/app_routes.dart';
 import '../widgets/custom_appbar.dart';
 import '../widgets/custom_shimmer.dart';
 
-class MessagesPage extends StatelessWidget {
+class MessagesPage extends StatefulWidget {
+  @override
+  State<MessagesPage> createState() => _MessagesPageState();
+}
+
+class _MessagesPageState extends State<MessagesPage> {
   final MessageController controller = Get.put(MessageController());
-  final UserController userController = Get.put(UserController());
+
+ final ChatListController chatController = Get.put(ChatListController());
 
   String getInitials(String name) {
     if (name == null || name.trim().isEmpty) {
@@ -26,24 +34,6 @@ class MessagesPage extends StatelessWidget {
         .map((part) => part[0].toUpperCase())
         .join();
   }
-
-  void showNewRoomSheet() {
-    Get.lazyPut(() => RoomController());
-
-    Get.bottomSheet(
-      const NewRoomBottomSheet(),
-      isScrollControlled: true,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
-      ),
-    ).then((_) {
-      Get.delete<RoomController>();
-    });
-  }
-
 
   void _showPopupMenu(BuildContext context, TapDownDetails details) async {
     final selectedValue = await showMenu<int>(
@@ -195,6 +185,12 @@ class MessagesPage extends StatelessWidget {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    chatController.fetchChatList(); // Re-fetch when coming back
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
@@ -220,7 +216,7 @@ class MessagesPage extends StatelessWidget {
               Get.bottomSheet(
                 SizedBox(
                     height: MediaQuery.of(context).size.height * 0.9,
-                    child: const NewRoomBottomSheet()),
+                    child:  NewRoomBottomSheet()),
                 isScrollControlled: true,
                 backgroundColor: Colors.white,
                 shape: const RoundedRectangleBorder(
@@ -229,6 +225,7 @@ class MessagesPage extends StatelessWidget {
                   ),
                 ),
               );
+              chatController.fetchChatList();
             },
           ),
         ),
@@ -255,7 +252,9 @@ class MessagesPage extends StatelessWidget {
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 0, horizontal: 12),
                           ),
-                          onChanged: (value) {},
+                          onChanged: (value) {
+                            chatController.searchText.value = value;
+                          },
                         ),
                       ),
                     ),
@@ -272,15 +271,11 @@ class MessagesPage extends StatelessWidget {
             ],
           ),
 
-          // Obx(() => controller.isFilterMenuVisible.value
-          //     ? _buildFilterMenu()
-          //     : const SizedBox.shrink()),
-          // Message List
           Expanded(
             child: Obx(() {
               if (controller.isLoading.value) {
                 return ListView.builder(
-                  itemCount: 2, // Number of shimmer placeholders
+                  itemCount: chatController.chatList.length, // Number of shimmer placeholders
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(
@@ -295,16 +290,23 @@ class MessagesPage extends StatelessWidget {
               }
               return ListView.builder(
                // itemCount: controller.filteredMessages.length,
-                itemCount: userController.users.length,
+               // itemCount: userController.users.length,
+                itemCount: chatController.filteredChatList.length,
                 itemBuilder: (context, index) {
                  // final message = controller.filteredMessages[index];
-                  final user = userController.users[index];
+                  final chatUser = chatController.filteredChatList[index];
                   return GestureDetector(
                     onTap: () {
-                      Get.toNamed(AppRoutes.chat, arguments: {
-                        'receiverId': user.id,
-                        'name': "${user.firstname} ${user.lastname}",
-                      } );
+                      chatUser.isRoom ? Get.toNamed(AppRoutes.groupChat, arguments: {
+                        'roomId': chatUser.roomId,
+                        'name': chatUser.name
+                      })?.then((_) => chatController.fetchChatList())
+                          : Get.toNamed(AppRoutes.chat, arguments: {
+                        // 'receiverId': user.id,
+                        // 'name': "${user.firstname} ${user.lastname}",
+                        'receiverId': chatUser.userId,
+                        'name': chatUser.name,
+                      } )?.then((_) => chatController.fetchChatList());
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -332,7 +334,7 @@ class MessagesPage extends StatelessWidget {
                                             backgroundColor:
                                                 Colors.grey.shade400,
                                             child: Text(
-                                              getInitials("${user.firstname} ${user.lastname}"),
+                                              getInitials(chatUser.name),
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.white),
@@ -377,7 +379,7 @@ class MessagesPage extends StatelessWidget {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                        "${user.firstname} ${user.lastname}",
+                                        chatUser.name,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
                                               overflow: TextOverflow.ellipsis,
@@ -385,16 +387,10 @@ class MessagesPage extends StatelessWidget {
                                             ),
                                             Text(
                                             //  message.title,
-                                              "${user.email}",
+                                            //   "${user.email}",
+                                              chatUser.messageWithPrefix??'',
                                               style: TextStyle(
                                                   color: Colors.grey.shade500),
-                                            ),
-                                            Text(
-                                              // message.lastMessage,
-                                              "${user.status}",
-                                              style: TextStyle(
-                                                  color: theme.hintColor,
-                                                  fontWeight: FontWeight.w400),
                                             ),
                                           ],
                                         ),
@@ -404,7 +400,7 @@ class MessagesPage extends StatelessWidget {
                                 ),
                                 Text(
                                   // message.date,
-                                  DateUtilsHelper.formatDate( "${user.createdAt}"),
+                                  DateUtilsHelper.formatDate( "${chatUser.createdAt}"),
                                   //"${user.createdAt}",
                                   style: TextStyle(
                                       color: theme.dividerColor,

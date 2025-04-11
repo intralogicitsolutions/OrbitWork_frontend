@@ -15,6 +15,7 @@ class AppRoutes{
   static const String submitProposal = '/submitproposal';
   static const String myStats = '/mystats';
   static const String chat = '/chat';
+  static const String groupChat = '/groupChat';
   static const String billingAndPayments = '/billingandpayments';
   static const String addBillingMethod = '/addbillingmethod';
   static const String membershipAndConnects = '/membershipandconnects';

@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketService extends GetxService {
-   IO.Socket? socket;
+  IO.Socket? socket;
 
   @override
   void onInit() {
@@ -13,7 +13,7 @@ class SocketService extends GetxService {
   void connectToSocket() {
     socket = IO.io(
       //'https://orbitwork-backend.onrender.com',
-      'https://c534-2405-f600-8-f614-595a-951a-fbfd-ddb3.ngrok-free.app',
+      'https://cc16-2405-f600-8-987-a535-5bc9-1cd-de8.ngrok-free.app',
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .disableAutoConnect()
@@ -32,50 +32,121 @@ class SocketService extends GetxService {
       print("New message received: $data");
     });
 
-    socket!.on('message_seen', (data) {
-    print("message seen: $data");
-    },);
+    socket!.on(
+      'message_seen',
+      (data) {
+        print("message seen: $data");
+      },
+    );
 
     socket!.connect();
   }
-   void updateMessage(String messageId, String updatedText) {
-     socket?.emit('update_message', {
-       'messageId': messageId,
-       'message': updatedText,
-     });
-   }
 
-   void deleteMessage(String messageId, String userId, {bool deleteForEveryone = false}) {
-     socket?.emit('delete_message', {
-       'messageId': messageId,
-       'userId': userId,
-       'deleteForEveryone': deleteForEveryone,
-     });
-   }
+  void connectUser(String userId) {
+    socket!.emit('connect_user', {'user_id': userId});
+  }
 
-   void emitMessageSeen(String messageId, String userId) {
-     socket?.emit('message_seen', {
-       'messageId': messageId,
-       'user_id': userId,
-     });
-   }
+  void joinRoom(String userId, String roomId) {
+    socket!.emit('join_room', {
+      'user_id': userId,
+      'room_id': roomId,
+    });
+  }
 
-   void listenForUpdatedMessages(Function(Map data) onUpdated) {
-     socket?.on('message_updated', (data) {
-       onUpdated(data);
-     });
-   }
+  void leaveRoom(String userId, String roomId) {
+    socket!.emit('leave_room', {
+      'user_id': userId,
+      'room_id': roomId,
+    });
+  }
 
-   void listenForDeletedMessages(Function(Map data) onDeleted) {
-     socket?.on('message_deleted', (data) {
-       onDeleted(data);
-     });
-   }
+  void sendGroupMessage(Map<String, dynamic> messageData) {
+    socket!.emit('chat_message', messageData);
+  }
 
-   void listenForSeenMessages(Function(Map data) onSeen) {
-     socket?.on('message_seen', (data) {
-       onSeen(data);
-     });
-   }
+  void updateMessage(String messageId, String updatedText) {
+    socket?.emit('update_message', {
+      'messageId': messageId,
+      'message': updatedText,
+    });
+  }
 
+  void updateGroupMessage(String messageId, String roomId, String updatedText) {
+    socket!.emit('update_group_message', {
+      'messageId': messageId,
+      'room_id': roomId,
+      'message': updatedText,
+    });
+  }
+
+  void deleteMessage(String messageId, String userId,
+      {bool deleteForEveryone = false}) {
+    socket?.emit('delete_message', {
+      'messageId': messageId,
+      'userId': userId,
+      'deleteForEveryone': deleteForEveryone,
+    });
+  }
+
+  void deleteGroupMessage(String messageId, String roomId,) {
+    socket!.emit('delete_group_message', {
+      'messageId': messageId,
+      'room_id': roomId,
+      //'deleteForEveryone': deleteForEveryone,
+    });
+  }
+
+
+
+  void emitMessageSeen(String messageId, String userId) {
+    socket?.emit('message_seen', {
+      'messageId': messageId,
+      'user_id': userId,
+    });
+  }
+
+  void listenForUpdatedMessages(Function(Map data) onUpdated) {
+    socket?.on('message_updated', (data) {
+      onUpdated(data);
+    });
+  }
+
+  void listenForDeletedMessages(Function(Map data) onDeleted) {
+    socket?.on('message_deleted', (data) {
+      onDeleted(data);
+    });
+  }
+
+  void listenForSeenMessages(Function(Map data) onSeen) {
+    socket?.on('message_seen', (data) {
+      onSeen(data);
+    });
+  }
+
+  void listenToGroupMessages(Function(dynamic) onMessageReceived) {
+    socket!.on('chat_message', onMessageReceived);
+  }
+
+  void listenToGroupMessageUpdate(Function(Map data) onUpdated) {
+    socket!.on('group_message_updated', (data){
+      onUpdated(data);
+    });
+  }
+
+  void listenToGroupMessageDelete(Function(Map data) onDeleted) {
+    socket!.on('group_message_deleted', (data) {
+      onDeleted(data);
+    });
+  }
+
+  // void updateGroupMessage(Map<String, dynamic> data) {
+  //   socket!.emit('update_group_message', data);
+  // }
+
+  // void deleteGroupMessage(String messageId, String roomId) {
+  //   socket!.emit('delete_group_message', {
+  //     'messageId': messageId,
+  //     'room_id': roomId,
+  //   });
+  // }
 }

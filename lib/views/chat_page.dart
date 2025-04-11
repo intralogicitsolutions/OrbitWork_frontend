@@ -134,13 +134,13 @@ import '../global/global.dart';
 
 class ChatPage extends StatelessWidget {
   final String name;
-  final String receiverId;
+  final String? receiverId;
 
   //final ChatController chatController = Get.put(ChatController());
   final ChatController chatController;
   final ScrollController _scrollController = ScrollController();
 
-  ChatPage({Key? key, required this.receiverId, required this.name})
+  ChatPage({Key? key, this.receiverId, required this.name,})
       : chatController = Get.put(ChatController(receiverId: receiverId)),
         super(key: key);
 
@@ -171,27 +171,27 @@ class ChatPage extends StatelessWidget {
                             formattedDate;
                     return Column(
                       children: [
-                        // if (showDateHeader)
-                        //   Padding(
-                        //     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        //     child: Center(
-                        //       child: Text(
-                        //         formattedDate,
-                        //         style: TextStyle(
-                        //           fontSize: 14,
-                        //           fontWeight: FontWeight.bold,
-                        //           color: Colors.grey[600],
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
+                        if (showDateHeader)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Center(
+                              child: Text(
+                                formattedDate,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ),
+                          ),
 
-                        //ChatBubble(message: message, isMe: isMe),
-                        ChatMessageBubble(
-                          message: message,
-                          isMe: isMe,
-                          showDateHeader: showDateHeader,
-                        ),
+                        ChatBubble(message: message, isMe: isMe),
+                        // ChatMessageBubble(
+                        //   message: message,
+                        //   isMe: isMe,
+                        //   showDateHeader: showDateHeader,
+                        // ),
 
                       ],
                     );
@@ -199,7 +199,7 @@ class ChatPage extends StatelessWidget {
                 );}),
           ),
           ChatInputField(
-            receiverId: receiverId,
+            receiverId: receiverId??'',
           ),
         ],
       ),

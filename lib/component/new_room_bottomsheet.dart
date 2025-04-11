@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/room_controller.dart';
 
-class NewRoomBottomSheet extends GetView<RoomController> {
-  const NewRoomBottomSheet({Key? key}) : super(key: key);
+class NewRoomBottomSheet extends StatelessWidget {
+  final controller = Get.put(RoomController());
+  final TextEditingController nameController = TextEditingController();
+
+  NewRoomBottomSheet({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,9 +53,26 @@ class NewRoomBottomSheet extends GetView<RoomController> {
               ),
             ),
             const SizedBox(height: 8),
+            // Display chips
+            Obx(() => Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: controller.people
+                      .map((name) => Chip(
+                            label: Text(name),
+                            backgroundColor: Colors.grey[300],
+                            deleteIcon: Icon(Icons.close),
+                            onDeleted: () => controller.removePerson(name),
+                          ))
+                      .toList(),
+                )),
+
+            const SizedBox(height: 8),
+
             TextField(
+              controller: nameController,
               decoration: InputDecoration(
-                hintText: 'Start typing names',
+                hintText: 'Type email & press space/enter',
                 hintStyle: TextStyle(color: Colors.grey),
                 //filled: true,
                 // fillColor: Colors.grey[200],
@@ -66,9 +86,23 @@ class NewRoomBottomSheet extends GetView<RoomController> {
                 ),
               ),
               onChanged: (value) {
-                // Handle search/add people logic
+                if (value.endsWith(' ') || value.endsWith('\n')) {
+                  final name = value.trim();
+                  if (name.isNotEmpty) {
+                    controller.addPerson(name);
+                    nameController.clear();
+                  }
+                }
+              },
+              onSubmitted: (value) {
+                final name = value.trim();
+                if (name.isNotEmpty) {
+                  controller.addPerson(name);
+                  nameController.clear();
+                }
               },
             ),
+
             const SizedBox(height: 24),
             Row(
               children: [
@@ -103,7 +137,8 @@ class NewRoomBottomSheet extends GetView<RoomController> {
                   vertical: 12,
                 ),
               ),
-              onChanged: (value) => controller.setRoomName(value),
+              //onChanged: (value) => controller.setRoomName(value),
+              onChanged: controller.setRoomName,
             ),
             const SizedBox(height: 16),
           ],

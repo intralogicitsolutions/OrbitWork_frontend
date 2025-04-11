@@ -58,6 +58,7 @@ import 'package:intl/intl.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:orbitwork/component/chat/pdf_view_page.dart';
 import 'package:orbitwork/component/chat/video_bubble.dart';
+import 'package:orbitwork/models/group_message_model.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
@@ -70,15 +71,27 @@ import 'full_screeen_video.dart';
 import 'full_screen_image.dart';
 ///use chat_bubble library  for chat ui
 class ChatBubble extends StatelessWidget {
-  final MessageModel message;
+  final MessageModel? message;
   final bool isMe;
+  final GroupMessageModel? groupMessage;
 
-  ChatBubble({required this.message, required this.isMe});
+  ChatBubble({this.message, required this.isMe, this.groupMessage});
 
   @override
   Widget build(BuildContext context) {
-    String formattedTime = DateFormat('hh:mm a').format(message.createdAt);
+    final bool isGroup = groupMessage != null;
+    final dynamic msg = isGroup ? groupMessage : message;
 
+    final String? text = msg.message;
+    final DateTime createdAt = msg.createdAt;
+    final String? messageType = msg.messageType;
+    final List<dynamic>? attachmentDetails = msg.attachmentDetails;
+    final double? latitude = msg.latitude;
+    final double? longitude = msg.longitude;
+    final String? status = isGroup ? null : message?.messageStatus;
+
+    String formattedTime = DateFormat('hh:mm a').format(createdAt);
+    //final status = message.messageStatus;
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: GestureDetector(
@@ -109,9 +122,9 @@ class ChatBubble extends StatelessWidget {
             children: [
               // Image Message
               //if (message.messageType == "image" && message.attachmentDetails?.url != null) ...[
-              if (message.messageType == "image" &&
-                  message.attachmentDetails != null) ...[
-                for (var file in message.attachmentDetails!)
+              if (messageType == "image" &&
+                  attachmentDetails != null) ...[
+                for (var file in attachmentDetails!)
                   if (file.url != null)
                     GestureDetector(
                       onTap: () {
@@ -130,25 +143,25 @@ class ChatBubble extends StatelessWidget {
                 const SizedBox(height: 5),
               ],
 
-              if (message.messageType == "video" &&
-                  message.attachmentDetails != null) ...[
-                for (var file in message.attachmentDetails!)
+              if (messageType == "video" &&
+                  attachmentDetails != null) ...[
+                for (var file in attachmentDetails!)
                   if (file.url != null)
                     VideoBubble(videoUrl: file.url!)
               ],
 
-              if (message.messageType == "audio" &&
-                  message.attachmentDetails != null) ...[
-                for (var file in message.attachmentDetails!)
+              if (messageType == "audio" &&
+                  attachmentDetails != null) ...[
+                for (var file in attachmentDetails!)
                   if (file.url != null)
                     AudioPlayerWidget(audioUrl: file.url!),
                 const SizedBox(height: 5),
               ],
 
               // File Attachment
-              if (message.messageType == "document" &&
-                  message.attachmentDetails != null) ...[
-                for (var file in message.attachmentDetails!)
+              if (messageType == "document" &&
+                  attachmentDetails != null) ...[
+                for (var file in attachmentDetails!)
                   if (file.name != null && file.url != null)
                 GestureDetector(
                   onTap: () async {
@@ -206,14 +219,14 @@ class ChatBubble extends StatelessWidget {
                 const SizedBox(height: 5),
               ],
 
-              if (message.messageType == "location" &&
-                  message.latitude != null &&
-                  message.longitude != null) ...[
+              if (messageType == "location" &&
+                  latitude != null &&
+                  longitude != null) ...[
 
                 GestureDetector(
                   onTap: () {
                     String mapUrl =
-                        "https://www.google.com/maps/search/?api=1&query=${message.latitude},${message.longitude}";
+                        "https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}";
                     launchUrl(Uri.parse(mapUrl), mode: LaunchMode.externalApplication);
                     // String mapUrl = "https://www.openstreetmap.org/?mlat=${message.latitude}&mlon=${message.longitude}&zoom=15";
                     // launchUrl(Uri.parse(mapUrl), mode: LaunchMode.externalApplication);
@@ -229,7 +242,7 @@ class ChatBubble extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                       child: Image.network(
                         // "https://maps.googleapis.com/maps/api/staticmap?center=${message.latitude},${message.longitude}&zoom=15&size=200x150&markers=color:red%7C${message.latitude},${message.longitude}&key=YOUR_GOOGLE_MAPS_API_KEY",
-                        "https://static-maps.yandex.ru/1.x/?lang=en-US&ll=${message.longitude},${message.latitude}&z=15&l=map&size=200,150",
+                        "https://static-maps.yandex.ru/1.x/?lang=en-US&ll=${longitude},${latitude}&z=15&l=map&size=200,150",
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -238,13 +251,32 @@ class ChatBubble extends StatelessWidget {
               ],
 
               // Text Message
-              if (message.message != null && message.message!.isNotEmpty) ...[
+              if (text != null && text!.isNotEmpty) ...[
                 Text(
-                  message.message!,
+                  text!,
                   style: const TextStyle(fontSize: 16),
                   softWrap: true,
                 ),
               ],
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    DateFormat('hh:mm a').format(createdAt),
+                    style: TextStyle(fontSize: 10, color: Colors.grey),
+                  ),
+                  const SizedBox(width: 4),
+                  if (isMe)
+                    Text(
+                      _getStatusText(status??''),
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: _getStatusColor(status??''),
+                      ),
+                    ),
+                ],
+              ),
             ],
           ),
         ),
@@ -254,6 +286,15 @@ class ChatBubble extends StatelessWidget {
 
   void _showEditDeleteOptions(BuildContext context) {
     final controller = Get.find<ChatController>();
+    final bool isGroup = groupMessage != null;
+    final dynamic msg = isGroup ? groupMessage : message;
+
+    // Calculate elapsed time in minutes
+    final createdAt = msg?.createdAt; // Ensure this is a DateTime object
+    final elapsedMinutes = DateTime.now().difference(createdAt!).inMinutes;
+
+    final canEdit = isMe && elapsedMinutes <= 60;
+    final canDeleteForEveryone = isMe && elapsedMinutes <= 180;
 
     showModalBottomSheet(
       context: context,
@@ -261,6 +302,7 @@ class ChatBubble extends StatelessWidget {
         return SafeArea(
           child: Wrap(
             children: [
+              if (isMe && canEdit) // Only sender can edit
               ListTile(
                 leading: Icon(Icons.edit),
                 title: Text("Edit"),
@@ -285,6 +327,7 @@ class ChatBubble extends StatelessWidget {
                         return SimpleDialog(
                           title: Text("Delete message?"),
                           children: [
+                            if (canDeleteForEveryone)
                             SimpleDialogOption(
                               onPressed: () {
                                 Navigator.pop(context, "everyone");
@@ -309,9 +352,11 @@ class ChatBubble extends StatelessWidget {
                     );
 
                     if (result == "everyone") {
-                      controller.deleteMessage(message.messageId, Global.userId!, deleteForEveryone: true);
+                      isGroup ?  controller.deleteGroupMessage(groupMessage?.id, deleteForEveryone: true)
+                          : controller.deleteMessage(message?.messageId, Global.userId!, deleteForEveryone: true);
                     } else if (result == "me") {
-                      controller.deleteMessage(message.messageId, Global.userId!, deleteForEveryone: false);
+                      isGroup ? controller.deleteGroupMessage(groupMessage?.id, deleteForEveryone: false)
+                      : controller.deleteMessage(message?.messageId, Global.userId!, deleteForEveryone: false);
                     }
                   }
               ),
@@ -326,7 +371,10 @@ class ChatBubble extends StatelessWidget {
 
   void _showEditDialog(BuildContext context) {
     final controller = Get.find<ChatController>();
-    final textController = TextEditingController(text: message.message);
+    final bool isGroup = groupMessage != null;
+    final textController = TextEditingController(text: isGroup? groupMessage?.message : message?.message);
+
+
 
     showDialog(
       context: context,
@@ -340,7 +388,8 @@ class ChatBubble extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                controller.updateMessage(message.messageId, textController.text.trim());
+                isGroup ? controller.updateGroupMessage(groupMessage?.id, textController.text.trim())
+                    :controller.updateMessage(message?.messageId, textController.text.trim());
                 Navigator.pop(context);
               },
               child: Text("Save"),
@@ -350,8 +399,29 @@ class ChatBubble extends StatelessWidget {
       },
     );
   }
-}
 
+  String _getStatusText(String status) {
+    switch (status) {
+      case 'seen':
+        return '✓✓ Seen';
+      case 'delivered':
+        return '✓✓';
+      case 'sent':
+        return '✓';
+      default:
+        return '';
+    }
+  }
+
+  Color _getStatusColor(String status) {
+    switch (status) {
+      case 'seen':
+        return Colors.blue;
+      default:
+        return Colors.grey;
+    }
+  }
+}
 
 
 
@@ -400,9 +470,9 @@ class ChatMessageBubble extends StatelessWidget {
   Widget _buildMessageWidget(MessageModel message, bool isMe, BuildContext context) {
     final status = message.messageStatus;
 
-    bool isSent = status == 'sent';
-    bool isDelivered = status == 'delivered';
     bool isSeen = status == 'seen';
+    bool isDelivered = isSeen || status == 'delivered';
+    bool isSent = isDelivered || status == 'sent';
 
     switch (message.messageType) {
       case 'text':
@@ -410,18 +480,40 @@ class ChatMessageBubble extends StatelessWidget {
           onLongPress: () {
             _showEditDeleteOptions(context);
           },
-          child: BubbleNormal(
-            text: message.message ?? '',
-           isSender: isMe,
-            color: isMe ? Color(0xFFE1FFC7) : Colors.grey.shade200,
-            tail: true,
-            sent: isSent,  // apply logic for the sent click
-            seen: isSeen, // apply logic of sent
-            delivered: isDelivered, // apply logic of delivered
-            textStyle: TextStyle(
-              fontSize: 16,
-              color: Colors.black,
-            ),
+          child: Column(
+            children: [
+              BubbleNormal(
+                text: message.message ?? '',
+               isSender: isMe,
+                color: isMe ? Color(0xFFE1FFC7) : Colors.grey.shade200,
+                tail: true,
+                // sent: isSent,  // apply logic for the sent click
+                // seen: isSeen, // apply logic of sent
+                // delivered: isDelivered, // apply logic of delivered
+                textStyle: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    DateFormat('hh:mm a').format(message.createdAt),
+                    style: TextStyle(fontSize: 10, color: Colors.grey),
+                  ),
+                  const SizedBox(width: 4),
+                  if (isMe)
+                    Text(
+                      _getStatusText(status),
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: _getStatusColor(status),
+                      ),
+                    ),
+                ],
+              ),
+            ],
           ),
         );
 
@@ -600,6 +692,29 @@ class ChatMessageBubble extends StatelessWidget {
       },
     );
   }
+
+  String _getStatusText(String status) {
+    switch (status) {
+      case 'seen':
+        return '✓✓ Seen';
+      case 'delivered':
+        return '✓✓';
+      case 'sent':
+        return '✓';
+      default:
+        return '';
+    }
+  }
+
+  Color _getStatusColor(String status) {
+    switch (status) {
+      case 'seen':
+        return Colors.blue;
+      default:
+        return Colors.grey;
+    }
+  }
+
 }
 
 

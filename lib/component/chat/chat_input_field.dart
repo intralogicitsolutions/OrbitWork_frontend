@@ -204,10 +204,11 @@ import '../../comms/enum/message.dart';
 import '../../controllers/chat_contoller.dart';
 
 class ChatInputField extends StatefulWidget {
-  final String receiverId;
+  final String? receiverId;
+  final String? roomId;
   // final VoidCallback? onMessageSent;
 
-  ChatInputField({super.key, required this.receiverId,});
+  ChatInputField({super.key, this.receiverId, this.roomId});
 
   @override
   State<ChatInputField> createState() => _ChatInputFieldState();
@@ -251,13 +252,22 @@ class _ChatInputFieldState extends State<ChatInputField> {
           IconButton(
             icon: Icon(Icons.send, color: Colors.green),
            onPressed: () {
+             // if (textController.text.isNotEmpty) {
+             //   chatController.sendMessage(widget.receiverId!, MessageType.text);
+             //   textController.clear();
+             //   // if (onMessageSent != null) {
+             //   //   onMessageSent!(); // Call the callback after sending
+             //   // }
+             // }
              if (textController.text.isNotEmpty) {
-               chatController.sendMessage(widget.receiverId, MessageType.text);
+               if (widget.receiverId != null) {
+                 chatController.sendMessage(widget.receiverId!, MessageType.text);
+               } else if (widget.roomId != null) {
+                 chatController.sendGroupMessage(widget.roomId!, MessageType.text);
+               }
                textController.clear();
-               // if (onMessageSent != null) {
-               //   onMessageSent!(); // Call the callback after sending
-               // }
              }
+
            },
            // onPressed: () => chatController.sendMessage(receiverId, MessageType.text),
           ),
@@ -280,7 +290,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
                 File? file = await _pickImage(ImageSource.camera);
                 if (file != null) {
                   print('file ==> ${file}');
-                  chatController.uploadAndSendFile(widget.receiverId,file: [file]);
+                  chatController.uploadAndSendFile(widget.receiverId!,file: [file]);
                 }
               },
             ),
@@ -293,7 +303,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
                 List<File> file = await _pickMultipleImages();
                 if (file.isNotEmpty) {
                   print('gallery image path ==> ${file}');
-                  chatController.uploadAndSendFile(widget.receiverId, file: file);
+                  chatController.uploadAndSendFile(widget.receiverId!, file: file);
                 }
               },
             ),
@@ -305,7 +315,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
                 //File? file = await _pickFile(FileType.audio);
                 List<File> file = await _pickFile(FileType.audio);
                 if (file.isNotEmpty) {
-                  chatController.uploadAndSendFile(widget.receiverId, file: file);
+                  chatController.uploadAndSendFile(widget.receiverId!, file: file);
                 }
               },
             ),
@@ -317,7 +327,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
                 //File? file = await _pickFile(FileType.video);
                 List<File> file = await _pickFile(FileType.video);
                 if (file.isNotEmpty) {
-                  chatController.uploadAndSendFile(widget.receiverId, file: file);
+                  chatController.uploadAndSendFile(widget.receiverId!, file: file);
                 }
               },
             ),
@@ -329,7 +339,12 @@ class _ChatInputFieldState extends State<ChatInputField> {
                 //File? file = await _pickFile(FileType.any);
                 List<File> file = await _pickFile(FileType.any);
                 if (file.isNotEmpty) {
-                  chatController.uploadAndSendFile(widget.receiverId, file: file);
+                  //chatController.uploadAndSendFile(widget.receiverId!, file: file);
+                  if (widget.receiverId != null) {
+                    chatController.uploadAndSendFile(widget.receiverId!, file: file);
+                  } else if (widget.roomId != null) {
+                    chatController.uploadAndSendGroupFile(widget.roomId!, file);
+                  }
                 }
               },
             ),
@@ -350,7 +365,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
                 Position position = await Geolocator.getCurrentPosition(
                     desiredAccuracy: LocationAccuracy.high);
 
-                chatController.sendLocation(position, widget.receiverId);
+                chatController.sendLocation(position, widget.receiverId!);
               },
             ),
           ],
