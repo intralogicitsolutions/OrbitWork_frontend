@@ -365,9 +365,9 @@ class JobsPage extends StatelessWidget {
                     // }
                     return Column(
                       children: controller.jobs.map((job) {
-                        print("Jobs List Length: ${controller.jobs.length}");
+                       // print("Jobs List Length: ${controller.jobs.length}");
                         for (var job in controller.jobs) {
-                          print("Job: ${job.title}, Budget: ${job.budget}");
+                          //print("Job: ${job.title}, Budget: ${job.budget}");
                         }
                         return GestureDetector(
                           onTap: () {

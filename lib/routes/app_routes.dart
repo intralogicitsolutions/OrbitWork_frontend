@@ -51,6 +51,7 @@ class AppRoutes{
   static const String freelancerProfile = '/freelancerProfile';
   static const String jobSearch = '/jobSearch';
   static const String savedJob = '/savedJob';
+  static const String groupEdit = '/groupEdit';
 
   ///Create User Profile///
 

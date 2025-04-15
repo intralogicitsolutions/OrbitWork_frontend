@@ -5,8 +5,9 @@ import '../component/chat/chat_input_field.dart';
 import '../component/chat/chat_message_bubble.dart';
 import '../controllers/chat_contoller.dart';
 import '../global/global.dart';
+import '../routes/app_routes.dart';
 
-class GroupChatPage extends StatelessWidget{
+class GroupChatPage extends StatelessWidget {
   final String name;
   final String? roomId;
 
@@ -20,7 +21,44 @@ class GroupChatPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(name)),
+      appBar: AppBar(
+        title: Text(name),
+        actions: [
+          PopupMenuButton<String>(
+            color: Get.theme.scaffoldBackgroundColor,
+            onSelected: (value) {
+              if (value == 'edit') {
+                // Handle edit action
+                print("Edit clicked");
+              }
+              // else if (value == 'add') {
+              //   // Handle add action
+              //   print("Add clicked");
+              // }
+            },
+            icon: Icon(Icons.more_vert),
+            itemBuilder: (BuildContext context) {
+              return <PopupMenuEntry<String>>[
+                PopupMenuItem<String>(
+                  value: 'edit',
+                  child: Text('Edit'),
+                  onTap: () {
+                    Get.toNamed(AppRoutes.groupEdit, arguments: {
+                      'roomId': roomId,
+                    });
+                  },
+                ),
+                // // if (chatController.isAdmin.value)
+                //   PopupMenuItem<String>(
+                //     value: 'add',
+                //     child: Text('Add'),
+                //   ),
+              ];
+            },
+          ),
+        ],
+
+      ),
       body: Column(
         children: [
           Expanded(
@@ -35,13 +73,13 @@ class GroupChatPage extends StatelessWidget{
 
                   DateTime messageDate = message.createdAt;
                   String formattedDate =
-                  DateFormat('dd-MM-yyyy').format(messageDate);
+                      DateFormat('dd-MM-yyyy').format(messageDate);
 
-                  bool showDateHeader = index ==
-                      chatController.groupMessages.length - 1 ||
-                      DateFormat('dd-MM-yyyy').format(
-                          chatController.groupMessages[index + 1].createdAt) !=
-                          formattedDate;
+                  bool showDateHeader =
+                      index == chatController.groupMessages.length - 1 ||
+                          DateFormat('dd-MM-yyyy').format(chatController
+                                  .groupMessages[index + 1].createdAt) !=
+                              formattedDate;
                   return Column(
                     children: [
                       if (showDateHeader)
@@ -58,18 +96,12 @@ class GroupChatPage extends StatelessWidget{
                             ),
                           ),
                         ),
-
                       ChatBubble(groupMessage: message, isMe: isMe),
-                      // ChatMessageBubble(
-                      //   message: message,
-                      //   isMe: isMe,
-                      //   showDateHeader: showDateHeader,
-                      // ),
-
                     ],
                   );
                 },
-              );}),
+              );
+            }),
           ),
           ChatInputField(
             roomId: roomId,
@@ -78,5 +110,4 @@ class GroupChatPage extends StatelessWidget{
       ),
     );
   }
-
 }

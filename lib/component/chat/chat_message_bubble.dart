@@ -113,7 +113,8 @@ class ChatBubble extends StatelessWidget {
               bottomRight: isMe ? Radius.zero : const Radius.circular(15),
             ),
             border: Border.all(
-              color: Colors.black.withOpacity(0.3),
+             // color: Colors.black.withOpacity(0.3),
+              color: Get.theme.disabledColor,
               width: 1.0,
             ),
           ),
@@ -373,7 +374,6 @@ class ChatBubble extends StatelessWidget {
     final controller = Get.find<ChatController>();
     final bool isGroup = groupMessage != null;
     final textController = TextEditingController(text: isGroup? groupMessage?.message : message?.message);
-
 
 
     showDialog(

@@ -63,6 +63,7 @@ import 'package:orbitwork/widgets/create_profile_container.dart';
 import 'package:orbitwork/widgets/profile_setup_container.dart';
 
 import '../views/group_chat_page.dart';
+import '../views/group_edit_page.dart';
 import '../views/overview_tab.dart';
 import '../widgets/specialized_profile_container.dart';
 
@@ -117,6 +118,7 @@ class AppPages {
     GetPage(name: AppRoutes.freelancerProfile, page: () => FreelancerProfilePage(),),
     GetPage(name: AppRoutes.jobSearch, page: () => JobSearch(),),
     GetPage(name: AppRoutes.savedJob, page: () => SavedJobPage(),),
+    GetPage(name: AppRoutes.groupEdit, page: () => GroupEditPage(roomId: Get.arguments['roomId'],),),
 
 
     /// Create User Profile ///

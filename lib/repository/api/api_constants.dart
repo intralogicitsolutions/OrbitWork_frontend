@@ -1,6 +1,6 @@
 class ApiConstants {
   static const String BASE_URL = "https://orbitwork-backend.onrender.com/api";
-  static const String TEMP_URL = "https://cc16-2405-f600-8-987-a535-5bc9-1cd-de8.ngrok-free.app/api";
+  static const String TEMP_URL = "https://8643-2405-f600-8-162a-dcd7-6c76-cd28-f28b.ngrok-free.app/api";
 
   // AUTH ROUTES
   static const String SIGNUP = "$BASE_URL/auth/signup";   //done
@@ -42,7 +42,8 @@ class ApiConstants {
 
   // CREATE_ROOM ROUTES
   static const String CREATE_ROOM = "$TEMP_URL/room/create"; //done
-  static const String UPDATE_ROOM = "$BASE_URL/room/update/:id";
-  static const String CREATE_ADMIN = "$TEMP_URL/room/admin/create";
-  static const String REMOVE_ADMIN = "$TEMP_URL/room/admin/remove";
+  static const String UPDATE_ROOM = "$TEMP_URL/room/update"; //working
+  static const String CREATE_ADMIN = "$TEMP_URL/room/admin/create";//done
+  static const String REMOVE_ADMIN = "$TEMP_URL/room/admin/remove";//done
+  static const String GET_ROOM_MEMBERS = "$TEMP_URL/room/members";//done
 }

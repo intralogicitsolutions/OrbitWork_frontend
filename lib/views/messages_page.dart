@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:orbitwork/controllers/chat_contoller.dart';
+import '../comms/global/string_utils.dart';
 import '../comms/utills/date_utils.dart';
 import '../component/new_room_bottomsheet.dart';
 import '../controllers/chat_list_controller.dart';
@@ -334,7 +335,7 @@ class _MessagesPageState extends State<MessagesPage> {
                                             backgroundColor:
                                                 Colors.grey.shade400,
                                             child: Text(
-                                              getInitials(chatUser.name),
+                                              StringUtils.getInitials(chatUser.name),
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.white),

@@ -13,7 +13,7 @@ class SocketService extends GetxService {
   void connectToSocket() {
     socket = IO.io(
       //'https://orbitwork-backend.onrender.com',
-      'https://cc16-2405-f600-8-987-a535-5bc9-1cd-de8.ngrok-free.app',
+      'https://8643-2405-f600-8-162a-dcd7-6c76-cd28-f28b.ngrok-free.app',
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .disableAutoConnect()
@@ -46,15 +46,19 @@ class SocketService extends GetxService {
     socket!.emit('connect_user', {'user_id': userId});
   }
 
-  void joinRoom(String userId, String roomId) {
-    socket!.emit('join_room', {
-      'user_id': userId,
+  void leaveRoom(String roomId, String userId) {
+    if (socket == null) {
+      print('Socket is null. Cannot leave room.');
+      return;
+    }
+    socket!.emit('leave_room', {
       'room_id': roomId,
+      'user_id': userId,
     });
   }
 
-  void leaveRoom(String userId, String roomId) {
-    socket!.emit('leave_room', {
+  void joinRoom(String userId, String roomId) {
+    socket!.emit('join_room', {
       'user_id': userId,
       'room_id': roomId,
     });
@@ -137,6 +141,10 @@ class SocketService extends GetxService {
     socket!.on('group_message_deleted', (data) {
       onDeleted(data);
     });
+  }
+
+  void listenForLeftRoom(Function(dynamic) onLeftRoom) {
+    socket?.on('left_room', onLeftRoom);
   }
 
   // void updateGroupMessage(Map<String, dynamic> data) {

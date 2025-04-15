@@ -229,8 +229,8 @@ class _ChatInputFieldState extends State<ChatInputField> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+        color: Get.theme.scaffoldBackgroundColor,
+        boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 4)],
       ),
       child: Row(
         children: [
