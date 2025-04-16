@@ -8,6 +8,7 @@ import '../models/group_members_model.dart';
 import '../models/room_model.dart';
 import 'package:http/http.dart' as http;
 
+import '../routes/app_routes.dart';
 import '../socket/socket_service/socket_service.dart';
 import 'chat_list_controller.dart';
 
@@ -114,10 +115,17 @@ class RoomController extends GetxController {
       final data = jsonDecode(response.body);
 
       if (data['success'] == 1) {
-        chatController.fetchChatList();
+        String roomId = data['body']['_id'];
+        String roomname = data['body']['name'];
+
+       // chatController.fetchChatList();
         Get.back(); // Close bottom sheet
         Get.snackbar(
             "Room Created", "Room '${roomName.value}' created successfully");
+        Get.toNamed(AppRoutes.groupChat, arguments: {
+          'roomId': roomId,
+          'name': roomname
+        })?..then((_) => chatController.fetchChatList());
         people.clear();
         roomName.value = '';
       } else {

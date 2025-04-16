@@ -29,7 +29,7 @@ class GroupMessageModel {
     this.messageType,
     this.latitude,
     this.longitude,
-    this.deletedFor,
+    this.deletedFor = const [],
     required this.messageStatus,
     required this.createdAt,
     required this.updatedAt,
@@ -57,7 +57,8 @@ class GroupMessageModel {
       longitude: (json["longitude"] is String)
           ? double.tryParse(json["longitude"])
           : json["longitude"] as double?,
-      deletedFor: (json['deletedFor'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
+      //deletedFor: (json['deletedFor'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
+      deletedFor: (json['deletedFor'] as List?)?.map((e) => e.toString()).toList() ?? [],
       messageStatus: json["message_status"] ?? 'sent',
       createdAt: json["created_at"] != null ? DateTime.tryParse(json["created_at"]) ?? DateTime.now() : DateTime.now(),
       updatedAt: json["updated_at"] != null ? DateTime.tryParse(json["updated_at"]) ?? DateTime.now() : DateTime.now(),
@@ -91,4 +92,43 @@ class GroupMessageModel {
   static List<GroupMessageModel> fromJsonList(List<dynamic> jsonList) {
     return jsonList.map((json) => GroupMessageModel.fromJson(json)).toList();
   }
+
+  GroupMessageModel copyWith({
+    String? id,
+    String? senderId,
+    List<String>? receiverId,
+    String? roomId,
+    String? message,
+    List<String>? attachmentId,
+    List<UploadFile>? attachmentDetails,
+    String? messageType,
+    double? latitude,
+    double? longitude,
+    List<String>? deletedFor,
+    String? messageStatus,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    bool? isDeleted,
+    int? status,
+  }) {
+    return GroupMessageModel(
+      id: id ?? this.id,
+      senderId: senderId ?? this.senderId,
+      receiverId: receiverId ?? this.receiverId,
+      roomId: roomId ?? this.roomId,
+      message: message ?? this.message,
+      attachmentId: attachmentId ?? this.attachmentId,
+      attachmentDetails: attachmentDetails ?? this.attachmentDetails,
+      messageType: messageType ?? this.messageType,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+      deletedFor: deletedFor ?? this.deletedFor,
+      messageStatus: messageStatus ?? this.messageStatus,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      isDeleted: isDeleted ?? this.isDeleted,
+      status: status ?? this.status,
+    );
+  }
+
 }

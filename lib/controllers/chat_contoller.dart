@@ -149,21 +149,33 @@ class ChatController extends GetxController {
     final jsonData = Map<String, dynamic>.from(data);
     final index = messages.indexWhere((m) => m.messageId == data['messageId']);
     if (index != -1) {
-      messages[index] = MessageModel.fromJson(jsonData);
+      //messages[index] = MessageModel.fromJson(jsonData);
+      messages[index] = messages[index].copyWith(message: jsonData['message'],);
+      messages.refresh();
     }
   }
 
-  void _onGroupMessageUpdated(Map data){
+  void _onGroupMessageUpdated(Map data) {
     final jsonData = Map<String, dynamic>.from(data);
     final index = groupMessages.indexWhere((m) => m.id == data['messageId']);
     if (index != -1) {
-      groupMessages[index] = GroupMessageModel.fromJson(jsonData);
+     // groupMessages[index] = GroupMessageModel.fromJson(jsonData);
+      groupMessages[index] = groupMessages[index].copyWith(message: jsonData['message'],);
+      messages.refresh();
     }
   }
 
+  // void _onMessageDeleted(Map data) {
+  //   final index = messages.indexWhere((m) => m.messageId == data['messageId']);
+  //   if (index != -1) {
+  //     messages.removeAt(index);
+  //   }
+  // }
   void _onMessageDeleted(Map data) {
     final index = messages.indexWhere((m) => m.messageId == data['messageId']);
     if (index != -1) {
+      // final updated = messages[index].copyWith(isDeleted: true);
+      // messages[index] = updated;
       messages.removeAt(index);
     }
   }
@@ -171,30 +183,38 @@ class ChatController extends GetxController {
   void _onGroupMessageDeleted(Map data) {
     final index = groupMessages.indexWhere((m) => m.id == data['messageId']);
     if (index != -1) {
+      // final updated = groupMessages[index].copyWith(isDeleted: true);
+      // groupMessages[index] = updated;
       groupMessages.removeAt(index);
     }
   }
 
+  //
+  // void _onGroupMessageDeleted(Map data) {
+  //   final index = groupMessages.indexWhere((m) => m.id == data['messageId']);
+  //   if (index != -1) {
+  //     groupMessages.removeAt(index);
+  //   }
+  // }
+
   void updateMessage(String? messageId, String newText) {
     socketService.updateMessage(messageId!, newText);
+    fetchMessage(receiverId);
   }
 
-  void updateGroupMessage(String? messageId, String newText){
-    socketService.updateGroupMessage(messageId!, roomId??'', newText);
+  void updateGroupMessage(String? messageId, String newText) {
+    socketService.updateGroupMessage(messageId!, roomId ?? '', newText);
+    fetchGroupMessages(roomId);
+
   }
 
-  void deleteMessage(String? messageId, String userId,
-      {bool deleteForEveryone = false}) {
-    socketService.deleteMessage(messageId!, userId,
-        deleteForEveryone: deleteForEveryone);
+  void deleteMessage(String? messageId) {
+    socketService.deleteMessage(messageId!);
   }
 
-  void deleteGroupMessage(String? messageId,
-      {bool deleteForEveryone = false} ){
-    socketService.deleteGroupMessage(messageId!, roomId??'');
+  void deleteGroupMessage(String? messageId) {
+    socketService.deleteGroupMessage(messageId!);
   }
-
-
 
   void _onMessageSeen(Map data) {
     String messageId = data['_id'];
@@ -207,8 +227,7 @@ class ChatController extends GetxController {
     }
   }
 
-
-  void joinGroup(String userId, String roomId){
+  void joinGroup(String userId, String roomId) {
     socketService.joinRoom(userId, roomId);
   }
 
@@ -265,9 +284,9 @@ class ChatController extends GetxController {
   }
 
   void sendGroupLocation(
-      Position position,
-      String roomId,
-      ) {
+    Position position,
+    String roomId,
+  ) {
     final message = GroupMessageModel(
       senderId: Global.userId!,
       roomId: roomId,
@@ -284,7 +303,6 @@ class ChatController extends GetxController {
     groupMessages.add(message);
   }
 
-
   Future<void> fetchGroupMessages(String? roomId) async {
     String? token = await TokenStorage.getToken();
     try {
@@ -299,7 +317,8 @@ class ChatController extends GetxController {
       if (response.statusCode == 200) {
         var jsonData = json.decode(response.body);
         if (jsonData['body'] is List) {
-          groupMessages.value = GroupMessageModel.fromJsonList(jsonData['body']);
+          groupMessages.value =
+              GroupMessageModel.fromJsonList(jsonData['body']);
         }
       } else {
         print("Failed to load group messages: ${response.body}");
@@ -309,14 +328,11 @@ class ChatController extends GetxController {
     }
   }
 
-
-
-
   @override
   void onInit() {
     super.onInit();
-    fetchMessage(receiverId??'');
-    fetchGroupMessages(roomId??'');
+    fetchMessage(receiverId ?? '');
+    fetchGroupMessages(roomId ?? '');
     socketService.listenForUpdatedMessages(_onMessageUpdated);
     socketService.listenForDeletedMessages(_onMessageDeleted);
     socketService.listenToGroupMessageUpdate(_onGroupMessageUpdated);
@@ -327,22 +343,21 @@ class ChatController extends GetxController {
         receiveMessage(data);
       });
 
-    // socketService.socket!.on("group_message", (data) {
-    //   print("Received group message: $data");
-    //   receiveGroupMessage(data);
-    // });
+      // socketService.socket!.on("group_message", (data) {
+      //   print("Received group message: $data");
+      //   receiveGroupMessage(data);
+      // });
       socketService.listenToGroupMessages((data) {
         receiveGroupMessage(Map<String, dynamic>.from(data));
       });
-  }
+    }
     socketService.listenForSeenMessages(_onMessageSeen);
   }
 
   @override
   void onClose() {
     if (socketService.socket != null) {
-      socketService.socket!
-          .off("chat_message");
+      socketService.socket!.off("chat_message");
       socketService.socket?.off("group_message");
     }
     super.onClose();

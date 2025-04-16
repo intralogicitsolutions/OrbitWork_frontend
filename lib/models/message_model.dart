@@ -159,4 +159,42 @@ class MessageModel {
   static List<MessageModel> fromJsonList(List<dynamic> jsonList) {
     return jsonList.map((json) => MessageModel.fromJson(json)).toList();
   }
+  MessageModel copyWith({
+    String? messageId,
+    String? senderId,
+    String? receiverId,
+    String? message,
+    List<String>? attachmentId,
+    List<UploadFile>? attachmentDetails,
+    String? roomId,
+    String? messageType,
+    double? latitude,
+    double? longitude,
+    String? messageStatus,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    bool? isDeleted,
+    int? status,
+  }) {
+    return MessageModel(
+      messageId: messageId ?? this.messageId,
+      senderId: senderId ?? this.senderId,
+      receiverId: receiverId ?? this.receiverId,
+      message: message ?? this.message,
+      attachmentId: attachmentId ?? this.attachmentId,
+      attachmentDetails: attachmentDetails ?? this.attachmentDetails,
+      roomId: roomId ?? this.roomId,
+      messageType: messageType ?? this.messageType,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+      messageStatus: messageStatus ?? this.messageStatus,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      isDeleted: isDeleted ?? this.isDeleted,
+      status: status ?? this.status,
+    );
+  }
+
 }
+
+

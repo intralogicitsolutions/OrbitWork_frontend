@@ -13,7 +13,7 @@ class SocketService extends GetxService {
   void connectToSocket() {
     socket = IO.io(
       //'https://orbitwork-backend.onrender.com',
-      'https://8643-2405-f600-8-162a-dcd7-6c76-cd28-f28b.ngrok-free.app',
+      'https://e148-2405-f600-8-162a-90d2-5805-fabd-8a8e.ngrok-free.app',
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .disableAutoConnect()
@@ -83,22 +83,35 @@ class SocketService extends GetxService {
     });
   }
 
-  void deleteMessage(String messageId, String userId,
-      {bool deleteForEveryone = false}) {
+  // void deleteMessage(String messageId, String userId,
+  //     {bool deleteForEveryone = false}) {
+  //   socket?.emit('delete_message', {
+  //     'messageId': messageId,
+  //     'userId': userId,
+  //     'deleteForEveryone': deleteForEveryone,
+  //   });
+  // }
+
+  void deleteMessage(String messageId){
     socket?.emit('delete_message', {
-      'messageId': messageId,
-      'userId': userId,
-      'deleteForEveryone': deleteForEveryone,
+      'messageId': messageId
     });
   }
 
-  void deleteGroupMessage(String messageId, String roomId,) {
-    socket!.emit('delete_group_message', {
-      'messageId': messageId,
-      'room_id': roomId,
-      //'deleteForEveryone': deleteForEveryone,
+  void deleteGroupMessage(String messageId){
+    socket?.emit('delete_group_message', {
+      'messageId': messageId
     });
   }
+
+  // void deleteGroupMessage(String messageId, String userId, String roomId, {bool deleteForEveryone = false}) {
+  //   socket!.emit('delete_group_message', {
+  //     'messageId': messageId,
+  //     'userId': userId,
+  //     'room_id': roomId,
+  //     'deleteForEveryone': deleteForEveryone,
+  //   });
+  // }
 
 
 
