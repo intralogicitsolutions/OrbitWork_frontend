@@ -206,7 +206,6 @@ import '../../controllers/chat_contoller.dart';
 class ChatInputField extends StatefulWidget {
   final String? receiverId;
   final String? roomId;
-  // final VoidCallback? onMessageSent;
 
   ChatInputField({super.key, this.receiverId, this.roomId});
 
@@ -232,44 +231,69 @@ class _ChatInputFieldState extends State<ChatInputField> {
         color: Get.theme.scaffoldBackgroundColor,
         boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 4)],
       ),
-      child: Row(
+      child: Column(
         children: [
-          IconButton(
-            icon: Icon(Icons.attach_file, color: Colors.grey[600]),
-            onPressed: () => _showAttachmentOptions(context),
-          ),
-          Expanded(
-            child: TextField(
-              controller: textController,
-              //controller: TextEditingController(text: chatController.messageText.value),
-              onChanged: (text) => chatController.messageText.value = text,
-              decoration: InputDecoration(
-                hintText: "Type a message...",
-                border: InputBorder.none,
+          Obx(() {
+            final reply = chatController.replyMessage.value;
+            return reply != null
+                ? Container(
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(8),
               ),
-            ),
-          ),
-          IconButton(
-            icon: Icon(Icons.send, color: Colors.green),
-           onPressed: () {
-             // if (textController.text.isNotEmpty) {
-             //   chatController.sendMessage(widget.receiverId!, MessageType.text);
-             //   textController.clear();
-             //   // if (onMessageSent != null) {
-             //   //   onMessageSent!(); // Call the callback after sending
-             //   // }
-             // }
-             if (textController.text.isNotEmpty) {
-               if (widget.receiverId != null) {
-                 chatController.sendMessage(widget.receiverId!, MessageType.text);
-               } else if (widget.roomId != null) {
-                 chatController.sendGroupMessage(widget.roomId!, MessageType.text);
-               }
-               textController.clear();
-             }
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Replying to", style: TextStyle(fontWeight: FontWeight.bold)),
+                        Text(reply.message!, maxLines: 1, overflow: TextOverflow.ellipsis),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () => chatController.clearReplyTo(),
+                  ),
+                ],
+              ),
+            )
+                : SizedBox.shrink();
+          }),
 
-           },
-           // onPressed: () => chatController.sendMessage(receiverId, MessageType.text),
+
+          Row(
+            children: [
+              IconButton(
+                icon: Icon(Icons.attach_file, color: Colors.grey[600]),
+                onPressed: () => _showAttachmentOptions(context),
+              ),
+              Expanded(
+                child: TextField(
+                  controller: textController,
+                  onChanged: (text) => chatController.messageText.value = text,
+                  decoration: InputDecoration(
+                    hintText: "Type a message...",
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+              IconButton(
+                icon: Icon(Icons.send, color: Colors.green),
+               onPressed: () {
+                 if (textController.text.isNotEmpty) {
+                   if (widget.receiverId != null) {
+                     chatController.sendMessage(widget.receiverId!, MessageType.text);
+                   } else if (widget.roomId != null) {
+                     chatController.sendGroupMessage(widget.roomId!, MessageType.text);
+                   }
+                   textController.clear();
+                 }
+               },
+              ),
+            ],
           ),
         ],
       ),
@@ -299,7 +323,6 @@ class _ChatInputFieldState extends State<ChatInputField> {
               title: const Text('Gallery'),
               onTap: () async {
                 Get.back();
-                //File? file = await _pickImage(ImageSource.gallery);
                 List<File> file = await _pickMultipleImages();
                 if (file.isNotEmpty) {
                   print('gallery image path ==> ${file}');
@@ -312,7 +335,6 @@ class _ChatInputFieldState extends State<ChatInputField> {
               title: const Text('Audio'),
               onTap: () async {
                 Get.back();
-                //File? file = await _pickFile(FileType.audio);
                 List<File> file = await _pickFile(FileType.audio);
                 if (file.isNotEmpty) {
                   chatController.uploadAndSendFile(widget.receiverId!, file: file);
@@ -324,7 +346,6 @@ class _ChatInputFieldState extends State<ChatInputField> {
               title: const Text('Video'),
               onTap: () async {
                 Get.back();
-                //File? file = await _pickFile(FileType.video);
                 List<File> file = await _pickFile(FileType.video);
                 if (file.isNotEmpty) {
                   chatController.uploadAndSendFile(widget.receiverId!, file: file);
@@ -336,10 +357,8 @@ class _ChatInputFieldState extends State<ChatInputField> {
               title: const Text('Document'),
               onTap: () async {
                 Get.back();
-                //File? file = await _pickFile(FileType.any);
                 List<File> file = await _pickFile(FileType.any);
                 if (file.isNotEmpty) {
-                  //chatController.uploadAndSendFile(widget.receiverId!, file: file);
                   if (widget.receiverId != null) {
                     chatController.uploadAndSendFile(widget.receiverId!, file: file);
                   } else if (widget.roomId != null) {
@@ -352,11 +371,6 @@ class _ChatInputFieldState extends State<ChatInputField> {
               leading: const Icon(Icons.location_on),
               title: const Text('Location'),
               onTap: () async {
-               // Get.back();
-                // Position? position = await _getCurrentLocation();
-                // if (position != null) {
-                //   chatController.uploadAndSendFile(receiverId, location: Location());
-                // }
                 LocationPermission permission = await Geolocator.requestPermission();
                 if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Location permission denied")));
@@ -390,15 +404,5 @@ class _ChatInputFieldState extends State<ChatInputField> {
       allowMultiple: true,
     );
     return result != null ? result.files.map((file) => File(file.path!)).toList() : [];
-  }
-
-  // Future<File?> _pickFile(FileType fileType) async {
-  Future<Position?> _getCurrentLocation() async {
-    try {
-      return await Geolocator.getCurrentPosition();
-    } catch (e) {
-      print("Location Error: $e");
-      return null;
-    }
   }
 }

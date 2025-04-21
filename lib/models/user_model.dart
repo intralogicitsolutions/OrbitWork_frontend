@@ -33,12 +33,12 @@ class UsersModel {
 /// for user api calling ///
 
 class UserModel {
-  final String id;
-  final String firstname;
-  final String lastname;
-  final String email;
+  final String? id;
+  final String? firstname;
+  final String? lastname;
+  final String? email;
   final String? password;
-  final int role;
+  final int? role;
   final String? token;
   final DateTime createdAt;
   final DateTime updatedAt;

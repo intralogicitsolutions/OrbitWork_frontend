@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:orbitwork/global/global.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketService extends GetxService {
@@ -13,7 +14,7 @@ class SocketService extends GetxService {
   void connectToSocket() {
     socket = IO.io(
       //'https://orbitwork-backend.onrender.com',
-      'https://e148-2405-f600-8-162a-90d2-5805-fabd-8a8e.ngrok-free.app',
+      'https://8361-2405-f600-8-42f5-4979-1ae9-363d-d4f1.ngrok-free.app',
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .disableAutoConnect()
@@ -21,8 +22,14 @@ class SocketService extends GetxService {
     );
 
     socket!.onConnect((_) {
-      print("Connected to socket");
+      print("Socket connected");
     });
+
+    socket!.onDisconnect((_) {
+      print("Socket disconnected");
+    });
+
+    socket!.onConnectError((err) => print("Connect error: $err"));
 
     socket!.on("connect_user", (data) {
       print("User connected: $data");
@@ -32,30 +39,30 @@ class SocketService extends GetxService {
       print("New message received: $data");
     });
 
-    socket!.on(
-      'message_seen',
-      (data) {
-        print("message seen: $data");
-      },
-    );
-
     socket!.connect();
   }
 
-  void connectUser(String userId) {
-    socket!.emit('connect_user', {'user_id': userId});
+  // void connectUser(String userId) {
+  //   socket!.emit('connect_user', {'user_id': userId});
+  // }
+
+  // =========================
+  //  User Presence
+  // =========================
+
+  void emitUserOnline(String userId) {
+    socket?.emit('user_online', userId);
+    print("Emitted user_online: $userId");
   }
 
-  void leaveRoom(String roomId, String userId) {
-    if (socket == null) {
-      print('Socket is null. Cannot leave room.');
-      return;
-    }
-    socket!.emit('leave_room', {
-      'room_id': roomId,
-      'user_id': userId,
-    });
+  void emitUserLeftMessagePage(String userId) {
+    socket?.emit('user_left_message_page', userId);
+    print("Emitted user_left_message_page: $userId");
   }
+
+  // =========================
+  //  User Room Management
+  // =========================
 
   void joinRoom(String userId, String roomId) {
     socket!.emit('join_room', {
@@ -64,8 +71,23 @@ class SocketService extends GetxService {
     });
   }
 
-  void sendGroupMessage(Map<String, dynamic> messageData) {
-    socket!.emit('chat_message', messageData);
+  void leaveRoom(String roomId, String userId) {
+    socket!.emit('leave_room', {
+      'room_id': roomId,
+      'user_id': userId,
+    });
+  }
+
+  // =========================
+  //  Message Emitters
+  // =========================
+
+  void emitMessageSeen(String messageId, String userId, bool isGroup) {
+    socket?.emit('message_seen', {
+      'messageId': messageId,
+      'user_id': userId,
+      'isGroup': isGroup,
+    });
   }
 
   void updateMessage(String messageId, String updatedText) {
@@ -83,15 +105,6 @@ class SocketService extends GetxService {
     });
   }
 
-  // void deleteMessage(String messageId, String userId,
-  //     {bool deleteForEveryone = false}) {
-  //   socket?.emit('delete_message', {
-  //     'messageId': messageId,
-  //     'userId': userId,
-  //     'deleteForEveryone': deleteForEveryone,
-  //   });
-  // }
-
   void deleteMessage(String messageId){
     socket?.emit('delete_message', {
       'messageId': messageId
@@ -104,23 +117,12 @@ class SocketService extends GetxService {
     });
   }
 
-  // void deleteGroupMessage(String messageId, String userId, String roomId, {bool deleteForEveryone = false}) {
-  //   socket!.emit('delete_group_message', {
-  //     'messageId': messageId,
-  //     'userId': userId,
-  //     'room_id': roomId,
-  //     'deleteForEveryone': deleteForEveryone,
-  //   });
+  // void sendGroupMessage(Map<String, dynamic> messageData) {
+  //   socket!.emit('chat_message', messageData);
   // }
-
-
-
-  void emitMessageSeen(String messageId, String userId) {
-    socket?.emit('message_seen', {
-      'messageId': messageId,
-      'user_id': userId,
-    });
-  }
+  //=========================
+  // Event Listeners
+  // =========================
 
   void listenForUpdatedMessages(Function(Map data) onUpdated) {
     socket?.on('message_updated', (data) {
@@ -140,8 +142,38 @@ class SocketService extends GetxService {
     });
   }
 
-  void listenToGroupMessages(Function(dynamic) onMessageReceived) {
-    socket!.on('chat_message', onMessageReceived);
+  void listenForSeenGroupMessages(Function(Map data) onSeen) {
+    socket?.on('message_seen', (data) {
+      onSeen(data);
+    });
+  }
+
+  void listenForDeliveredMessages(Function(Map data) onDelivered){
+    socket?.on('message_delivered', (data) {
+      onDelivered(data);
+    });
+  }
+
+  void listenForDeliveredGroupMessages(Function(Map data) onDelivered){
+    socket?.on('message_delivered', (data) {
+      onDelivered(data);
+    });
+  }
+
+  void listenToReceivedMessages(Function(Map<String, dynamic>) onReceived){
+    socket?.on('chat_message', (data) {
+      if (data is Map<String, dynamic>) {
+      onReceived(data);
+      }
+    });
+  }
+
+  void listenToGroupMessages(Function(Map<String, dynamic>) onMessageReceived) {
+    socket!.on('chat_message', (data) {
+      if (data is Map<String, dynamic>) {
+        onMessageReceived(data);
+      }
+    });
   }
 
   void listenToGroupMessageUpdate(Function(Map data) onUpdated) {
@@ -160,14 +192,25 @@ class SocketService extends GetxService {
     socket?.on('left_room', onLeftRoom);
   }
 
-  // void updateGroupMessage(Map<String, dynamic> data) {
-  //   socket!.emit('update_group_message', data);
-  // }
+  void listenForPresenceUpdates(Function(String userId, bool isOnline) onChange) {
+    socket?.on('presence_update', (data) {
+      final userId = data['userId'];
+      final isOnline = data['isOnline'];
+      if (userId != null && isOnline != null) {
+        onChange(userId, isOnline);
+      }
+    });
+  }
 
-  // void deleteGroupMessage(String messageId, String roomId) {
-  //   socket!.emit('delete_group_message', {
-  //     'messageId': messageId,
-  //     'room_id': roomId,
-  //   });
-  // }
+
+  // =========================
+  //  Cleanup
+  // =========================
+
+  /// Disconnects from the socket server.
+  void disconnect() {
+    socket?.emit('user_left_message_page', Global.userId);
+    socket?.disconnect();
+    socket?.destroy();
+  }
 }

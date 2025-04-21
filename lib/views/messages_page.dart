@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:orbitwork/controllers/chat_contoller.dart';
 import '../comms/global/string_utils.dart';
 import '../comms/utills/date_utils.dart';
 import '../component/new_room_bottomsheet.dart';
 import '../controllers/chat_list_controller.dart';
 import '../controllers/message_controller.dart';
-import '../controllers/room_controller.dart';
-import '../controllers/user_controller.dart';
 import '../routes/app_routes.dart';
 import '../widgets/custom_appbar.dart';
 import '../widgets/custom_shimmer.dart';
@@ -22,19 +19,6 @@ class _MessagesPageState extends State<MessagesPage> {
   final MessageController controller = Get.put(MessageController());
 
  final ChatListController chatController = Get.put(ChatListController());
-
-  String getInitials(String name) {
-    if (name == null || name.trim().isEmpty) {
-      return "?"; // Return a default character if name is empty or null
-    }
-    List<String> nameParts = name.split(' ');
-    //return nameParts.take(2).map((part) => part[0].toUpperCase()).join();
-    return nameParts
-        .where((part) => part.isNotEmpty) // Ensure no empty strings in the list
-        .take(2)
-        .map((part) => part[0].toUpperCase())
-        .join();
-  }
 
   void _showPopupMenu(BuildContext context, TapDownDetails details) async {
     final selectedValue = await showMenu<int>(
@@ -185,11 +169,22 @@ class _MessagesPageState extends State<MessagesPage> {
     }
   }
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   chatController.setupPresenceListener();
+  // }
+
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     chatController.fetchChatList(); // Re-fetch when coming back
+    // final socketService = Get.find<SocketService>();
+    // socketService.emitUserOnline(Global.userId??'');
+    chatController.setupSocketListeners();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -290,21 +285,18 @@ class _MessagesPageState extends State<MessagesPage> {
                 );
               }
               return ListView.builder(
-               // itemCount: controller.filteredMessages.length,
-               // itemCount: userController.users.length,
                 itemCount: chatController.filteredChatList.length,
                 itemBuilder: (context, index) {
-                 // final message = controller.filteredMessages[index];
                   final chatUser = chatController.filteredChatList[index];
+                 // print('is online ==> ${chatUser.isOnline}');
                   return GestureDetector(
+                    behavior: HitTestBehavior.opaque,
                     onTap: () {
                       chatUser.isRoom ? Get.toNamed(AppRoutes.groupChat, arguments: {
                         'roomId': chatUser.roomId,
                         'name': chatUser.name
                       })?.then((_) => chatController.fetchChatList())
                           : Get.toNamed(AppRoutes.chat, arguments: {
-                        // 'receiverId': user.id,
-                        // 'name': "${user.firstname} ${user.lastname}",
                         'receiverId': chatUser.userId,
                         'name': chatUser.name,
                       } )?.then((_) => chatController.fetchChatList());
@@ -313,9 +305,6 @@ class _MessagesPageState extends State<MessagesPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Column(
                         children: [
-                          // if (controller.isLoading.value) {
-                          //   return CustomShimmer(width: MediaQuery.of(context).size.width * 0.9 , height: 40,);
-                          // }
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
                             // Optional spacing
@@ -341,6 +330,7 @@ class _MessagesPageState extends State<MessagesPage> {
                                                   color: Colors.white),
                                             ),
                                           ),
+                                          if(!chatUser.isRoom)
                                           Positioned(
                                             top: 1,
                                             left: 1,
@@ -348,14 +338,14 @@ class _MessagesPageState extends State<MessagesPage> {
                                               width: 9, // Size of the dot
                                               height: 9,
                                               decoration: BoxDecoration(
-                                                color: theme
-                                                    .scaffoldBackgroundColor,
+                                                color:  theme.scaffoldBackgroundColor,
                                                 // Dot color
                                                 shape: BoxShape
                                                     .circle, // Makes the container circular
                                               ),
                                             ),
                                           ),
+                                          if(!chatUser.isRoom)
                                           Positioned(
                                             top: 2,
                                             left: 2,
@@ -363,8 +353,8 @@ class _MessagesPageState extends State<MessagesPage> {
                                               width: 6, // Size of the dot
                                               height: 6,
                                               decoration: BoxDecoration(
-                                                color:
-                                                    theme.unselectedWidgetColor,
+                                                color:chatUser.isOnline ? Colors.green :
+                                                theme.unselectedWidgetColor,
                                                 // Dot color
                                                 shape: BoxShape
                                                     .circle, // Makes the container circular

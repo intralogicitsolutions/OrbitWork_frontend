@@ -5,7 +5,7 @@ class GroupMessageModel {
   final String senderId;
   final List<String>? receiverId;
   final String roomId;
-  final String message;
+  final String? message;
   final List<String>? attachmentId;
   final List<UploadFile>? attachmentDetails;
   final String? messageType;
@@ -22,7 +22,7 @@ class GroupMessageModel {
     this.id,
     required this.senderId,
     this.receiverId,
-    required this.message,
+    this.message,
     required this.roomId,
     this.attachmentId,
     this.attachmentDetails,

@@ -37,7 +37,6 @@ class RoomController extends GetxController {
       // Optional: show a toast or navigate away
     });
     nameController = TextEditingController();
-
     nameController?.addListener(() {
       if (suppressListener) return;
       final trimmedText = nameController?.text.trim();
@@ -140,6 +139,7 @@ class RoomController extends GetxController {
     String? token = await TokenStorage.getToken();
     final url = Uri.parse('${ApiConstants.GET_ROOM_MEMBERS}/$roomId');
     try{
+      print('get room members url ==> ${url}');
     final response = await http.get(
       url,
       headers: {

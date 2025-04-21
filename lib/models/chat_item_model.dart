@@ -27,6 +27,9 @@ class ChatItem {
   final String? userId;
   final String? roomId;
 
+  DateTime? lastSeen;
+  bool isOnline;
+
   ChatItem({
     required this.isRoom,
     required this.name,
@@ -35,7 +38,16 @@ class ChatItem {
     this.email,
     this.userId,
     this.roomId,
+    this.lastSeen,
+    this.isOnline = false,
   });
+
+  void updateOnlineStatus(bool online) {
+    isOnline = online;
+    if (online) {
+      lastSeen = DateTime.now();
+    }
+  }
 
   factory ChatItem.fromJson(Map<String, dynamic> json) {
     return ChatItem(
@@ -58,6 +70,8 @@ class ChatItem {
     String? email,
     String? userId,
     String? roomId,
+    DateTime? lastSeen,
+    bool? isOnline,
   }) {
     return ChatItem(
       isRoom: isRoom ?? this.isRoom,
@@ -67,6 +81,8 @@ class ChatItem {
       email: email ?? this.email,
       userId: userId ?? this.userId,
       roomId: roomId ?? this.roomId,
+      lastSeen: lastSeen ?? this.lastSeen,
+      isOnline: isOnline ?? this.isOnline,
     );
   }
 }

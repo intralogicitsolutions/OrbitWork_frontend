@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:get/get.dart';
@@ -14,17 +15,31 @@ class ChatListController extends GetxController {
   final isLoading = false.obs;
   final socketService = Get.put(SocketService());
 
+  //final RxList<ChatItem> filteredChatList = <ChatItem>[].obs;
+  final Map<String, bool> onlineUsers = {};
+  final onlineUserIds = <String>{}.obs;
+  Timer? onlineStatusTimer;
+
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
     fetchChatList();
+    //setupPresenceListener();
+    setupSocketListeners();
+    startStatusTimer();
     debounce(searchText, (_) => filterChatList(),
         time: Duration(milliseconds: 300));
     socketService.listenToGroupMessages((data) {
       print("Real-time message received in ChatListController: $data");
       _handleNewMessage(data);
     });
+  }
+
+  @override
+  void onClose() {
+    onlineStatusTimer?.cancel();
+    super.onClose();
   }
 
   Future<void> fetchChatList() async {
@@ -71,7 +86,7 @@ class ChatListController extends GetxController {
     // Assuming `data` contains room_id and message text
     final message = data['message'] ?? '';
     final roomId = data['room_id'] ?? '';
-    final timestamp = data['timestamp']; // Optional
+    final timestamp = data['created_at']; // Optional
 
     final index = chatList.indexWhere((chat) => chat.roomId == roomId);
     if (index != -1) {
@@ -88,4 +103,87 @@ class ChatListController extends GetxController {
       fetchChatList();
     }
   }
+
+  // void setupPresenceListener() {
+  //   socketService.listenForUserPresence((userId, isOnline) {
+  //     final index = filteredChatList.indexWhere((chat) => chat.userId == userId);
+  //     if (index != -1) {
+  //       filteredChatList[index].isOnline = isOnline;
+  //       filteredChatList.refresh();
+  //     }
+  //   });
+  // }
+
+  void setupSocketListeners() {
+    final socketService = Get.find<SocketService>();
+
+    // socketService.socket?.on('user_online', (data) {
+    //   final userId = data.toString();
+    //   onlineUserIds.add(userId);
+    //   _updateUserStatus(userId, true);
+    // });
+    //
+    // socketService.socket?.on('user_left_message_page', (data) {
+    //   final userId = data.toString();
+    //   onlineUserIds.remove(userId);
+    //   _updateUserStatus(userId, false);
+    // });
+    socketService.listenForPresenceUpdates((userId, isOnline) {
+      if (isOnline) {
+        onlineUserIds.add(userId);
+      } else {
+        onlineUserIds.remove(userId);
+      }
+      _updateUserStatus(userId, isOnline);
+    });
+  }
+
+  void _updateUserStatus(String userId, bool isOnline) {
+    final index = filteredChatList.indexWhere((u) => u.userId == userId);
+    if (index != -1) {
+      final user = filteredChatList[index];
+      user.updateOnlineStatus(isOnline);
+      filteredChatList[index] = user.copyWith(
+        isOnline: user.isOnline,
+        lastSeen: user.lastSeen,
+      );
+      filteredChatList.refresh();
+    }else {
+      print("User not found in filteredChatList: $userId");
+    }
+  }
+
+  void startStatusTimer() {
+    onlineStatusTimer = Timer.periodic(Duration(seconds: 30), (_) {
+      final now = DateTime.now();
+      for (var user in filteredChatList) {
+        if (user.lastSeen != null) {
+          final difference = now.difference(user.lastSeen!);
+          user.isOnline = difference.inMinutes < 2;
+        }
+      }
+      filteredChatList.refresh();
+    });
+  }
+
+  // void startStatusTimer() {
+  //   onlineStatusTimer?.cancel(); // ensure not duplicated
+  //   onlineStatusTimer = Timer.periodic(Duration(seconds: 30), (_) {
+  //     final now = DateTime.now();
+  //     for (int i = 0; i < filteredChatList.length; i++) {
+  //       final user = filteredChatList[i];
+  //       if (user.lastSeen != null) {
+  //         final diff = now.difference(user.lastSeen!);
+  //         final isStillOnline = diff.inMinutes < 2;
+  //
+  //         if (user.isOnline != isStillOnline) {
+  //           filteredChatList[i] = user.copyWith(
+  //             isOnline: isStillOnline,
+  //             lastSeen: user.lastSeen,
+  //           );
+  //         }
+  //       }
+  //     }
+  //   });
+  // }
 }
