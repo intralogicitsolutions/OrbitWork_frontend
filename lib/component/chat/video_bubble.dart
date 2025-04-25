@@ -78,10 +78,13 @@ import 'full_screeen_video.dart';
 
 class VideoBubble extends StatelessWidget {
   final String videoUrl;
+  final double width;
+  final double height;
+  final double iconSize;
   final VideoController controller;
 
-  VideoBubble({Key? key, required this.videoUrl})
-      : controller = Get.put(VideoController(videoUrl)),
+  VideoBubble({Key? key, required this.videoUrl, required this.width, required this.height, required this.iconSize})
+      : controller = Get.put(VideoController(videoUrl), tag: videoUrl),
         super(key: key);
 
   @override
@@ -98,21 +101,21 @@ class VideoBubble extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             child: Image.file(
               File(controller.thumbnailPath.value),
-              width: 200,
-              height: 200,
+              width: width,
+              height: height,
               fit: BoxFit.cover,
             ),
           )
               : Container(
-            width: 200,
-            height: 200,
+            width: width,
+            height: height,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Colors.black12,
             ),
             child: Center(child: CircularProgressIndicator()), // Loading
           )),
-          const Icon(Icons.play_circle_fill, color: Colors.white, size: 50),
+          Icon(Icons.play_circle_fill, color: Colors.white, size: iconSize),
         ],
       ),
     );

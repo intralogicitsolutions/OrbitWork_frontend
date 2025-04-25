@@ -1,5 +1,6 @@
 
 import 'package:orbitwork/models/upload_file_model.dart';
+import 'package:orbitwork/models/user_details_model.dart';
 import 'package:orbitwork/models/user_model.dart';
 
 class MessagesModel {
@@ -30,8 +31,8 @@ class MessageModel {
   final String? message;
   final List<String>? attachmentId;
   final List<UploadFile>? attachmentDetails;
-  final List<UserModel>? senderDetails;
-  final List<UserModel>? receiverDetails;
+  final List<UserDetails>? senderDetails;
+  final List<UserDetails>? receiverDetails;
   final String? roomId;
   final String? messageType;
   final double? latitude;
@@ -85,16 +86,14 @@ class MessageModel {
       attachmentDetails: json["attechment_details"] is Map<String, dynamic>
           ? [UploadFile.fromJson(json["attechment_details"])]
           : (json["attechment_details"] as List<dynamic>?)?.map((item) => UploadFile.fromJson(item)).toList(),
-      senderDetails: json["sender_details"] == null
-          ? null
-          : (json["sender_details"] as List)
-          .map((userJson) => UserModel.fromJson(userJson))
-          .toList(),
-      receiverDetails: json["receiver_details"] == null
-          ? null
-          : (json["receiver_details"] as List)
-          .map((userJson) => UserModel.fromJson(userJson))
-          .toList(),
+      senderDetails: (json['sender_details'] as List<dynamic>?)
+          ?.map((e) => UserDetails.fromJson(e))
+          .toList() ??
+          [],
+      receiverDetails: (json['receiver_details'] as List<dynamic>?)
+          ?.map((e) => UserDetails.fromJson(e))
+          .toList() ??
+          [],
       roomId: json["room_id"] ?? '',
       messageType: json["message_type"] ?? '',
 
@@ -157,8 +156,8 @@ class MessageModel {
     String? message,
     List<String>? attachmentId,
     List<UploadFile>? attachmentDetails,
-    List<UserModel>? senderDetails,
-    List<UserModel>? receiverDetails,
+    List<UserDetails>? senderDetails,
+    List<UserDetails>? receiverDetails,
     String? roomId,
     String? messageType,
     double? latitude,

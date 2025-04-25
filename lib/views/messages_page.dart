@@ -382,6 +382,8 @@ class _MessagesPageState extends State<MessagesPage> {
                                               chatUser.messageWithPrefix??'',
                                               style: TextStyle(
                                                   color: Colors.grey.shade500),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                             ),
                                           ],
                                         ),

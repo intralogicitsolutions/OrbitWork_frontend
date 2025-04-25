@@ -7,34 +7,42 @@ import '../controllers/chat_contoller.dart';
 import '../global/global.dart';
 import '../routes/app_routes.dart';
 
-class GroupChatPage extends StatelessWidget {
+class GroupChatPage extends StatefulWidget {
   final String name;
   final String? roomId;
 
   final ChatController chatController;
-  final ScrollController _scrollController = ScrollController();
 
   GroupChatPage({Key? key, required this.name, this.roomId})
       : chatController = Get.put(ChatController(roomId: roomId)),
         super(key: key);
 
   @override
+  State<GroupChatPage> createState() => _GroupChatPageState();
+}
+
+class _GroupChatPageState extends State<GroupChatPage> {
+   ChatController? chatController;
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    chatController?.initSocket(userId: Global.userId ?? '', roomId: widget.roomId);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(name),
+        title: Text(widget.name),
         actions: [
           PopupMenuButton<String>(
             color: Get.theme.scaffoldBackgroundColor,
             onSelected: (value) {
               if (value == 'edit') {
-                // Handle edit action
                 print("Edit clicked");
               }
-              // else if (value == 'add') {
-              //   // Handle add action
-              //   print("Add clicked");
-              // }
             },
             icon: Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) {
@@ -44,15 +52,10 @@ class GroupChatPage extends StatelessWidget {
                   child: Text('Edit'),
                   onTap: () {
                     Get.toNamed(AppRoutes.groupEdit, arguments: {
-                      'roomId': roomId,
+                      'roomId': widget.roomId,
                     });
                   },
                 ),
-                // // if (chatController.isAdmin.value)
-                //   PopupMenuItem<String>(
-                //     value: 'add',
-                //     child: Text('Add'),
-                //   ),
               ];
             },
           ),
@@ -66,9 +69,9 @@ class GroupChatPage extends StatelessWidget {
               return ListView.builder(
                 controller: _scrollController,
                 reverse: true,
-                itemCount: chatController.groupMessages.length,
+                itemCount: widget.chatController.groupMessages.length,
                 itemBuilder: (context, index) {
-                  var message = chatController.groupMessages[index];
+                  var message = widget.chatController.groupMessages[index];
                   bool isMe = message.senderId == Global.userId;
 
                   DateTime messageDate = message.createdAt;
@@ -76,10 +79,16 @@ class GroupChatPage extends StatelessWidget {
                       DateFormat('dd-MM-yyyy').format(messageDate);
 
                   bool showDateHeader =
-                      index == chatController.groupMessages.length - 1 ||
-                          DateFormat('dd-MM-yyyy').format(chatController
+                      index == widget.chatController.groupMessages.length - 1 ||
+                          DateFormat('dd-MM-yyyy').format(widget.chatController
                                   .groupMessages[index + 1].createdAt) !=
                               formattedDate;
+
+                  bool showSenderName = index == widget.chatController.groupMessages.length - 1 ||
+                      widget.chatController.groupMessages[index + 1].senderId != message.senderId ||
+                      DateFormat('dd-MM-yyyy').format(widget.chatController.groupMessages[index + 1].createdAt) != formattedDate ||
+                      (widget.chatController.groupMessages[index + 1].createdAt.isBefore(message.createdAt.add(Duration(minutes: -3))));
+
                   return Column(
                     children: [
                       if (showDateHeader)
@@ -96,7 +105,7 @@ class GroupChatPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                      ChatBubble(groupMessage: message, isMe: isMe),
+                      ChatBubble(groupMessage: message, isMe: isMe, showSenderName: showSenderName,),
                     ],
                   );
                 },
@@ -104,7 +113,7 @@ class GroupChatPage extends StatelessWidget {
             }),
           ),
           ChatInputField(
-            roomId: roomId,
+            roomId: widget.roomId,
           ),
         ],
       ),

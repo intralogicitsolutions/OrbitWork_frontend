@@ -49,25 +49,21 @@
 // }
 
 import 'dart:io';
-
-import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:open_filex/open_filex.dart';
-import 'package:orbitwork/component/chat/pdf_view_page.dart';
 import 'package:orbitwork/component/chat/video_bubble.dart';
 import 'package:orbitwork/models/group_message_model.dart';
-import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:swipe_to/swipe_to.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../comms/global/string_utils.dart';
 import '../../controllers/chat_contoller.dart';
 import '../../global/global.dart';
 import '../../models/message_model.dart';
 import 'audio_player.dart';
-import 'full_screeen_video.dart';
 import 'full_screen_image.dart';
 
 ///use chat_bubble library  for chat ui
@@ -75,8 +71,9 @@ class ChatBubble extends StatefulWidget {
   final MessageModel? message;
   final bool isMe;
   final GroupMessageModel? groupMessage;
+  final bool showSenderName;
 
-  ChatBubble({this.message, required this.isMe, this.groupMessage});
+  ChatBubble({this.message, required this.isMe, this.groupMessage, this.showSenderName = false});
 
   @override
   State<ChatBubble> createState() => _ChatBubbleState();
@@ -86,6 +83,7 @@ class _ChatBubbleState extends State<ChatBubble> {
   bool _seenEmitted = false;
 
   final ChatController controller = Get.put(ChatController());
+  final textFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -110,320 +108,406 @@ class _ChatBubbleState extends State<ChatBubble> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
-    final bool isGroup = widget.groupMessage != null;
+    final isGroup = widget.groupMessage != null;
     final dynamic msg = isGroup ? widget.groupMessage : widget.message;
     final String? text = msg.message;
     final DateTime createdAt = msg.createdAt;
+    final localTime = createdAt.toLocal();
     final String? messageType = msg.messageType;
     final List<dynamic>? attachmentDetails = msg.attachmentDetails;
     final double? latitude = msg.latitude;
     final double? longitude = msg.longitude;
     final String? status = isGroup ? widget.groupMessage?.messageStatus : widget.message?.messageStatus;
-    final String formattedTime = DateFormat('hh:mm a').format(createdAt);
-    final textFocusNode = FocusNode();
+    final String formattedTime = DateFormat('hh:mm a').format(localTime);
+    //final sender = msg.senderDetails?.first;
+    final sender = (msg.senderDetails != null && msg.senderDetails!.isNotEmpty)
+        ? msg.senderDetails!.first
+        : null;
+    final replyTo = msg.replyToDetails;
+
     //final status = message.messageStatus;
     return Align(
       alignment: widget.isMe ? Alignment.centerLeft : Alignment.centerLeft,
-      child: GestureDetector(
-        onLongPress: () {
-          _showEditDeleteOptions(context);
-        },
-        onHorizontalDragEnd: (details) {
-          if (details.primaryVelocity != null && details.primaryVelocity! > 0) {
-            // Swipe right detected
-            controller.setReplyTo(widget.message!);
-            FocusScope.of(context).requestFocus(textFocusNode);
+      child: SwipeTo(
+        onRightSwipe: (details) {
+          if (isGroup) {
+            controller.setReplyToGroupMessage(widget.groupMessage!);
+          } else {
+            controller.setReplyToMessage(widget.message!);
           }
+          FocusScope.of(context).requestFocus(textFocusNode);
         },
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-          padding: const EdgeInsets.all(12),
-          constraints: BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width * 0.7,
-          ),
-          decoration: BoxDecoration(
-            //  color: isMe ? Colors.green[300] : Colors.grey[300],
-            borderRadius: BorderRadius.only(
-              topLeft: const Radius.circular(15),
-              topRight: const Radius.circular(15),
-              bottomLeft: widget.isMe ? const Radius.circular(15) : Radius.zero,
-              bottomRight: widget.isMe ? Radius.zero : const Radius.circular(15),
+        iconOnRightSwipe: Icons.arrow_forward_ios,
+        rightSwipeWidget: SizedBox.shrink(),
+        child: GestureDetector(
+          onLongPress: () {
+            _showEditDeleteOptions(context);
+          },
+
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+           padding: const EdgeInsets.symmetric(horizontal: 8),
+
+            decoration: BoxDecoration(
+              //  color: isMe ? Colors.green[300] : Colors.grey[300],
+              borderRadius: BorderRadius.only(
+                topLeft: const Radius.circular(15),
+                topRight: const Radius.circular(15),
+                bottomLeft: widget.isMe ? const Radius.circular(15) : Radius.zero,
+                bottomRight: widget.isMe ? Radius.zero : const Radius.circular(15),
+              ),
             ),
-            // border: Border.all(
-            //   // color: Colors.black.withOpacity(0.3),
-            //   color: Get.theme.disabledColor,
-            //   width: 1.0,
-            // ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Stack(
-                    clipBehavior: Clip.none,
-                    // Ensures the dot can overflow outside the stack
-                    children: [
-                      CircleAvatar(
-                        backgroundColor:
-                        Colors.grey.shade400,
-                        child: Text(
-                          StringUtils.getInitials("${widget.message?.senderDetails?.first.firstname} ${widget.message?.senderDetails?.first.lastname}"),
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                      ),
-                      // if(!chatUser.isRoom)
-                        Positioned(
-                          top: 1,
-                          left: 1,
-                          child: Container(
-                            width: 9, // Size of the dot
-                            height: 9,
-                            decoration: BoxDecoration(
-                              color:  Get.theme.scaffoldBackgroundColor,
-                              // Dot color
-                              shape: BoxShape
-                                  .circle, // Makes the container circular
-                            ),
-                          ),
-                        ),
-                      //if(!chatUser.isRoom)
-                        Positioned(
-                          top: 2,
-                          left: 2,
-                          child: Container(
-                            width: 6, // Size of the dot
-                            height: 6,
-                            decoration: BoxDecoration(
-                              color: Get.theme.unselectedWidgetColor,
-                              // Dot color
-                              shape: BoxShape
-                                  .circle, // Makes the container circular
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    widget.showSenderName ?
+                    Stack(
+                      clipBehavior: Clip.none,
+                      // Ensures the dot can overflow outside the stack
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              "${widget.message?.senderDetails?.first.firstname} ${widget.message?.senderDetails?.first.lastname}",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                            SizedBox(width: 10,),
-                            Text(
-                              formattedTime,
-                              style: TextStyle(fontSize: 10, color: Colors.grey),
-                            ),
-                          ],
+                        CircleAvatar(
+                          backgroundColor:
+                          Colors.grey.shade400,
+                          child: Text(
+                            StringUtils.getInitials("${sender?.firstname ?? ''} ${sender?.lastname ?? ''}"),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
                         ),
-                        // Text(
-                        //   //  message.title,
-                        //   //   "${user.email}",
-                        //   chatUser.messageWithPrefix??'',
-                        //   style: TextStyle(
-                        //       color: Colors.grey.shade500),
-                        // ),
-                        if (widget.message?.replyToDetails  != null) ...[
-                          Container(
-                            padding: const EdgeInsets.all(6),
-                            margin: EdgeInsets.only(bottom: 4),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[300],
-                              borderRadius: BorderRadius.circular(8),
+                        // if(!chatUser.isRoom)
+                          Positioned(
+                            top: 1,
+                            left: 1,
+                            child: Container(
+                              width: 9, // Size of the dot
+                              height: 9,
+                              decoration: BoxDecoration(
+                                color:  Get.theme.scaffoldBackgroundColor,
+                                // Dot color
+                                shape: BoxShape
+                                    .circle, // Makes the container circular
+                              ),
                             ),
-                            child: Column(
+                          ),
+
+                          Positioned(
+                            top: 2,
+                            left: 2,
+                            child: Container(
+                              width: 6, // Size of the dot
+                              height: 6,
+                              decoration: BoxDecoration(
+                                color: widget.isMe ? Get.theme.primaryColor : Get.theme.unselectedWidgetColor,
+                                // Dot color
+                                shape: BoxShape
+                                    .circle, // Makes the container circular
+                              ),
+                            ),
+                          ),
+                      ],
+                    ) : SizedBox( width: 40 ,),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment:
+                        CrossAxisAlignment.start,
+                        children: [
+                          if(widget.showSenderName)
+                          Row(
+                            children: [
+                              Text(
+                      "${sender?.firstname ?? ''} ${sender?.lastname ?? ''}",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                    fontWeight: FontWeight.w600),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                              SizedBox(width: 10,),
+                              Text(
+                                formattedTime,
+                                style: TextStyle(fontSize: 11, color: Colors.grey, fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 5,),
+
+                          if (replyTo != null) ...[
+                            Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  // "Reply to: ${controller.replyMessage.value?.message ?? ''}",
-                                  "${widget.message?.replyToDetails?.message ??''}",
-                                  style: const TextStyle(
-                                    fontStyle: FontStyle.italic,
-                                    fontSize: 12,
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+
+                                      if (replyTo.message != null)
+                                        Text(
+                                          replyTo.message!,
+                                          style:  TextStyle(
+                                              fontSize: 14,
+                                            fontWeight: FontWeight.w500
+                                          ),
+                                          softWrap: true,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                        ),
+                                      if (replyTo.messageType == 'image')
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(6),
+                                          child: Image.network(
+                                            replyTo.attachmentDetails!.first.url ?? '', height: 80, width: 80, fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      if(replyTo.messageType == 'video')
+                                        VideoBubble(videoUrl: replyTo?.attachmentDetails?.first.url ?? '', width: 50, height: 50, iconSize: 20,
+                                        ),
+                                      if(replyTo.messageType == 'audio')
+                                        SizedBox(
+                                            height: 50,
+                                            width: 50,
+                                            child: AudioPlayerWidget(audioUrl: replyTo?.attachmentDetails?.first.url ?? '')),
+                                      if(replyTo.messageType == 'document')
+                                        Row(
+                                          children: [
+                                            Icon(Icons.file_copy_rounded, color: Colors.grey, size: 20,),
+                                            SizedBox(width: 20,),
+                                            Text(replyTo?.attachmentDetails?.first.name??'')
+                                          ],
+                                        ),
+                                      if(replyTo.messageType == 'location')
+                                        SizedBox(
+                                          height: 50,
+                                          width: 50,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(10),
+                                            child: Image.network(
+                                              "https://static-maps.yandex.ru/1.x/?lang=en-US&ll=${replyTo?.latitude},${replyTo?.longitude}&z=15&l=map&size=150,150",
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                    ],
                                   ),
                                 ),
-                                if (widget.message?.replyToDetails?.messageType == 'image')
-                                  Image.network(widget.message!.replyToDetails!.attachmentDetails!.first.url??''),
                               ],
                             ),
-                          ),
-                          // Text(widget.message?.message??''),
-                          const SizedBox(height: 5),
-                        ],
+                            const SizedBox(height: 5),
+                          ],
 
-                        // Image Message
-                        //if (message.messageType == "image" && message.attachmentDetails?.url != null) ...[
-                        if (messageType == "image" && attachmentDetails != null) ...[
-                          for (var file in attachmentDetails)
-                            if (file.url != null)
-                              GestureDetector(
-                                onTap: () {
-                                  Get.to(() => FullScreenImage(imageUrl: file.url!));
-                                },
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.network(
-                                    file.url!,
-                                    width: 200,
-                                    height: 200,
-                                    fit: BoxFit.cover,
+                          Row(
+                            children: [
+                              replyTo != null ? Image.asset(
+                                'assets/icon/reply_message.png',
+                                height: 20,
+                                width: 20,
+                              ): SizedBox.shrink(),
+                              const SizedBox(width: 6),
+                              Expanded(
+                                child: Container(
+                                  padding: replyTo != null ? const EdgeInsets.all(8) : null,
+                                  margin: replyTo != null ? const EdgeInsets.only(bottom: 6): null,
+                                  decoration: replyTo != null ? BoxDecoration(
+                                    color: Colors.grey.shade100,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ) : null,
+                                  child: Row(
+                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                     if( replyTo != null )...[
+                                       CircleAvatar(
+                                         radius: 14,
+                                         backgroundColor:
+                                         Colors.grey.shade400,
+                                         child: Text(
+                                           StringUtils.getInitials("${sender?.firstname ?? ''} ${sender?.lastname ?? ''}"),
+                                           style: TextStyle(
+                                               fontSize: 12,
+                                               fontWeight: FontWeight.bold,
+                                               color: Colors.white),
+                                         ),
+                                       ),
+                                       SizedBox(width: 10,)
+                                     ],
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            if (messageType == "image" && attachmentDetails != null) ...[
+                                              for (var file in attachmentDetails)
+                                                if (file.url != null)
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Get.to(() => FullScreenImage(imageUrl: file.url!));
+                                                    },
+                                                    child: ClipRRect(
+                                                      borderRadius: BorderRadius.circular(10),
+                                                      child: Image.network(
+                                                        file.url!,
+                                                        width: 200,
+                                                        height: 200,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                  ),
+                                              const SizedBox(height: 5),
+                                            ],
+
+                                            if (messageType == "video" && attachmentDetails != null) ...[
+                                              for (var file in attachmentDetails)
+                                                if (file.url != null) VideoBubble(videoUrl: file.url!, width: 200, height: 200, iconSize: 50,)
+                                            ],
+
+                                            if (messageType == "audio" && attachmentDetails != null) ...[
+                                              for (var file in attachmentDetails)
+                                                if (file.url != null) AudioPlayerWidget(audioUrl: file.url!),
+                                              const SizedBox(height: 5),
+                                            ],
+
+                                            // File Attachment
+                                            if (messageType == "document" && attachmentDetails != null) ...[
+                                              for (var file in attachmentDetails)
+                                                if (file.name != null && file.url != null)
+                                                  GestureDetector(
+                                                    onTap: () async {
+                                                      try {
+                                                        final url = file.url;
+                                                        //final originalName = document["originalName"];
+                                                        final originalName = file.name;
+
+                                                        if (url != null && originalName != null) {
+                                                          final directory = await getTemporaryDirectory();
+                                                          final filePath = "${directory.path}/$originalName";
+
+                                                          final file = File(filePath);
+                                                          if (!file.existsSync()) {
+                                                            final response = await http.get(Uri.parse(url));
+                                                            if (response.statusCode == 200) {
+                                                              await file.writeAsBytes(response.bodyBytes);
+                                                            } else {
+                                                              throw Exception("Failed to download file");
+                                                            }
+                                                          }
+
+                                                          final result = await OpenFilex.open(filePath);
+                                                          if (result.type != ResultType.done) {
+                                                            print('error opening file : ${result.message}');
+                                                            throw Exception(
+                                                                "Error opening file: ${result.message}");
+                                                          }
+                                                        } else {
+                                                          throw Exception("Invalid file data");
+                                                        }
+                                                      } catch (e) {
+                                                        print('error : ${e.toString()}');
+                                                        ScaffoldMessenger.of(context).showSnackBar(
+                                                          SnackBar(content: Text("Error: ${e.toString()}")),
+                                                        );
+                                                      }
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        Container(
+                                                            padding: const EdgeInsets.all(8),
+                                                            decoration: BoxDecoration(
+                                                              color: Colors.grey.shade200,
+                                                              shape: BoxShape.circle,
+                                                            ),
+                                                            child: const Icon(Icons.file_copy_rounded, color: Colors.grey, size: 18,)),
+                                                        SizedBox(width: 5,),
+                                                        const SizedBox(width: 5),
+                                                        Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Text(
+                                                              file.name!,
+                                                              // basename(message.attachmentId!),
+                                                              style:  TextStyle(
+                                                                fontSize: 14,
+                                                                  fontWeight: FontWeight.w500,
+                                                                  //color: Colors.blue,
+                                                                  overflow: TextOverflow.ellipsis),
+                                                            ),
+                                                            Text(StringUtils.getFileSizeString(bytes: file.size),
+                                                            style: TextStyle(
+                                                              fontSize: 12,
+                                                              color: Colors.grey
+                                                            ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                              const SizedBox(height: 5),
+                                            ],
+
+                                            if (messageType == "location" && latitude != null && longitude != null) ...[
+                                              GestureDetector(
+                                                onTap: () {
+                                                  String mapUrl =
+                                                      "https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}";
+                                                  launchUrl(Uri.parse(mapUrl),
+                                                      mode: LaunchMode.externalApplication);
+                                                  // String mapUrl = "https://www.openstreetmap.org/?mlat=${message.latitude}&mlon=${message.longitude}&zoom=15";
+                                                  // launchUrl(Uri.parse(mapUrl), mode: LaunchMode.externalApplication);
+                                                },
+                                                child: Container(
+                                                  height: 150,
+                                                  width: 200,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(10),
+                                                    color: Colors.blue[100],
+                                                  ),
+                                                  child: ClipRRect(
+                                                    borderRadius: BorderRadius.circular(10),
+                                                    child: Image.network(
+                                                      // "https://maps.googleapis.com/maps/api/staticmap?center=${message.latitude},${message.longitude}&zoom=15&size=200x150&markers=color:red%7C${message.latitude},${message.longitude}&key=YOUR_GOOGLE_MAPS_API_KEY",
+                                                      "https://static-maps.yandex.ru/1.x/?lang=en-US&ll=${longitude},${latitude}&z=15&l=map&size=200,150",
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                            // Text Message
+                                            if (text != null && text.isNotEmpty) ...[
+                                              Text(
+                                                text,
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: widget.message?.replyToDetails != null
+                                                      ? Colors.grey.shade700
+                                                      : Get.theme.secondaryHeaderColor,
+                                                ),
+                                                softWrap: true,
+                                              ),
+                                            ],
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
-                          const SizedBox(height: 5),
-                        ],
-
-                        if (messageType == "video" && attachmentDetails != null) ...[
-                          for (var file in attachmentDetails)
-                            if (file.url != null) VideoBubble(videoUrl: file.url!)
-                        ],
-
-                        if (messageType == "audio" && attachmentDetails != null) ...[
-                          for (var file in attachmentDetails)
-                            if (file.url != null) AudioPlayerWidget(audioUrl: file.url!),
-                          const SizedBox(height: 5),
-                        ],
-
-                        // File Attachment
-                        if (messageType == "document" && attachmentDetails != null) ...[
-                          for (var file in attachmentDetails)
-                            if (file.name != null && file.url != null)
-                              GestureDetector(
-                                onTap: () async {
-                                  try {
-                                    final url = file.url;
-                                    //final originalName = document["originalName"];
-                                    final originalName = file.name;
-
-                                    if (url != null && originalName != null) {
-                                      final directory = await getTemporaryDirectory();
-                                      final filePath = "${directory.path}/$originalName";
-
-                                      final file = File(filePath);
-                                      if (!file.existsSync()) {
-                                        final response = await http.get(Uri.parse(url));
-                                        if (response.statusCode == 200) {
-                                          await file.writeAsBytes(response.bodyBytes);
-                                        } else {
-                                          throw Exception("Failed to download file");
-                                        }
-                                      }
-
-                                      final result = await OpenFilex.open(filePath);
-                                      if (result.type != ResultType.done) {
-                                        print('error opening file : ${result.message}');
-                                        throw Exception(
-                                            "Error opening file: ${result.message}");
-                                      }
-                                    } else {
-                                      throw Exception("Invalid file data");
-                                    }
-                                  } catch (e) {
-                                    print('error : ${e.toString()}');
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text("Error: ${e.toString()}")),
-                                    );
-                                  }
-                                },
-                                child: Row(
-                                  children: [
-                                    const Icon(Icons.attach_file, color: Colors.blue),
-                                    const SizedBox(width: 5),
-                                    Expanded(
-                                      child: Text(
-                                        file.name!,
-                                        // basename(message.attachmentId!),
-                                        style: const TextStyle(
-                                            color: Colors.blue,
-                                            overflow: TextOverflow.ellipsis),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                          const SizedBox(height: 5),
-                        ],
-
-                        if (messageType == "location" && latitude != null && longitude != null) ...[
-                          GestureDetector(
-                            onTap: () {
-                              String mapUrl =
-                                  "https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}";
-                              launchUrl(Uri.parse(mapUrl),
-                                  mode: LaunchMode.externalApplication);
-                              // String mapUrl = "https://www.openstreetmap.org/?mlat=${message.latitude}&mlon=${message.longitude}&zoom=15";
-                              // launchUrl(Uri.parse(mapUrl), mode: LaunchMode.externalApplication);
-                            },
-                            child: Container(
-                              height: 150,
-                              width: 200,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.blue[100],
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.network(
-                                  // "https://maps.googleapis.com/maps/api/staticmap?center=${message.latitude},${message.longitude}&zoom=15&size=200x150&markers=color:red%7C${message.latitude},${message.longitude}&key=YOUR_GOOGLE_MAPS_API_KEY",
-                                  "https://static-maps.yandex.ru/1.x/?lang=en-US&ll=${longitude},${latitude}&z=15&l=map&size=200,150",
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
+                            ],
                           ),
                         ],
-
-                        // Text Message
-                        if (text != null && text.isNotEmpty) ...[
-                          Text(
-                            text,
-                            style: const TextStyle(fontSize: 16),
-                            softWrap: true,
-                          ),
-                        ],
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            // Text(
-                            //   formattedTime,
-                            //   style: TextStyle(fontSize: 10, color: Colors.grey),
-                            // ),
-                            const SizedBox(width: 4),
-                            if (widget.isMe)
-                              Text(
-                                _getStatusText(status ?? ''),
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  color: _getStatusColor(status ?? ''),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-
-
-                ],
-              ),
-
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

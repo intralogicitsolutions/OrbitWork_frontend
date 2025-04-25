@@ -1,45 +1,76 @@
 import 'package:get/get.dart';
 import 'package:orbitwork/global/global.dart';
+import 'package:orbitwork/models/group_message_model.dart';
+import 'package:orbitwork/models/message_model.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketService extends GetxService {
   IO.Socket? socket;
 
-  @override
-  void onInit() {
-    super.onInit();
-    connectToSocket();
-  }
+  final RxBool isConnected = false.obs;
 
-  void connectToSocket() {
-    socket = IO.io(
-      //'https://orbitwork-backend.onrender.com',
-      'https://8361-2405-f600-8-42f5-4979-1ae9-363d-d4f1.ngrok-free.app',
-      IO.OptionBuilder()
-          .setTransports(['websocket'])
-          .disableAutoConnect()
-          .build(),
-    );
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  //   connectToSocket();
+  // }
+  //
+  // void connectToSocket() {
+  //   socket = IO.io(
+  //     'https://5b61-2405-f600-8-51d5-2924-9248-488-2392.ngrok-free.app',
+  //     IO.OptionBuilder()
+  //         .setTransports(['websocket'])
+  //         .disableAutoConnect()
+  //         .build(),
+  //   );
+  //
+  //   socket!.onConnect((_) {
+  //     print("Socket connected");
+  //   });
+  //
+  //   socket!.onDisconnect((_) {
+  //     print("Socket disconnected");
+  //   });
+  //
+  //   socket!.onConnectError((err) => print("Connect error: $err"));
+  //
+  //   socket!.on("connect_user", (data) {
+  //     print("User connected: $data");
+  //   });
+  //
+  //   socket!.on("chat_message", (data) {
+  //     print("New message received: $data");
+  //   });
+  //
+  //   socket!.connect();
+  // }
 
-    socket!.onConnect((_) {
-      print("Socket connected");
+  Future<void> connectSocket(String userId) async {
+    socket = IO.io('https://decc-2405-f600-8-51d5-85ee-796c-38d0-d858.ngrok-free.app', <String, dynamic>{
+      'transports': ['websocket'],
+      'autoConnect': false,
     });
 
-    socket!.onDisconnect((_) {
-      print("Socket disconnected");
+    socket?.connect();
+
+    socket?.onConnect((_) {
+      isConnected.value = true;
+      print('✅ Socket connected');
+      socket?.emit('connect_user', {'user_id': userId});
     });
 
-    socket!.onConnectError((err) => print("Connect error: $err"));
-
-    socket!.on("connect_user", (data) {
-      print("User connected: $data");
+    socket?.onDisconnect((_) {
+      isConnected.value = false;
+      print('❌ Socket disconnected');
     });
 
-    socket!.on("chat_message", (data) {
-      print("New message received: $data");
+    socket?.onConnectError((data) {
+      print('❗ Socket Connect Error: $data');
     });
 
-    socket!.connect();
+    socket?.onError((data) {
+      print('❗ Socket Error: $data');
+    });
   }
 
   // void connectUser(String userId) {
@@ -81,6 +112,14 @@ class SocketService extends GetxService {
   // =========================
   //  Message Emitters
   // =========================
+
+  void sendMessage(MessageModel messageData) {
+    socket?.emit('chat_message', messageData);
+  }
+
+  void sendGroupMessage(GroupMessageModel messageData) {
+    socket?.emit('chat_message', messageData);
+  }
 
   void emitMessageSeen(String messageId, String userId, bool isGroup) {
     socket?.emit('message_seen', {
@@ -148,9 +187,16 @@ class SocketService extends GetxService {
     });
   }
 
-  void listenForDeliveredMessages(Function(Map data) onDelivered){
+  void listenForDeliveredMessages(Function(Map<String, dynamic> data) onDelivered){
     socket?.on('message_delivered', (data) {
+      print("📨 message_delivered event received: $data");
+      if (data is Map<String, dynamic>) {
       onDelivered(data);
+      } else if (data is Map) {
+        onDelivered(Map<String, dynamic>.from(data));}
+      else {
+        print("⚠️ Invalid data type for message_delivered: $data");
+      }
     });
   }
 
@@ -162,14 +208,23 @@ class SocketService extends GetxService {
 
   void listenToReceivedMessages(Function(Map<String, dynamic>) onReceived){
     socket?.on('chat_message', (data) {
+      print('📨 Received direct message: $data');
       if (data is Map<String, dynamic>) {
       onReceived(data);
       }
     });
   }
 
+  void listenToNewMessages(Function(Map<String, dynamic>) onData) {
+    socket?.on('new_message', (data) {
+      print('🆕 New message: $data');
+      onData(Map<String, dynamic>.from(data));
+    });
+  }
+
+
   void listenToGroupMessages(Function(Map<String, dynamic>) onMessageReceived) {
-    socket!.on('chat_message', (data) {
+    socket?.on('chat_message', (data) {
       if (data is Map<String, dynamic>) {
         onMessageReceived(data);
       }
@@ -177,13 +232,13 @@ class SocketService extends GetxService {
   }
 
   void listenToGroupMessageUpdate(Function(Map data) onUpdated) {
-    socket!.on('group_message_updated', (data){
+    socket?.on('group_message_updated', (data){
       onUpdated(data);
     });
   }
 
   void listenToGroupMessageDelete(Function(Map data) onDeleted) {
-    socket!.on('group_message_deleted', (data) {
+    socket?.on('group_message_deleted', (data) {
       onDeleted(data);
     });
   }
@@ -202,6 +257,43 @@ class SocketService extends GetxService {
     });
   }
 
+  // =========================
+  // NOTIFICATION LISTENER
+  // =========================
+
+  void onReceiveNotification(Function(dynamic data) callback) {
+    socket?.on('receiveNotification', (data){
+      print("Notification received: $data");
+      callback(data);
+    });
+  }
+
+  // // Optional: Chat related
+  // void onNewMessage(Function(dynamic data) callback) {
+  //   socket?.on('new_message', callback);
+  // }
+  //
+  // void emitChatMessage(Map<String, dynamic> message) {
+  //   socket?.emit('chat_message', message);
+  // }
+
+  void setupMessageListeners({
+    //required Function(dynamic data) onNewMessage,
+    required Function(dynamic data) onNotification,
+  }) {
+    //socket?.on('new_message', onNewMessage);
+    socket?.on('receiveNotification', onNotification);
+  }
+
+
+
+  void on(String event, Function(dynamic) callback) {
+    socket?.on(event, callback);
+  }
+
+  void off(String event) {
+    socket?.off(event);
+  }
 
   // =========================
   //  Cleanup

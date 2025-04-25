@@ -2,13 +2,17 @@
   import 'package:get/get.dart';
   import 'package:orbitwork/routes/app_page.dart';
   import 'package:orbitwork/routes/app_routes.dart';
+import 'package:orbitwork/socket/notification_service/notification_service.dart';
 
 import 'comms/global/global_binding.dart';
 import 'controllers/theme_controller.dart';
 
-  void main() {
+  void main() async {
     Get.put(ThemeController());
     GlobalBindings().dependencies();
+    WidgetsFlutterBinding.ensureInitialized();
+   // await NotificationService().init();
+    await Get.putAsync(() => NotificationService().init());
     runApp(const MyApp());
   }
 

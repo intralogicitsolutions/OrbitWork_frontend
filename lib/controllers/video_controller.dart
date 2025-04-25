@@ -6,17 +6,18 @@ import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoController extends GetxController{
-  late VideoPlayerController videoPlayerController;
-  RxBool isPlaying = true.obs;
-  RxBool isInitialized = false.obs;
-  RxString thumbnailPath = ''.obs;
+  late final VideoPlayerController videoPlayerController;
+  final RxBool isPlaying = true.obs;
+  final RxBool isInitialized = false.obs;
+  final RxString thumbnailPath = ''.obs;
 
   VideoController(String videoUrl) {
     videoPlayerController = VideoPlayerController.network(videoUrl)
       ..initialize().then((_) {
         isInitialized.value = true;
         // videoPlayerController.play();
-        // isPlaying.value = videoPlayerController.value.isPlaying;
+        // isPlaying.value = true;
+       // isPlaying.value = videoPlayerController.value.isPlaying;
         update();
         _generateThumbnail(videoUrl);
       });
@@ -52,7 +53,7 @@ class VideoController extends GetxController{
     } else {
       videoPlayerController.play();
     }
-    isPlaying.value = videoPlayerController.value.isPlaying;
+    //isPlaying.value = videoPlayerController.value.isPlaying;
   }
 
   @override

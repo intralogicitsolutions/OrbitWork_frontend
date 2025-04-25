@@ -11,7 +11,6 @@ class ChatPage extends StatefulWidget {
   final String name;
   final String? receiverId;
 
-  //final ChatController chatController = Get.put(ChatController());
   final ChatController chatController;
 
   ChatPage({Key? key, this.receiverId, required this.name,})
@@ -35,6 +34,7 @@ class _ChatPageState extends State<ChatPage> {
     // Emit user_online when entering the chat
     final socketService = Get.find<SocketService>();
     socketService.emitUserOnline(Global.userId??'');
+    chatController.initSocket(userId: Global.userId ?? '');
   }
 
   @override
@@ -55,8 +55,8 @@ class _ChatPageState extends State<ChatPage> {
           Expanded(
             child: Obx(() {
               return ListView.builder(
-                controller: _scrollController,
-                  reverse: true,
+               controller: _scrollController,
+                 reverse: true,
                   itemCount: widget.chatController.messages.length,
                   itemBuilder: (context, index) {
                     var message = widget.chatController.messages[index];
@@ -71,6 +71,13 @@ class _ChatPageState extends State<ChatPage> {
                         DateFormat('dd-MM-yyyy').format(
                                 widget.chatController.messages[index + 1].createdAt) !=
                             formattedDate;
+
+
+                    bool showSenderName = index == widget.chatController.messages.length - 1 ||
+                        widget.chatController.messages[index + 1].senderId != message.senderId ||
+                         DateFormat('dd-MM-yyyy').format(widget.chatController.messages[index + 1].createdAt) != formattedDate ||
+                        (widget.chatController.messages[index + 1].createdAt.isBefore(message.createdAt.add(Duration(minutes: -3))));                        // widget.chatController.messages[index + 1].createdAt.difference(message.createdAt).inMinutes >= 3;
+
                     return Column(
                       children: [
                         if (showDateHeader)
@@ -87,7 +94,7 @@ class _ChatPageState extends State<ChatPage> {
                               ),
                             ),
                           ),
-                        ChatBubble(message: message, isMe: isMe),
+                        ChatBubble(message: message, isMe: isMe,showSenderName: showSenderName, ),
                       ],
                     );
                   },

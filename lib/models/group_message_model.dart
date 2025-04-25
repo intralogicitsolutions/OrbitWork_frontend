@@ -1,4 +1,5 @@
 import 'package:orbitwork/models/upload_file_model.dart';
+import 'package:orbitwork/models/user_details_model.dart';
 
 class GroupMessageModel {
   final String? id;
@@ -8,15 +9,17 @@ class GroupMessageModel {
   final String? message;
   final List<String>? attachmentId;
   final List<UploadFile>? attachmentDetails;
+  final List<UserDetails>? senderDetails;
   final String? messageType;
   final double? latitude;
   final double? longitude;
-  final List<String>? deletedFor;
+  final GroupMessageModel? replyTo;
   String messageStatus;
   final DateTime createdAt;
   final DateTime updatedAt;
   final bool isDeleted;
   final int status;
+  final GroupMessageModel? replyToDetails;
 
   GroupMessageModel({
     this.id,
@@ -26,15 +29,17 @@ class GroupMessageModel {
     required this.roomId,
     this.attachmentId,
     this.attachmentDetails,
+    this.senderDetails,
     this.messageType,
     this.latitude,
     this.longitude,
-    this.deletedFor = const [],
+    this.replyTo,
     required this.messageStatus,
     required this.createdAt,
     required this.updatedAt,
     this.isDeleted = false,
     this.status = 1,
+    this.replyToDetails,
   });
 
   factory GroupMessageModel.fromJson(Map<String, dynamic> json) {
@@ -50,6 +55,10 @@ class GroupMessageModel {
       attachmentDetails: json["attechment_details"] is Map<String, dynamic>
           ? [UploadFile.fromJson(json["attechment_details"])]
           : (json["attechment_details"] as List<dynamic>?)?.map((item) => UploadFile.fromJson(item)).toList(),
+      senderDetails: (json['sender_details'] as List<dynamic>?)
+          ?.map((e) => UserDetails.fromJson(e))
+          .toList() ??
+          [],
       messageType: json["message_type"] ?? '',
       latitude: (json["latitude"] is String)
           ? double.tryParse(json["latitude"])
@@ -58,12 +67,17 @@ class GroupMessageModel {
           ? double.tryParse(json["longitude"])
           : json["longitude"] as double?,
       //deletedFor: (json['deletedFor'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
-      deletedFor: (json['deletedFor'] as List?)?.map((e) => e.toString()).toList() ?? [],
+      replyTo: json['reply_to'] is Map<String, dynamic>
+          ? GroupMessageModel.fromJson(json['reply_to'])
+          : null,
       messageStatus: json["message_status"] ?? 'sent',
       createdAt: json["created_at"] != null ? DateTime.tryParse(json["created_at"]) ?? DateTime.now() : DateTime.now(),
       updatedAt: json["updated_at"] != null ? DateTime.tryParse(json["updated_at"]) ?? DateTime.now() : DateTime.now(),
       isDeleted: json["is_deleted"] ?? false,
       status: json["status"] ?? 1,
+      replyToDetails: json['reply_to_details'] != null
+          ? GroupMessageModel.fromJson(json['reply_to_details'])
+          : null,
     );
   }
 
@@ -76,16 +90,18 @@ class GroupMessageModel {
       "attechment_id": attachmentId,
       // "attechment_details": attachmentDetails?.toJson(),
       "attechment_details": attachmentDetails?.map((e) => e.toJson()).toList(),
+      "sender_details": senderDetails?.map((e) => e.toJson()).toList(),
       "room_id": roomId,
       "message_type": messageType,
       "latitude": latitude,
       "longitude": longitude,
-      "deletedFor": deletedFor,
+      "reply_to": replyTo?.toJson(),
       "message_status": messageStatus,
       "created_at": createdAt.toIso8601String(),
       "updated_at": updatedAt.toIso8601String(),
       "is_deleted": isDeleted,
       "status": status,
+      'reply_to_details': replyToDetails?.toJson(),
     };
   }
 
@@ -101,15 +117,17 @@ class GroupMessageModel {
     String? message,
     List<String>? attachmentId,
     List<UploadFile>? attachmentDetails,
+    List<UserDetails>? senderDetails,
     String? messageType,
     double? latitude,
     double? longitude,
-    List<String>? deletedFor,
+    GroupMessageModel? replyTo,
     String? messageStatus,
     DateTime? createdAt,
     DateTime? updatedAt,
     bool? isDeleted,
     int? status,
+    GroupMessageModel? replyToDetails,
   }) {
     return GroupMessageModel(
       id: id ?? this.id,
@@ -119,15 +137,17 @@ class GroupMessageModel {
       message: message ?? this.message,
       attachmentId: attachmentId ?? this.attachmentId,
       attachmentDetails: attachmentDetails ?? this.attachmentDetails,
+      senderDetails: senderDetails ?? this.senderDetails,
       messageType: messageType ?? this.messageType,
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
-      deletedFor: deletedFor ?? this.deletedFor,
+      replyTo: replyTo ?? this.replyTo,
       messageStatus: messageStatus ?? this.messageStatus,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       isDeleted: isDeleted ?? this.isDeleted,
       status: status ?? this.status,
+      replyToDetails: replyToDetails ?? this.replyToDetails,
     );
   }
 

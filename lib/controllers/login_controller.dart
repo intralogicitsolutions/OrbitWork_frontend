@@ -44,6 +44,9 @@ class LoginController extends GetxController {
       final data = jsonDecode(response.body);
       if (data["success"] == 1) {
         Global.userId = data["body"]["_id"];
+        Global.userFirstname = data["body"]["firstname"];
+        Global.userLastname = data["body"]["lastname"];
+        Global.email = data["body"]["email"];
         print('userId ===> ${Global.userId}');
         String token = data["body"]["token"];
         await TokenStorage.saveToken(token);

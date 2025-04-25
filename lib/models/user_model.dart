@@ -40,21 +40,21 @@ class UserModel {
   final String? password;
   final int? role;
   final String? token;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final bool isDeleted;
-  final int status;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final bool? isDeleted;
+  final int? status;
 
   UserModel({
-    required this.id,
-    required this.firstname,
-    required this.lastname,
-    required this.email,
+    this.id,
+    this.firstname,
+    this.lastname,
+    this.email,
     this.password,
-    required this.role,
+    this.role,
     this.token,
-    required this.createdAt,
-    required this.updatedAt,
+    this.createdAt,
+    this.updatedAt,
     this.isDeleted = false,
     this.status = 1,
   });
@@ -62,13 +62,13 @@ class UserModel {
   /// ✅ Convert JSON to `UserModel` object
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json["_id"],
-      firstname: json["firstname"],
-      lastname: json["lastname"],
-      email: json["email"],
-      password: json["password"],
+      id: json["_id"]?.toString(),
+      firstname: json["firstname"]?.toString(),
+      lastname: json["lastname"]?.toString(),
+      email: json["email"]?.toString(),
+      password: json["password"]?.toString(),
       role: json["role"],
-      token: json["token"],
+      token: json["token"]?.toString(),
       createdAt: DateTime.parse(json["created_at"]),
       updatedAt: DateTime.parse(json["updated_at"]),
       isDeleted: json["is_deleted"] ?? false,
@@ -86,8 +86,8 @@ class UserModel {
       "password": password,
       "role": role,
       "token": token,
-      "created_at": createdAt.toIso8601String(),
-      "updated_at": updatedAt.toIso8601String(),
+      "created_at": createdAt?.toIso8601String(),
+      "updated_at": updatedAt?.toIso8601String(),
       "is_deleted": isDeleted,
       "status": status,
     };

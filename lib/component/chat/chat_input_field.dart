@@ -1,207 +1,17 @@
-// import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-// import 'package:file_picker/file_picker.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_sound/flutter_sound.dart';
-// import 'package:flutter_sound/public/flutter_sound_recorder.dart';
-// import 'package:get/get.dart';
-// import 'package:image_picker/image_picker.dart';
-// import 'package:location/location.dart';
-// import '../../controllers/chat_contoller.dart';
-//
-// class ChatInputField extends StatelessWidget {
-//   final TextEditingController _controller = TextEditingController();
-//   final ChatsController chatController = Get.find<ChatsController>();
-//   final ImagePicker _picker = ImagePicker();
-//   final FlutterSoundRecorder _audioRecorder = FlutterSoundRecorder();
-//   final Location _location = Location();
-//   bool _isRecording = false;
-//   String _recordedAudioPath = '';
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: const EdgeInsets.all(8.0),
-//       child: Column(
-//         children: [
-//           if (_isRecording) ...[
-//             // Audio recording UI
-//             Row(
-//               children: [
-//                 IconButton(
-//                   icon: Icon(Icons.stop, color: Colors.red),
-//                   onPressed: () async {
-//                     await _stopRecording();
-//                     chatController.sendMessage(_recordedAudioPath);
-//                   },
-//                 ),
-//                 Text('Recording...'),
-//               ],
-//             ),
-//           ],
-//           Row(
-//             children: [
-//               Expanded(
-//                 child: TextField(
-//                   controller: _controller,
-//                   onChanged: (text) {
-//                     chatController.updateMessageText(text);
-//                   },
-//                   decoration: InputDecoration(
-//                     hintText: "Type a message...",
-//                     border: OutlineInputBorder(
-//                       borderRadius: BorderRadius.circular(25),
-//                     ),
-//                     suffixIcon:  Row(
-//                       mainAxisSize: MainAxisSize.min,
-//                       children: [
-//                         IconButton(
-//                           icon: Icon(Icons.attach_file),
-//                           onPressed: () async {
-//                             _showFileOptionsBottomSheet(context);
-//                           },
-//                         ),
-//                         IconButton(
-//                           icon: Icon(Icons.camera_alt),
-//                           onPressed: () async {
-//                             // Handle camera button
-//                             final XFile? image = await _picker.pickImage(source: ImageSource.camera);
-//                             if (image != null) {
-//                               chatController.sendImage(image.path);
-//                             }
-//                           },
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//               Obx(() {
-//                 return IconButton(
-//                   icon: Icon(
-//                     chatController.messageText.value.isNotEmpty || chatController.selectedFilePath.value.isNotEmpty
-//                         ? Icons.send
-//                         : Icons.mic,
-//                     color: chatController.messageText.value.isNotEmpty || chatController.selectedFilePath.value.isNotEmpty
-//                         ? Colors.green
-//                         : Colors.blue,
-//                   ),
-//                   onPressed: () {
-//                     FocusScope.of(context).unfocus();
-//                     if (chatController.messageText.value.isNotEmpty) {
-//                       chatController.sendMessage(chatController.messageText.value);
-//                       _controller.clear();
-//                       chatController.messageText.value = "";
-//                     } else if (chatController.selectedFilePath.value.isNotEmpty) {
-//                       chatController.sendFile(chatController.selectedFilePath.value);
-//                     } else {
-//                       // Handle mic recording if needed
-//                     }
-//                   },
-//                 );
-//               }),
-//             ],
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   Future<void> _startRecording() async {
-//     await _audioRecorder.startRecorder(
-//       toFile: 'audio.wav',
-//       codec: Codec.pcm16WAV,
-//     );
-//     _isRecording = true;
-//   }
-//
-//   Future<void> _stopRecording() async {
-//     final String? path = await _audioRecorder.stopRecorder();
-//     _recordedAudioPath = path!;
-//     _isRecording = false;
-//   }
-//
-//   void _showFileOptionsBottomSheet(BuildContext context) {
-//     showModalBottomSheet(
-//       context: context,
-//       builder: (context) => Padding(
-//         padding: const EdgeInsets.all(8.0),
-//         child: Wrap(
-//           children: [
-//             ListTile(
-//               leading: Icon(Icons.photo),
-//               title: Text("Gallery"),
-//               onTap: () async {
-//                 final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-//                 if (image != null) {
-//                   chatController.sendImage(image.path);
-//                   chatController.selectedFilePath.value = image.path;
-//                 }
-//                 Navigator.pop(context);
-//               },
-//             ),
-//             ListTile(
-//               leading: Icon(Icons.camera),
-//               title: Text("Camera"),
-//               onTap: () async {
-//                 final XFile? image = await _picker.pickImage(source: ImageSource.camera);
-//                 if (image != null) {
-//                   chatController.sendImage(image.path);
-//                   chatController.selectedFilePath.value = image.path;
-//                 }
-//                 Navigator.pop(context);
-//               },
-//             ),
-//             ListTile(
-//               leading: Icon(Icons.location_on),
-//               title: Text("Location"),
-//               onTap: () async {
-//                 LocationData location = await _location.getLocation();
-//                 chatController.sendLocation(location.latitude!, location.longitude!);
-//                 chatController.selectedFilePath.value = ''; // Reset file path
-//                 Navigator.pop(context);
-//               },
-//             ),
-//             ListTile(
-//               leading: Icon(Icons.insert_drive_file),
-//               title: Text("Document"),
-//               onTap: () async {
-//                 FilePickerResult? result = await FilePicker.platform.pickFiles();
-//                 if (result != null) {
-//                   String filePath = result.files.single.path!;
-//                   chatController.sendFile(filePath);
-//                   chatController.selectedFilePath.value = filePath;
-//                 }
-//                 Navigator.pop(context);
-//               },
-//             ),
-//             ListTile(
-//               leading: Icon(Icons.mic),
-//               title: Text("Audio"),
-//               onTap: () async {
-//                 // Handle audio selection logic if needed
-//                 Navigator.pop(context);
-//               },
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
-
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:orbitwork/component/chat/audio_player.dart';
+import 'package:orbitwork/component/chat/video_bubble.dart';
+import 'package:orbitwork/models/message_model.dart';
 import 'package:orbitwork/models/upload_file_model.dart';
 
 import '../../comms/enum/message.dart';
 import '../../controllers/chat_contoller.dart';
+import '../../models/group_message_model.dart';
 
 class ChatInputField extends StatefulWidget {
   final String? receiverId;
@@ -216,6 +26,8 @@ class ChatInputField extends StatefulWidget {
 class _ChatInputFieldState extends State<ChatInputField> {
   final ChatController chatController = Get.find<ChatController>();
   final TextEditingController textController = TextEditingController();
+  MessageModel? message;
+  GroupMessageModel? groupMessage;
 
   @override
   void dispose() {
@@ -234,36 +46,103 @@ class _ChatInputFieldState extends State<ChatInputField> {
       child: Column(
         children: [
           Obx(() {
-            final reply = chatController.replyMessage.value;
-            return reply != null
+            final isGroup = widget.roomId != null;
+            final dynamic msg = isGroup
+                ? chatController.replyGroupMessage.value
+                : chatController.replyMessage.value;
+            // final replyMessage = chatController.replyMessage.value;
+            // final replyGroupMessage = chatController.replyGroupMessage.value;
+            // final reply = widget.receiverId != null
+            //     ? chatController.replyMessage.value
+            //     : chatController.replyGroupMessage.value;
+            return (msg != null)
                 ? Container(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
                       children: [
-                        Text("Replying to", style: TextStyle(fontWeight: FontWeight.bold)),
-                        Text(reply.message!, maxLines: 1, overflow: TextOverflow.ellipsis),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Replying to",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              if (msg?.messageType == 'text')
+                                Text("${msg?.message}",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis),
+                              if (msg?.messageType == 'image')
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(6),
+                                  child: Image.network(
+                                    msg?.attachmentDetails?.first.url ?? '',
+                                    height: 50,
+                                    width: 50,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              if (msg?.messageType == 'document')
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.file_copy_rounded,
+                                      color: Colors.grey,
+                                      size: 20,
+                                    ),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Text(msg?.attachmentDetails?.first.name ??
+                                        '')
+                                  ],
+                                ),
+                              if (msg?.messageType == 'video')
+                                VideoBubble(
+                                  videoUrl:
+                                      msg?.attachmentDetails?.first.url ?? '',
+                                  width: 50,
+                                  height: 50,
+                                  iconSize: 20,
+                                ),
+                              if (msg?.messageType == 'audio')
+                                SizedBox(
+                                    height: 50,
+                                    width: 50,
+                                    child: AudioPlayerWidget(
+                                        audioUrl:
+                                            msg?.attachmentDetails?.first.url ??
+                                                '')),
+                              if (msg?.messageType == 'location')
+                                SizedBox(
+                                  height: 50,
+                                  width: 50,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.network(
+                                      "https://static-maps.yandex.ru/1.x/?lang=en-US&ll=${msg?.latitude},${msg?.longitude}&z=15&l=map&size=150,150",
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                        IconButton(
+                            icon: Icon(Icons.close),
+                            onPressed: () {
+                              widget.roomId != null
+                                  ? chatController.clearReplyToGroupMessage()
+                                  : chatController.clearReplyToMessage();
+                            }),
                       ],
                     ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.close),
-                    onPressed: () => chatController.clearReplyTo(),
-                  ),
-                ],
-              ),
-            )
+                  )
                 : SizedBox.shrink();
           }),
-
-
           Row(
             children: [
               IconButton(
@@ -282,16 +161,20 @@ class _ChatInputFieldState extends State<ChatInputField> {
               ),
               IconButton(
                 icon: Icon(Icons.send, color: Colors.green),
-               onPressed: () {
-                 if (textController.text.isNotEmpty) {
-                   if (widget.receiverId != null) {
-                     chatController.sendMessage(widget.receiverId!, MessageType.text);
-                   } else if (widget.roomId != null) {
-                     chatController.sendGroupMessage(widget.roomId!, MessageType.text);
-                   }
-                   textController.clear();
-                 }
-               },
+                onPressed: () {
+                  if (textController.text.isNotEmpty) {
+                    if (widget.receiverId != null) {
+                      chatController.sendMessage(
+                          widget.receiverId!, MessageType.text);
+                      chatController.fetchMessage(widget.receiverId!);
+                    } else if (widget.roomId != null) {
+                      chatController.sendGroupMessage(
+                          widget.roomId!, MessageType.text);
+                      chatController.fetchGroupMessages(widget.roomId!);
+                    }
+                    textController.clear();
+                  }
+                },
               ),
             ],
           ),
@@ -314,7 +197,15 @@ class _ChatInputFieldState extends State<ChatInputField> {
                 File? file = await _pickImage(ImageSource.camera);
                 if (file != null) {
                   print('file ==> ${file}');
-                  chatController.uploadAndSendFile(widget.receiverId!,file: [file]);
+                  if (widget.receiverId != null) {
+                    chatController
+                        .uploadAndSendFile(widget.receiverId!, file: [file]);
+                    chatController.fetchMessage(widget.receiverId!);
+                  } else if (widget.roomId != null) {
+                    chatController
+                        .uploadAndSendGroupFile(widget.roomId!, files: [file]);
+                    chatController.fetchGroupMessages(widget.roomId);
+                  }
                 }
               },
             ),
@@ -326,7 +217,13 @@ class _ChatInputFieldState extends State<ChatInputField> {
                 List<File> file = await _pickMultipleImages();
                 if (file.isNotEmpty) {
                   print('gallery image path ==> ${file}');
-                  chatController.uploadAndSendFile(widget.receiverId!, file: file);
+                  if(widget.receiverId != null){
+                    chatController.uploadAndSendFile(widget.receiverId!, file: file);
+                    chatController.fetchMessage(widget.receiverId);
+                  } else if(widget.roomId != null){
+                    chatController.uploadAndSendGroupFile(widget.roomId!, files: file);
+                    chatController.fetchGroupMessages(widget.roomId);
+                  }
                 }
               },
             ),
@@ -337,7 +234,15 @@ class _ChatInputFieldState extends State<ChatInputField> {
                 Get.back();
                 List<File> file = await _pickFile(FileType.audio);
                 if (file.isNotEmpty) {
-                  chatController.uploadAndSendFile(widget.receiverId!, file: file);
+                  if(widget.receiverId != null){
+                    chatController.uploadAndSendFile(widget.receiverId!,
+                        file: file);
+                    chatController.fetchMessage(widget.receiverId);
+                  } else if(widget.roomId != null){
+                    chatController.uploadAndSendGroupFile(widget.roomId!, files: file );
+                    chatController.fetchGroupMessages(widget.roomId);
+                  }
+
                 }
               },
             ),
@@ -348,7 +253,15 @@ class _ChatInputFieldState extends State<ChatInputField> {
                 Get.back();
                 List<File> file = await _pickFile(FileType.video);
                 if (file.isNotEmpty) {
-                  chatController.uploadAndSendFile(widget.receiverId!, file: file);
+                  if(widget.receiverId != null){
+                    chatController.uploadAndSendFile(widget.receiverId!,
+                        file: file);
+                    chatController.fetchMessage(widget.receiverId);
+                  }else if(widget.roomId != null){
+                    chatController.uploadAndSendGroupFile(widget.roomId!, files: file);
+                    chatController.fetchGroupMessages(widget.roomId);
+                  }
+
                 }
               },
             ),
@@ -360,9 +273,13 @@ class _ChatInputFieldState extends State<ChatInputField> {
                 List<File> file = await _pickFile(FileType.any);
                 if (file.isNotEmpty) {
                   if (widget.receiverId != null) {
-                    chatController.uploadAndSendFile(widget.receiverId!, file: file);
+                    chatController.uploadAndSendFile(widget.receiverId!,
+                        file: file);
+                    chatController.fetchMessage(widget.receiverId!);
                   } else if (widget.roomId != null) {
-                    chatController.uploadAndSendGroupFile(widget.roomId!, file);
+                    chatController.uploadAndSendGroupFile(widget.roomId!,
+                        files: file);
+                    chatController.fetchGroupMessages(widget.roomId!);
                   }
                 }
               },
@@ -371,15 +288,24 @@ class _ChatInputFieldState extends State<ChatInputField> {
               leading: const Icon(Icons.location_on),
               title: const Text('Location'),
               onTap: () async {
-                LocationPermission permission = await Geolocator.requestPermission();
-                if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Location permission denied")));
+                LocationPermission permission =
+                    await Geolocator.requestPermission();
+                if (permission == LocationPermission.denied ||
+                    permission == LocationPermission.deniedForever) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Location permission denied")));
                   return;
                 }
                 Position position = await Geolocator.getCurrentPosition(
                     desiredAccuracy: LocationAccuracy.high);
+                if(widget.receiverId != null){
+                  chatController.sendLocation(position, widget.receiverId!);
+                  chatController.fetchMessage(widget.receiverId);
+                }else if(widget.roomId != null){
+                  chatController.sendGroupLocation(position, widget.roomId!);
+                  chatController.fetchGroupMessages(widget.roomId);
+                }
 
-                chatController.sendLocation(position, widget.receiverId!);
               },
             ),
           ],
@@ -395,7 +321,9 @@ class _ChatInputFieldState extends State<ChatInputField> {
 
   Future<List<File>> _pickMultipleImages() async {
     final List<XFile>? pickedFiles = await ImagePicker().pickMultiImage();
-    return pickedFiles != null ? pickedFiles.map((xFile) => File(xFile.path)).toList() : [];
+    return pickedFiles != null
+        ? pickedFiles.map((xFile) => File(xFile.path)).toList()
+        : [];
   }
 
   Future<List<File>> _pickFile(FileType fileType) async {
@@ -403,6 +331,8 @@ class _ChatInputFieldState extends State<ChatInputField> {
       type: fileType,
       allowMultiple: true,
     );
-    return result != null ? result.files.map((file) => File(file.path!)).toList() : [];
+    return result != null
+        ? result.files.map((file) => File(file.path!)).toList()
+        : [];
   }
 }
