@@ -41,9 +41,11 @@ class MessageModel {
    String messageStatus;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final DateTime? dateTime;
   final bool isDeleted;
   final int status;
   final MessageModel? replyToDetails;
+  final String? localFilePath;
 
   MessageModel({
     this.messageId,
@@ -62,9 +64,11 @@ class MessageModel {
     required this.messageStatus,
     required dynamic createdAt,
     required this.updatedAt,
+    this.dateTime,
     this.isDeleted = false,
     this.status = 1,
     this.replyToDetails,
+    this.localFilePath,
   }) : createdAt = createdAt is int
       ? DateTime.fromMillisecondsSinceEpoch(createdAt)
       : createdAt is String

@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:orbitwork/component/chat/audio_player.dart';
 import 'package:orbitwork/component/chat/video_bubble.dart';
 import 'package:orbitwork/models/message_model.dart';
 import 'package:orbitwork/models/upload_file_model.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../comms/enum/message.dart';
 import '../../controllers/chat_contoller.dart';
@@ -25,13 +27,13 @@ class ChatInputField extends StatefulWidget {
 
 class _ChatInputFieldState extends State<ChatInputField> {
   final ChatController chatController = Get.find<ChatController>();
-  final TextEditingController textController = TextEditingController();
+ // final TextEditingController textController = TextEditingController();
   MessageModel? message;
   GroupMessageModel? groupMessage;
 
   @override
   void dispose() {
-    textController.dispose();
+    chatController.textController.dispose();
     super.dispose();
   }
 
@@ -143,6 +145,57 @@ class _ChatInputFieldState extends State<ChatInputField> {
                   )
                 : SizedBox.shrink();
           }),
+          Obx(() {
+            final joinUrl = chatController.messageText.value;
+            final isZoomLink = joinUrl.contains("zoom.us");
+
+            if (isZoomLink) {
+              final meetingTime = chatController.selectedMeetingTime.value;
+
+              return Container(
+                padding: EdgeInsets.all(12),
+                margin: EdgeInsets.only(bottom: 6),
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade50,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.blue),
+                ),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/icon/zoom.png',
+                      height: 32,
+                      width: 32,
+                    ),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Created a Zoom Meeting", style: TextStyle(fontWeight: FontWeight.bold)),
+                          if (meetingTime != null)
+                            Text(
+                              DateFormat('MMM d, yyyy – hh:mm a').format(meetingTime),
+                              style: TextStyle(color: Colors.grey[600]),
+                            ),
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: () {
+                        chatController.messageText.value = '';
+                        chatController.textController.clear();
+                        chatController.selectedMeetingTime.value = null;
+                      },
+                    )
+                  ],
+                ),
+              );
+            }
+
+            return SizedBox.shrink();
+          }),
           Row(
             children: [
               IconButton(
@@ -151,7 +204,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
               ),
               Expanded(
                 child: TextField(
-                  controller: textController,
+                  controller: chatController.textController,
                   onChanged: (text) => chatController.messageText.value = text,
                   decoration: InputDecoration(
                     hintText: "Type a message...",
@@ -162,17 +215,17 @@ class _ChatInputFieldState extends State<ChatInputField> {
               IconButton(
                 icon: Icon(Icons.send, color: Colors.green),
                 onPressed: () {
-                  if (textController.text.isNotEmpty) {
+                  if (chatController.textController.text.isNotEmpty) {
                     if (widget.receiverId != null) {
                       chatController.sendMessage(
-                          widget.receiverId!, MessageType.text);
+                          widget.receiverId!, MessageType.text,);
                       chatController.fetchMessage(widget.receiverId!);
                     } else if (widget.roomId != null) {
                       chatController.sendGroupMessage(
                           widget.roomId!, MessageType.text);
                       chatController.fetchGroupMessages(widget.roomId!);
                     }
-                    textController.clear();
+                    chatController.textController.clear();
                   }
                 },
               ),
@@ -198,12 +251,10 @@ class _ChatInputFieldState extends State<ChatInputField> {
                 if (file != null) {
                   print('file ==> ${file}');
                   if (widget.receiverId != null) {
-                    chatController
-                        .uploadAndSendFile(widget.receiverId!, file: [file]);
+                    chatController.uploadAndSendFile(widget.receiverId!, file: [file]);
                     chatController.fetchMessage(widget.receiverId!);
                   } else if (widget.roomId != null) {
-                    chatController
-                        .uploadAndSendGroupFile(widget.roomId!, files: [file]);
+                    chatController.uploadAndSendGroupFile(widget.roomId!, files: [file]);
                     chatController.fetchGroupMessages(widget.roomId);
                   }
                 }
@@ -314,10 +365,41 @@ class _ChatInputFieldState extends State<ChatInputField> {
     );
   }
 
+  // Future<File?> _pickImage(ImageSource source) async {
+  //   final pickedFile = await ImagePicker().pickImage(source: source);
+  //   return pickedFile != null ? File(pickedFile.path) : null;
+  // }
   Future<File?> _pickImage(ImageSource source) async {
-    final pickedFile = await ImagePicker().pickImage(source: source);
-    return pickedFile != null ? File(pickedFile.path) : null;
+    try {
+      // Ask for permissions (especially for Android 13+)
+      final permissionStatus = await Permission.camera.request();
+      if (!permissionStatus.isGranted) {
+        print('Camera permission denied.');
+        return null;
+      }
+
+      final pickedFile = await ImagePicker().pickImage(
+        source: source,
+        maxWidth: 1080,
+        maxHeight: 1920,
+        imageQuality: 75, // Compress to avoid crash on low-end devices
+      );
+
+      if (pickedFile == null) {
+        print('No image selected (user canceled or error).');
+        return null;
+      }
+
+      final file = File(pickedFile.path);
+      print('Picked image path: ${file.path}');
+      return file;
+    } catch (e, stack) {
+      print('Exception while picking image: $e');
+      print('StackTrace: $stack');
+      return null;
+    }
   }
+
 
   Future<List<File>> _pickMultipleImages() async {
     final List<XFile>? pickedFiles = await ImagePicker().pickMultiImage();

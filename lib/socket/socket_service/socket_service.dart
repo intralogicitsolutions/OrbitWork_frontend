@@ -46,7 +46,7 @@ class SocketService extends GetxService {
   // }
 
   Future<void> connectSocket(String userId) async {
-    socket = IO.io('https://decc-2405-f600-8-51d5-85ee-796c-38d0-d858.ngrok-free.app', <String, dynamic>{
+    socket = IO.io('https://2d93-2405-f600-8-565f-dd72-597b-7d87-d4cb.ngrok-free.app', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });
@@ -225,6 +225,7 @@ class SocketService extends GetxService {
 
   void listenToGroupMessages(Function(Map<String, dynamic>) onMessageReceived) {
     socket?.on('chat_message', (data) {
+      print('📨 Received direct group message: $data');
       if (data is Map<String, dynamic>) {
         onMessageReceived(data);
       }
@@ -300,9 +301,9 @@ class SocketService extends GetxService {
   // =========================
 
   /// Disconnects from the socket server.
-  void disconnect() {
-    socket?.emit('user_left_message_page', Global.userId);
-    socket?.disconnect();
-    socket?.destroy();
-  }
+  // void disconnect() {
+  //   socket?.emit('user_left_message_page', Global.userId);
+  //   socket?.disconnect();
+  //   socket?.destroy();
+  // }
 }

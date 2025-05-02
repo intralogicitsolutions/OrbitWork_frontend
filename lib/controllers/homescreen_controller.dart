@@ -13,6 +13,7 @@ class HomeScreenController extends GetxController {
   Future<void> _requestPermissions() async {
     // Request camera, gallery, and notification permissions
     await _requestCameraPermission();
+    await _requestStoragePermission();
     await _requestGalleryPermission();
     await _requestNotificationPermission();
   }
@@ -21,6 +22,13 @@ class HomeScreenController extends GetxController {
     final cameraStatus = await Permission.camera.status;
     if (!cameraStatus.isGranted) {
       await Permission.camera.request();
+    }
+  }
+
+  Future<void> _requestStoragePermission() async {
+    final storageStatus = await Permission.storage.status;
+    if(!storageStatus.isGranted) {
+      await Permission.storage.request();
     }
   }
 

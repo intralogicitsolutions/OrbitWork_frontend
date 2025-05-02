@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import '../comms/zoom_meeting_creation.dart';
 import '../component/chat/chat_input_field.dart';
 import '../component/chat/chat_message_bubble.dart';
 import '../controllers/chat_contoller.dart';
@@ -37,6 +38,41 @@ class _GroupChatPageState extends State<GroupChatPage> {
       appBar: AppBar(
         title: Text(widget.name),
         actions: [
+          PopupMenuButton<String>(
+            color: Get.theme.scaffoldBackgroundColor,
+            onSelected: (value) {
+              if (value == 'edit') {
+                print("Edit clicked");
+              }
+            },
+            icon: Icon(Icons.call),
+            itemBuilder: (BuildContext context) {
+              return <PopupMenuEntry<String>>[
+                PopupMenuItem<String>(
+                  value: 'edit',
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'assets/icon/zoom.png',
+                        height: 30,
+                        width: 30,
+                      ),
+                      SizedBox(width: 10,),
+                      Text('Zoom Meeting')
+                    ],
+                  ),
+                  onTap: () async{
+                    await Future.delayed(Duration(milliseconds: 200)); // fixes onTap delay issue
+                    //_handleZoomMeetingCreation();
+                    ZoomMeetingHelper.handleZoomMeetingCreation(
+                      context: context,
+                      chatController: chatController,
+                    );
+                  },
+                ),
+              ];
+            },
+          ),
           PopupMenuButton<String>(
             color: Get.theme.scaffoldBackgroundColor,
             onSelected: (value) {

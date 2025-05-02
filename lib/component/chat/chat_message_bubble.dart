@@ -54,6 +54,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:orbitwork/component/chat/video_bubble.dart';
+import 'package:orbitwork/controllers/download_controller.dart';
 import 'package:orbitwork/models/group_message_model.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
@@ -63,8 +64,11 @@ import '../../comms/global/string_utils.dart';
 import '../../controllers/chat_contoller.dart';
 import '../../global/global.dart';
 import '../../models/message_model.dart';
+import '../../models/upload_file_model.dart';
 import 'audio_player.dart';
+import 'downloadable_file_widget.dart';
 import 'full_screen_image.dart';
+import 'package:orbitwork/extensions/upload_file_utils.dart';
 
 ///use chat_bubble library  for chat ui
 class ChatBubble extends StatefulWidget {
@@ -83,6 +87,7 @@ class _ChatBubbleState extends State<ChatBubble> {
   bool _seenEmitted = false;
 
   final ChatController controller = Get.put(ChatController());
+  final DownloadController downloadController = Get.put(DownloadController());
   final textFocusNode = FocusNode();
 
   @override
@@ -125,6 +130,8 @@ class _ChatBubbleState extends State<ChatBubble> {
     //final sender = msg.senderDetails?.first;
     final sender = (msg.senderDetails != null && msg.senderDetails!.isNotEmpty)
         ? msg.senderDetails!.first
+        // : (msg.receiverDetails != null && msg.receiverDetails!.isNotEmpty)
+        // ? msg.receiverDetails!.first
         : null;
     final replyTo = msg.replyToDetails;
 
@@ -373,79 +380,135 @@ class _ChatBubbleState extends State<ChatBubble> {
                                             ],
 
                                             // File Attachment
+                                            // if (messageType == "document" && attachmentDetails != null) ...[
+                                            //   for (var file in attachmentDetails)
+                                            //     if (file.name != null && file.url != null)
+                                            //       DownloadableFileWidget(
+                                            //         fileUrl: file.url!,
+                                            //         fileName: file.name!,
+                                            //         fileSize: file.size,
+                                            //         isSender: widget.isMe,
+                                            //       ),
+                                            // ],
+
                                             if (messageType == "document" && attachmentDetails != null) ...[
-                                              for (var file in attachmentDetails)
-                                                if (file.name != null && file.url != null)
-                                                  GestureDetector(
-                                                    onTap: () async {
-                                                      try {
-                                                        final url = file.url;
-                                                        //final originalName = document["originalName"];
-                                                        final originalName = file.name;
-
-                                                        if (url != null && originalName != null) {
-                                                          final directory = await getTemporaryDirectory();
-                                                          final filePath = "${directory.path}/$originalName";
-
-                                                          final file = File(filePath);
-                                                          if (!file.existsSync()) {
-                                                            final response = await http.get(Uri.parse(url));
-                                                            if (response.statusCode == 200) {
-                                                              await file.writeAsBytes(response.bodyBytes);
-                                                            } else {
-                                                              throw Exception("Failed to download file");
-                                                            }
-                                                          }
-
-                                                          final result = await OpenFilex.open(filePath);
-                                                          if (result.type != ResultType.done) {
-                                                            print('error opening file : ${result.message}');
-                                                            throw Exception(
-                                                                "Error opening file: ${result.message}");
-                                                          }
-                                                        } else {
-                                                          throw Exception("Invalid file data");
+                                              // for (var file in attachmentDetails)
+                                              //   if (file.name != null && file.url != null)
+                                                  ...attachmentDetails.map<Widget>((dynamic file) {
+                                                      if (file is! UploadFile || file.name == null || file.url == null) return const SizedBox.shrink();
+                                                      return FutureBuilder<bool>(
+                                                          future: file.isFileDownloadedLocally(),
+                                                        builder: (context, snapshot) {
+                                                          bool downloaded = snapshot.data ?? false;
+                                                          return GestureDetector(
+                                                            onTap: () async {
+                                                              try {
+                                                                if (!downloaded) {
+                                                                  final path = await ChatController().downloadFileToLocal(file);
+                                                                  if (path != null) {
+                                                                    await OpenFilex.open(path);
+                                                                  }
+                                                                } else {
+                                                                  final dir = await getApplicationDocumentsDirectory();
+                                                                  final path = '${dir.path}/${file.name}';
+                                                                  await OpenFilex.open(path);
+                                                                }
+                                                              } catch (e) {
+                                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                                  SnackBar(content: Text("Error: ${e.toString()}")),
+                                                                );
+                                                              }
+                                                            },
+                                                            // onTap: () async {
+                                                            //   try {
+                                                            //     final url = file.url;
+                                                            //     //final originalName = document["originalName"];
+                                                            //     final originalName = file.name;
+                                                            //
+                                                            //     if (url != null && originalName != null) {
+                                                            //       final directory = await getTemporaryDirectory();
+                                                            //       final filePath = "${directory.path}/$originalName";
+                                                            //
+                                                            //       final file = File(filePath);
+                                                            //       if (!file.existsSync()) {
+                                                            //         final response = await http.get(Uri.parse(url));
+                                                            //         if (response.statusCode == 200) {
+                                                            //           await file.writeAsBytes(response.bodyBytes);
+                                                            //         } else {
+                                                            //           throw Exception("Failed to download file");
+                                                            //         }
+                                                            //       }
+                                                            //
+                                                            //       final result = await OpenFilex.open(filePath);
+                                                            //       if (result.type != ResultType.done) {
+                                                            //         print('error opening file : ${result.message}');
+                                                            //         throw Exception(
+                                                            //             "Error opening file: ${result.message}");
+                                                            //       }
+                                                            //     } else {
+                                                            //       throw Exception("Invalid file data");
+                                                            //     }
+                                                            //   } catch (e) {
+                                                            //     print('error : ${e.toString()}');
+                                                            //     ScaffoldMessenger.of(context).showSnackBar(
+                                                            //       SnackBar(content: Text("Error: ${e.toString()}")),
+                                                            //     );
+                                                            //   }
+                                                            // },
+                                                            child: Row(
+                                                              children: [
+                                                                Stack(
+                                                                  alignment: Alignment.center,
+                                                                  children: [
+                                                                    Container(
+                                                                        padding: const EdgeInsets.all(8),
+                                                                        decoration: BoxDecoration(
+                                                                          color: Colors.grey.shade200,
+                                                                          shape: BoxShape.circle,
+                                                                        ),
+                                                                        child: const Icon(Icons.insert_drive_file, color: Colors.grey, size: 18,)),
+                                                                    Obx(() {
+                                                                      final progress = downloadController.getProgress(file.name!);
+                                                                      final isDownloading = downloadController.isDownloading(file.name!);
+                                                                      return isDownloading
+                                                                          ? Text(
+                                                                        '${(progress * 100).toStringAsFixed(0)}%',
+                                                                        style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                                                                      )
+                                                                          : (!downloaded
+                                                                          ? const Icon(Icons.download, size: 16, color: Colors.black87)
+                                                                          : const SizedBox());
+                                                                    }),
+                                                                  ],
+                                                                ),
+                                                                SizedBox(width: 5,),
+                                                                const SizedBox(width: 5),
+                                                                Column(
+                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                  children: [
+                                                                    Text(
+                                                                      file.name!,
+                                                                      // basename(message.attachmentId!),
+                                                                      style:  TextStyle(
+                                                                        fontSize: 14,
+                                                                          fontWeight: FontWeight.w500,
+                                                                          //color: Colors.blue,
+                                                                          overflow: TextOverflow.ellipsis),
+                                                                    ),
+                                                                    Text(StringUtils.getFileSizeString(bytes: file.size!),
+                                                                    style: TextStyle(
+                                                                      fontSize: 12,
+                                                                      color: Colors.grey
+                                                                    ),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          );
                                                         }
-                                                      } catch (e) {
-                                                        print('error : ${e.toString()}');
-                                                        ScaffoldMessenger.of(context).showSnackBar(
-                                                          SnackBar(content: Text("Error: ${e.toString()}")),
-                                                        );
-                                                      }
-                                                    },
-                                                    child: Row(
-                                                      children: [
-                                                        Container(
-                                                            padding: const EdgeInsets.all(8),
-                                                            decoration: BoxDecoration(
-                                                              color: Colors.grey.shade200,
-                                                              shape: BoxShape.circle,
-                                                            ),
-                                                            child: const Icon(Icons.file_copy_rounded, color: Colors.grey, size: 18,)),
-                                                        SizedBox(width: 5,),
-                                                        const SizedBox(width: 5),
-                                                        Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                          children: [
-                                                            Text(
-                                                              file.name!,
-                                                              // basename(message.attachmentId!),
-                                                              style:  TextStyle(
-                                                                fontSize: 14,
-                                                                  fontWeight: FontWeight.w500,
-                                                                  //color: Colors.blue,
-                                                                  overflow: TextOverflow.ellipsis),
-                                                            ),
-                                                            Text(StringUtils.getFileSizeString(bytes: file.size),
-                                                            style: TextStyle(
-                                                              fontSize: 12,
-                                                              color: Colors.grey
-                                                            ),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
+                                                      );
+                                                    }
                                                   ),
                                               const SizedBox(height: 5),
                                             ],
@@ -480,7 +543,50 @@ class _ChatBubbleState extends State<ChatBubble> {
                                             ],
                                             // Text Message
                                             if (text != null && text.isNotEmpty) ...[
-                                              Text(
+                                              text.contains("zoom.us") ?
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  final url = Uri.parse(text);
+                                                  if (await canLaunchUrl(url)) {
+                                                    await launchUrl(url, mode: LaunchMode.externalApplication);
+                                                  } else {
+                                                    Get.snackbar('Error', 'Could not open Zoom link');
+                                                  }
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets.all(12),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.blue.shade50,
+                                                    borderRadius: BorderRadius.circular(12),
+                                                    border: Border.all(color: Colors.blue),
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      Image.asset(
+                                                        'assets/icon/zoom.png',
+                                                        height: 32,
+                                                        width: 32,
+                                                      ),
+                                                      SizedBox(width: 12),
+                                                      Expanded(
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Text("Zoom Meeting", style: TextStyle(fontWeight: FontWeight.bold)),
+                                                            // You must extract datetime from message model (see step 2)
+                                                           if (localTime != null)
+                                                              Text(
+                                                                DateFormat('MMM d, yyyy – hh:mm a').format(localTime),
+                                                                style: TextStyle(color: Colors.grey[600]),
+                                                              ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              )
+                                              : Text(
                                                 text,
                                                 style: TextStyle(
                                                     fontSize: 14,
@@ -491,6 +597,26 @@ class _ChatBubbleState extends State<ChatBubble> {
                                                 ),
                                                 softWrap: true,
                                               ),
+                                              // Linkify(
+                                              //   text: text,
+                                              //   style: TextStyle(
+                                              //     fontSize: 14,
+                                              //     fontWeight: FontWeight.w500,
+                                              //     color: widget.message?.replyToDetails != null
+                                              //         ? Colors.grey.shade700
+                                              //         : Get.theme.secondaryHeaderColor,
+                                              //   ),
+                                              //   softWrap: true,
+                                              //   onOpen: (link) async {
+                                              //     final url = Uri.parse(link.url);
+                                              //     if (await canLaunchUrl(url)) {
+                                              //       await launchUrl(url, mode: LaunchMode.externalApplication);
+                                              //     } else {
+                                              //       Get.snackbar('Error', 'Could not launch ${link.url}');
+                                              //     }
+                                              //   },
+                                              // )
+
                                             ],
                                           ],
                                         ),

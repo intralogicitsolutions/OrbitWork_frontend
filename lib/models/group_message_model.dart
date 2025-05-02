@@ -17,6 +17,7 @@ class GroupMessageModel {
   String messageStatus;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final DateTime? dateTime;
   final bool isDeleted;
   final int status;
   final GroupMessageModel? replyToDetails;
@@ -37,6 +38,7 @@ class GroupMessageModel {
     required this.messageStatus,
     required this.createdAt,
     required this.updatedAt,
+    this.dateTime,
     this.isDeleted = false,
     this.status = 1,
     this.replyToDetails,
@@ -48,7 +50,10 @@ class GroupMessageModel {
       senderId: json['sender_id'] ?? '',
       message: json['message'] ?? '',
       roomId: json['room_id'] ?? '',
-      receiverId: (json['receiver_id'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
+      //receiverId: (json['receiver_id'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
+      receiverId: json['receiver_id'] is List
+          ? (json['receiver_id'] as List).map((e) => e.toString()).toList()
+          : [json['receiver_id'].toString()],
       attachmentId: json["attechment_id"] is String
           ? [json["attechment_id"]]
           : (json["attechment_id"] as List<dynamic>?)?.map((id) => id.toString()).toList(),

@@ -7,6 +7,7 @@ import 'package:orbitwork/controllers/upload_file_controller.dart';
 import 'package:orbitwork/global/global.dart';
 import 'package:orbitwork/models/user_model.dart';
 import 'package:orbitwork/repository/api/api_constants.dart';
+import 'package:path_provider/path_provider.dart';
 import '../comms/enum/message.dart';
 import '../global/tokenStorage.dart';
 import '../models/chat_item_model.dart';
@@ -19,12 +20,16 @@ import '../socket/socket_service/socket_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'download_controller.dart';
+
 class ChatController extends GetxController {
   final String? receiverId;
   final String? roomId;
   final RxList<MessageModel> messages = <MessageModel>[].obs;
   final RxList<GroupMessageModel> groupMessages = <GroupMessageModel>[].obs;
   final RxString messageText = ''.obs;
+  final TextEditingController textController = TextEditingController();
+  final selectedMeetingTime = Rxn<DateTime>();
 
   final RxList<Map<String, dynamic>> notifications = <Map<String, dynamic>>[].obs;
 
@@ -36,7 +41,6 @@ class ChatController extends GetxController {
 
   final ScrollController _scrollController = ScrollController();
   final notificationService = Get.find<NotificationService>();
-
 
   ChatController({this.roomId, this.receiverId});
 
@@ -116,7 +120,9 @@ class ChatController extends GetxController {
   }
 
 
-  void initSocket({required String userId,  String? roomId}) {
+  void initSocket({required String userId, String? roomId}) {
+
+    print('Room Id :::: ${roomId}');
 
     socketService.connectSocket(userId);
     if(roomId != null){
@@ -130,7 +136,8 @@ class ChatController extends GetxController {
      // messages.add(data);
       try {
         final message = MessageModel.fromJson(data);
-        messages.add(message);
+          messages.add(message);
+
       } catch (e, stack) {
         print("❌ Failed to parse message: $e");
         print(stack);
@@ -140,14 +147,21 @@ class ChatController extends GetxController {
     // Listen for notifications
     socketService.on('receiveNotification', (data) {
       print('🔔 Notification: $data');
-     // notifications.add(Map<String, dynamic>.from(data));
-      final notification = MessageModel.fromJson(data);
-      final groupNotification = GroupMessageModel.fromJson(data);
-      if(notification.roomId != null){
-        handleMessageNotification(notification);
-      }else{
-        handleGroupMessageNotification(groupNotification);
+      try{
+        final mapData = Map<String, dynamic>.from(data);
+        final notification = MessageModel.fromJson(data);
+        final groupNotification = GroupMessageModel.fromJson(data);
+        if(mapData['isGroup'] == true){
+          handleGroupMessageNotification(groupNotification);
+        }else{
+          handleMessageNotification(notification);
+        }
+      }catch (e, stack) {
+        print(" Failed to parse notification: $e");
+        print(stack);
       }
+     // notifications.add(Map<String, dynamic>.from(data));
+
     });
 
     // Listen for delivery confirmations
@@ -195,8 +209,9 @@ class ChatController extends GetxController {
     replyGroupMessage.value = null;
   }
 
-  void sendMessage(String receiverId, MessageType type) {
+  void sendMessage(String receiverId, MessageType type) async{
     if (messageText.value.isNotEmpty && socketService.socket != null) {
+      //final receiver = await fetchUserDetails(receiverId);
       final message = MessageModel(
         senderId: Global.userId!,
         receiverId: receiverId,
@@ -214,8 +229,13 @@ class ChatController extends GetxController {
           email: Global.email!,
           // other fields if needed
         )],
+       // receiverDetails: [receiver!],
+        dateTime: selectedMeetingTime.value,
         replyToDetails: replyMessage.value,
       );
+
+      print('Sending Zoom link at: ${selectedMeetingTime.value}');
+      print('Saved in message model: ${message.dateTime}');
 
       messages.insert(0, message); // insert at top since ListView is reversed
       _scrollToBottom();
@@ -223,20 +243,8 @@ class ChatController extends GetxController {
 
       socketService.sendMessage(message);
 
+      selectedMeetingTime.value = null;
 
-      //socketService.socket!.emit("chat_message", message.toJson());
-
-      // socketService.socket?.emit("new_message", message.toJson());
-      //
-      // // 🔔 Emit Notification to Receiver
-      // socketService.socket?.emit('receiveNotification', {
-      //   'receiver_id': receiverId,
-      //   'sender_id': Global.userId,
-      //   'message': messageText.value,
-      //   'message_type': type.toString().split('.').last,
-      //   //'type': roomId != null ? 'group-message' : 'message',
-      // });
-     // messages.add(message);
       messageText.value = "";
       clearReplyToMessage();
     }
@@ -264,6 +272,15 @@ class ChatController extends GetxController {
             email: Global.email!,
           )],
           replyToDetails: replyMessage.value,
+          attachmentDetails: [
+            UploadFile(
+              id: uploadedFile.id,
+              size: uploadedFile.size,
+              name: uploadedFile.name,
+              url: uploadedFile.url,
+              fileType: uploadedFile.fileType,
+            )
+          ]
         );
 
         messages.insert(0, message);
@@ -335,6 +352,31 @@ class ChatController extends GetxController {
     groupMessages.insert(0, msg);
     update();
   }
+
+  Future<UserDetails?> fetchUserDetails(String receiverId) async {
+    String? token = await TokenStorage.getToken();
+    final url = '${ApiConstants.GET_USER_DETAILS}/$receiverId';
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Authorization': '$token',
+          'Content-Type': 'application/json'
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        return UserDetails.fromJson(jsonData['body']);
+      } else {
+        print('Failed to fetch user details: ${response.body}');
+      }
+    } catch (e) {
+      print('Error fetching user details: $e');
+    }
+    return null;
+  }
+
 
   Future<void> fetchMessage(String? receiverId) async {
     String? token = await TokenStorage.getToken();
@@ -515,6 +557,7 @@ class ChatController extends GetxController {
           email: Global.email!,
           // other fields if needed
         )],
+        dateTime: selectedMeetingTime.value,
         replyToDetails: replyGroupMessage.value,
       );
 
@@ -567,6 +610,15 @@ class ChatController extends GetxController {
             // other fields if needed
           )],
           replyToDetails: replyGroupMessage.value,
+            attachmentDetails: [
+              UploadFile(
+                id: uploadedFile.id,
+                size: uploadedFile.size,
+                name: uploadedFile.name,
+                url: uploadedFile.url,
+                fileType: uploadedFile.fileType,
+              )
+            ]
         );
         groupMessages.insert(0, groupMessage);
         _scrollToBottom();
@@ -707,6 +759,11 @@ class ChatController extends GetxController {
   void handleMessageNotification(MessageModel notification){
     messages.add(notification);
 
+    print('notification message type ===> ${notification.messageType}');
+    print('attachmentDetails ===> ${notification.attachmentDetails}');
+
+    final attachments = notification.attachmentDetails;
+
     if(notification.messageType == 'image'){
       notificationService.showNotification(
         id: DateTime.now().millisecondsSinceEpoch ~/ 1000,
@@ -767,6 +824,92 @@ class ChatController extends GetxController {
     //   backgroundColor: Colors.black.withOpacity(0.8),
     //   colorText: Colors.white,
     // );
+  }
+
+  Future<String?> createZoomMeetingAPI(DateTime selectedDateTime) async {
+    final String date = selectedDateTime.toLocal().toIso8601String().split('T')[0]; // "YYYY-MM-DD"
+    final String time = selectedDateTime.toLocal().toIso8601String().split('T')[1].substring(0, 5); // "HH:MM"
+    String? token = await TokenStorage.getToken();
+    final response = await http.post(
+      Uri.parse(ApiConstants.CREATE_ZOOM_MEETING),
+      headers: {
+        'Authorization': '$token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        "topic": "Static Zoom Meeting",
+        "date": date,
+        "time": time,
+        //"start_time": startTime,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body);
+      selectedMeetingTime.value = DateTime.parse(body['data']['start_time']);
+      if (body['success'] == true && body['data']?['join_url'] != null) {
+        messageText.value = body['data']['join_url'];
+        return body['data']['join_url'];
+      }
+    }
+    return null;
+  }
+
+  // Future<String?> downloadFileToLocal(UploadFile file) async {
+  //   try {
+  //     final dir = await getApplicationDocumentsDirectory();
+  //     final filePath = '${dir.path}/${file.name}';
+  //
+  //
+  //     final existingFile = File(filePath);
+  //     if (await existingFile.exists()) {
+  //       print("File already exists locally.");
+  //       return filePath;
+  //     }
+  //
+  //     final response = await http.get(Uri.parse(file.url!));
+  //     if (response.statusCode == 200) {
+  //       final localFile = File(filePath);
+  //       await localFile.writeAsBytes(response.bodyBytes);
+  //       print("Downloaded to: $filePath");
+  //       return filePath;
+  //     } else {
+  //       Get.snackbar("Download failed", "Server error: ${response.statusCode}");
+  //     }
+  //   } catch (e) {
+  //     print("Download error: $e");
+  //     Get.snackbar("Download failed", "Error: $e");
+  //   }
+  //   return null;
+  // }
+  Future<String?> downloadFileToLocal(UploadFile file) async {
+    try {
+      final dir = await getApplicationDocumentsDirectory();
+      final filePath = '${dir.path}/${file.name}';
+      final httpClient = HttpClient();
+
+      final request = await httpClient.getUrl(Uri.parse(file.url!));
+      final response = await request.close();
+
+      final bytes = <int>[];
+      final total = response.contentLength;
+      int received = 0;
+
+      await for (var chunk in response) {
+        bytes.addAll(chunk);
+        received += chunk.length;
+
+        final progress = received / total;
+        Get.find<DownloadController>().setProgress(file.name!, progress);
+      }
+
+      final f = File(filePath);
+      await f.writeAsBytes(bytes);
+      return filePath;
+    } catch (e) {
+      print('Download error: $e');
+      return null;
+    }
   }
 
 }

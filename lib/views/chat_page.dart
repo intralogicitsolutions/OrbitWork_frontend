@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import '../comms/zoom_meeting_creation.dart';
 import '../component/chat/chat_input_field.dart';
 import '../component/chat/chat_message_bubble.dart';
 import '../controllers/chat_contoller.dart';
@@ -49,7 +50,47 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.name)),
+      appBar: AppBar(
+          title: Text(widget.name),
+        actions: [
+
+          PopupMenuButton<String>(
+            color: Get.theme.scaffoldBackgroundColor,
+            onSelected: (value) {
+              if (value == 'edit') {
+                print("Edit clicked");
+              }
+            },
+            icon: Icon(Icons.call),
+            itemBuilder: (BuildContext context) {
+              return <PopupMenuEntry<String>>[
+                PopupMenuItem<String>(
+                  value: 'edit',
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'assets/icon/zoom.png',
+                        height: 30,
+                        width: 30,
+                      ),
+                      SizedBox(width: 10,),
+                      Text('Zoom Meeting')
+                    ],
+                  ),
+                  onTap: () async{
+                    await Future.delayed(Duration(milliseconds: 200)); // fixes onTap delay issue
+                    //_handleZoomMeetingCreation();
+                    ZoomMeetingHelper.handleZoomMeetingCreation(
+                      context: context,
+                      chatController: chatController,
+                    );
+                  },
+                ),
+              ];
+            },
+          )
+        ],
+      ),
       body: Column(
         children: [
           Expanded(
@@ -107,4 +148,47 @@ class _ChatPageState extends State<ChatPage> {
       ),
     );
   }
+
+  // void _handleZoomMeetingCreation() async {
+  //   final DateTime? selectedDate = await showDatePicker(
+  //     context: context,
+  //     initialDate: DateTime.now(),
+  //     firstDate: DateTime.now(),
+  //     lastDate: DateTime(2100),
+  //   );
+  //
+  //   if (selectedDate == null) return;
+  //
+  //   final TimeOfDay? selectedTime = await showTimePicker(
+  //     context: context,
+  //     initialTime: TimeOfDay.now(),
+  //   );
+  //
+  //   if (selectedTime == null) return;
+  //
+  //   final DateTime combinedDateTime = DateTime(
+  //     selectedDate.year,
+  //     selectedDate.month,
+  //     selectedDate.day,
+  //     selectedTime.hour,
+  //     selectedTime.minute,
+  //   );
+  //
+  //  // final String isoString = combinedDateTime.toUtc().toIso8601String();
+  //
+  //   try {
+  //     final joinUrl = await chatController.createZoomMeetingAPI(combinedDateTime);
+  //     print('joinUrl ==> ${joinUrl}');
+  //     if (joinUrl != null) {
+  //       chatController.textController.text = joinUrl;
+  //       chatController.messageText.value = joinUrl;
+  //     // chatController.sendMessage(widget.receiverId ?? '', joinUrl); // call your ChatInputField logic
+  //     } else {
+  //       Get.snackbar('Error', 'Failed to create Zoom meeting');
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar('Error', 'Failed: $e');
+  //   }
+  // }
+
 }
