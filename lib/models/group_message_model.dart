@@ -9,7 +9,7 @@ class GroupMessageModel {
   final String? message;
   final List<String>? attachmentId;
   final List<UploadFile>? attachmentDetails;
-  final List<UserDetails>? senderDetails;
+   List<UserDetails>? senderDetails;
   final String? messageType;
   final double? latitude;
   final double? longitude;

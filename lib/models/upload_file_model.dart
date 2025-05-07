@@ -37,9 +37,11 @@ class UploadFile {
       'size': size,
       'url': url,
       'fileType': fileType,
-
     };
+
   }
+  @override
+  String toString() => toJson().toString();
 }
 
 class Location {

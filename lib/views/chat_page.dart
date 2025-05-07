@@ -35,7 +35,7 @@ class _ChatPageState extends State<ChatPage> {
     // Emit user_online when entering the chat
     final socketService = Get.find<SocketService>();
     socketService.emitUserOnline(Global.userId??'');
-    chatController.initSocket(userId: Global.userId ?? '');
+   // chatController.initSocket(userId: Global.userId ?? '');
   }
 
   @override

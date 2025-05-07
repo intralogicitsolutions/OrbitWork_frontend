@@ -1,52 +1,3 @@
-// import 'package:flutter/material.dart';
-// import '../../controllers/chat_contoller.dart';
-// import '../../models/message_model.dart';
-// import 'package:get/get.dart';
-//
-//
-// class ChatMessageBubble extends StatelessWidget {
-//   final Message message;
-//   final ChatController controller = Get.find();
-//
-//   ChatMessageBubble({
-//     Key? key,
-//     required this.message,
-//   }) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final isMe = message.senderId == controller.currentUser.value?.id;
-//
-//     return Padding(
-//       padding: const EdgeInsets.symmetric(vertical: 4),
-//       child: Row(
-//         mainAxisAlignment:
-//         isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-//         children: [
-//           Container(
-//             constraints: BoxConstraints(
-//               maxWidth: MediaQuery.of(context).size.width * 0.7,
-//             ),
-//             padding: const EdgeInsets.symmetric(
-//               horizontal: 16,
-//               vertical: 10,
-//             ),
-//             decoration: BoxDecoration(
-//               color: isMe ? Colors.blue : Colors.grey[200],
-//               borderRadius: BorderRadius.circular(16),
-//             ),
-//             child: Text(
-//               message.content,
-//               style: TextStyle(
-//                 color: isMe ? Colors.white : Colors.black,
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
 
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -130,8 +81,6 @@ class _ChatBubbleState extends State<ChatBubble> {
     //final sender = msg.senderDetails?.first;
     final sender = (msg.senderDetails != null && msg.senderDetails!.isNotEmpty)
         ? msg.senderDetails!.first
-        // : (msg.receiverDetails != null && msg.receiverDetails!.isNotEmpty)
-        // ? msg.receiverDetails!.first
         : null;
     final replyTo = msg.replyToDetails;
 
@@ -230,7 +179,7 @@ class _ChatBubbleState extends State<ChatBubble> {
                           Row(
                             children: [
                               Text(
-                      "${sender?.firstname ?? ''} ${sender?.lastname ?? ''}",
+                             "${sender?.firstname ?? ''} ${sender?.lastname ?? ''}",
                                 style: TextStyle(
                                   fontSize: 16,
                                     fontWeight: FontWeight.w600),
@@ -351,31 +300,64 @@ class _ChatBubbleState extends State<ChatBubble> {
                                             if (messageType == "image" && attachmentDetails != null) ...[
                                               for (var file in attachmentDetails)
                                                 if (file.url != null)
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      Get.to(() => FullScreenImage(imageUrl: file.url!));
-                                                    },
-                                                    child: ClipRRect(
-                                                      borderRadius: BorderRadius.circular(10),
-                                                      child: Image.network(
-                                                        file.url!,
-                                                        width: 200,
-                                                        height: 200,
-                                                        fit: BoxFit.cover,
+                                                  Stack(
+                                                    children: [
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          Get.to(() => FullScreenImage(imageUrl: file.url!));
+                                                        },
+                                                        child: ClipRRect(
+                                                          borderRadius: BorderRadius.circular(10),
+                                                          child: Image.network(
+                                                            file.url!,
+                                                            width: 200,
+                                                            height: 200,
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
                                                       ),
-                                                    ),
+                                                      // Positioned(child: IconButton(
+                                                      //     onPressed: () {
+                                                      //       controller.downloadAndSaveFile(file.url!, 'image');
+                                                      //     },
+                                                      //     icon: const Icon(Icons.download, color: Colors.white),))
+                                                    ],
                                                   ),
                                               const SizedBox(height: 5),
                                             ],
 
                                             if (messageType == "video" && attachmentDetails != null) ...[
                                               for (var file in attachmentDetails)
-                                                if (file.url != null) VideoBubble(videoUrl: file.url!, width: 200, height: 200, iconSize: 50,)
+                                                if (file.url != null) Stack(
+                                                  children: [
+                                                    VideoBubble(videoUrl: file.url!, width: 200, height: 200, iconSize: 50,),
+                                                    Positioned(
+                                                      right: 8,
+                                                      bottom: 8,
+                                                      child: IconButton(
+                                                        icon: const Icon(Icons.download, color: Colors.white),
+                                                        onPressed: () {
+                                                          controller.downloadAndSaveFile(file.url!, 'video');
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )
                                             ],
 
                                             if (messageType == "audio" && attachmentDetails != null) ...[
                                               for (var file in attachmentDetails)
-                                                if (file.url != null) AudioPlayerWidget(audioUrl: file.url!),
+                                                if (file.url != null) Stack(
+                                                  children: [
+                                                    AudioPlayerWidget(audioUrl: file.url!),
+                                                    IconButton(
+                                                      icon: const Icon(Icons.download),
+                                                      onPressed: () {
+                                                        controller.downloadAndSaveFile(file.url!, 'audio');
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
                                               const SizedBox(height: 5),
                                             ],
 
@@ -407,10 +389,13 @@ class _ChatBubbleState extends State<ChatBubble> {
                                                                   final path = await ChatController().downloadFileToLocal(file);
                                                                   if (path != null) {
                                                                     await OpenFilex.open(path);
+                                                                    // Trigger UI update by notifying controller
+                                                                   // downloadController.updateDownloadedStatus(file.name!);
                                                                   }
                                                                 } else {
                                                                   final dir = await getApplicationDocumentsDirectory();
-                                                                  final path = '${dir.path}/${file.name}';
+                                                                 // final path = '${dir.path}/${file.name}';
+                                                                  final path = '/storage/emulated/0/Download/${file.name}';
                                                                   await OpenFilex.open(path);
                                                                 }
                                                               } catch (e) {
@@ -468,14 +453,17 @@ class _ChatBubbleState extends State<ChatBubble> {
                                                                         ),
                                                                         child: const Icon(Icons.insert_drive_file, color: Colors.grey, size: 18,)),
                                                                     Obx(() {
-                                                                      final progress = downloadController.getProgress(file.name!);
+                                                                      // final progress = downloadController.getProgress(file.name!);
+                                                                      // final isDownloading = downloadController.isDownloading(file.name!);
                                                                       final isDownloading = downloadController.isDownloading(file.name!);
+                                                                      final progress = downloadController.getProgress(file.name!);
+                                                                  //    final isDownloaded = downloadController.isDownloaded(file.name!);
                                                                       return isDownloading
                                                                           ? Text(
                                                                         '${(progress * 100).toStringAsFixed(0)}%',
                                                                         style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                                                                       )
-                                                                          : (!downloaded
+                                                                          : ((!downloaded && !widget.isMe)
                                                                           ? const Icon(Icons.download, size: 16, color: Colors.black87)
                                                                           : const SizedBox());
                                                                     }),
@@ -767,294 +755,4 @@ class _ChatBubbleState extends State<ChatBubble> {
   }
 }
 
-// class ChatMessageBubble extends StatelessWidget {
-//   final MessageModel message;
-//   final bool isMe;
-//   final bool showDateHeader;
-//
-//   const ChatMessageBubble({
-//     Key? key,
-//     required this.message,
-//     required this.isMe,
-//     this.showDateHeader = false,
-//   }) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     DateTime createdAt = message.createdAt;
-//     String formattedDate =
-//         '${createdAt.day}/${createdAt.month}/${createdAt.year}';
-//
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         if (showDateHeader)
-//           Padding(
-//             padding: const EdgeInsets.symmetric(vertical: 8.0),
-//             child: Center(
-//               child: Text(
-//                 formattedDate,
-//                 style: TextStyle(
-//                   fontSize: 14,
-//                   fontWeight: FontWeight.bold,
-//                   color: Colors.grey[600],
-//                 ),
-//               ),
-//             ),
-//           ),
-//         _buildMessageWidget(message, isMe, context),
-//       ],
-//     );
-//   }
-//
-//   Widget _buildMessageWidget(
-//       MessageModel message, bool isMe, BuildContext context) {
-//     final status = message.messageStatus;
-//
-//     bool isSeen = status == 'seen';
-//     bool isDelivered = isSeen || status == 'delivered';
-//     bool isSent = isDelivered || status == 'sent';
-//
-//     switch (message.messageType) {
-//       case 'text':
-//         return GestureDetector(
-//           onLongPress: () {
-//             _showEditDeleteOptions(context);
-//           },
-//           child: Column(
-//             children: [
-//               BubbleNormal(
-//                 text: message.message ?? '',
-//                 isSender: isMe,
-//                 color: isMe ? Color(0xFFE1FFC7) : Colors.grey.shade200,
-//                 tail: true,
-//                 // sent: isSent,  // apply logic for the sent click
-//                 // seen: isSeen, // apply logic of sent
-//                 // delivered: isDelivered, // apply logic of delivered
-//                 textStyle: TextStyle(
-//                   fontSize: 16,
-//                   color: Colors.black,
-//                 ),
-//               ),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.end,
-//                 children: [
-//                   Text(
-//                     DateFormat('hh:mm a').format(message.createdAt),
-//                     style: TextStyle(fontSize: 10, color: Colors.grey),
-//                   ),
-//                   const SizedBox(width: 4),
-//                   if (isMe)
-//                     Text(
-//                       _getStatusText(status),
-//                       style: TextStyle(
-//                         fontSize: 10,
-//                         color: _getStatusColor(status),
-//                       ),
-//                     ),
-//                 ],
-//               ),
-//             ],
-//           ),
-//         );
-//
-//       case 'image':
-//         return Column(
-//           crossAxisAlignment:
-//               isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-//           children: message.attachmentDetails!
-//               .map((file) => GestureDetector(
-//                     onTap: () {
-//                       Get.to(() => FullScreenImage(imageUrl: file.url!));
-//                     },
-//                     onLongPress: () {
-//                       _showEditDeleteOptions(context);
-//                     },
-//                     child: BubbleNormalImage(
-//                       id: file.url!,
-//                       image: Image.network(file.url!, fit: BoxFit.cover),
-//                       isSender: isMe,
-//                       tail: true,
-//                       sent: isSent,
-//                       seen: isSeen,
-//                       delivered: isDelivered,
-//                     ),
-//                   ))
-//               .toList(),
-//         );
-//
-//       case 'video':
-//         return Row(
-//           mainAxisAlignment:
-//               isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-//           children: message.attachmentDetails!
-//               .map((file) => GestureDetector(
-//                   onLongPress: () {
-//                     _showEditDeleteOptions(context);
-//                   },
-//                   child: VideoBubble(videoUrl: file.url!)))
-//               .toList(),
-//         );
-//
-//       case 'audio':
-//         return Column(
-//           crossAxisAlignment:
-//               isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-//           children: message.attachmentDetails!
-//               .map((file) => GestureDetector(
-//                   onLongPress: () {
-//                     _showEditDeleteOptions(context);
-//                   },
-//                   child: AudioPlayerWidget(audioUrl: file.url!)))
-//               .toList(),
-//         );
-//
-//       case 'document':
-//         return Column(
-//           crossAxisAlignment:
-//               isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-//           children: message.attachmentDetails!
-//               .map((file) => BubbleNormal(
-//                     text: file.name ?? "Document",
-//                     isSender: isMe,
-//                     color: Colors.blue[100]!,
-//                     tail: true,
-//                     seen: isSeen,
-//                     sent: isSent,
-//                     delivered: isDelivered,
-//                     textStyle: TextStyle(
-//                       color: Colors.blue,
-//                       // decoration: TextDecoration.underline,
-//                     ),
-//                   ))
-//               .toList(),
-//         );
-//
-//       default:
-//         return SizedBox.shrink();
-//     }
-//   }
-//
-//   void _showEditDeleteOptions(BuildContext context) {
-//     final controller = Get.find<ChatController>();
-//
-//     showModalBottomSheet(
-//       context: context,
-//       builder: (_) {
-//         return SafeArea(
-//           child: Wrap(
-//             children: [
-//               if (isMe) // Only sender can edit
-//                 ListTile(
-//                   leading: Icon(Icons.edit),
-//                   title: Text("Edit"),
-//                   onTap: () {
-//                     Navigator.pop(context);
-//                     _showEditDialog(context);
-//                   },
-//                 ),
-//               ListTile(
-//                   leading: Icon(Icons.delete),
-//                   title: Text("Delete"),
-//                   // onTap: () {
-//                   //   Navigator.pop(context);
-//                   //   controller.deleteMessage(message.messageId, Global.userId!, deleteForEveryone: true);
-//                   // },
-//                   onTap: () async {
-//                     Navigator.pop(
-//                         context); // Close the bottom sheet or list tile menu first
-//
-//                     final result = await showDialog<String>(
-//                       context: context,
-//                       builder: (context) {
-//                         return SimpleDialog(
-//                           title: Text("Delete message?"),
-//                           children: [
-//                             SimpleDialogOption(
-//                               onPressed: () {
-//                                 Navigator.pop(context, "everyone");
-//                               },
-//                               child: Text("Delete for everyone"),
-//                             ),
-//                             SimpleDialogOption(
-//                               onPressed: () {
-//                                 Navigator.pop(context, "me");
-//                               },
-//                               child: Text("Delete for me"),
-//                             ),
-//                             SimpleDialogOption(
-//                               onPressed: () {
-//                                 Navigator.pop(context, "cancel");
-//                               },
-//                               child: Text("Cancel",
-//                                   style: TextStyle(color: Colors.red)),
-//                             ),
-//                           ],
-//                         );
-//                       },
-//                     );
-//
-//                     if (result == "everyone") {
-//                       controller.deleteMessage(message.messageId);
-//                     } else if (result == "me") {
-//                       controller.deleteMessage(message.messageId);
-//                     }
-//                   }),
-//             ],
-//           ),
-//         );
-//       },
-//     );
-//   }
-//
-//   void _showEditDialog(BuildContext context) {
-//     final controller = Get.find<ChatController>();
-//     final textController = TextEditingController(text: message.message);
-//
-//     showDialog(
-//       context: context,
-//       builder: (_) {
-//         return AlertDialog(
-//           title: Text("Edit Message"),
-//           content: TextField(
-//             controller: textController,
-//             autofocus: true,
-//           ),
-//           actions: [
-//             TextButton(
-//               onPressed: () {
-//                 controller.updateMessage(
-//                     message.messageId, textController.text.trim());
-//                 Navigator.pop(context);
-//               },
-//               child: Text("Save"),
-//             ),
-//           ],
-//         );
-//       },
-//     );
-//   }
-//
-//   String _getStatusText(String status) {
-//     switch (status) {
-//       case 'seen':
-//         return '✓✓ Seen';
-//       case 'delivered':
-//         return '✓✓';
-//       case 'sent':
-//         return '✓';
-//       default:
-//         return '';
-//     }
-//   }
-//
-//   Color _getStatusColor(String status) {
-//     switch (status) {
-//       case 'seen':
-//         return Colors.blue;
-//       default:
-//         return Colors.grey;
-//     }
-//   }
-// }
 

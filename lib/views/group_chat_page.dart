@@ -29,7 +29,8 @@ class _GroupChatPageState extends State<GroupChatPage> {
   @override
   void initState() {
     super.initState();
-    chatController?.initSocket(userId: Global.userId ?? '', roomId: widget.roomId);
+    print('group chat page roomId ===> ${widget.roomId}');
+  //  chatController?.initSocket(userId: Global.userId ?? '', roomId: widget.roomId);
   }
 
   @override

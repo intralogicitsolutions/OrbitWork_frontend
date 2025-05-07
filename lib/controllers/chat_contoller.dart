@@ -8,6 +8,7 @@ import 'package:orbitwork/global/global.dart';
 import 'package:orbitwork/models/user_model.dart';
 import 'package:orbitwork/repository/api/api_constants.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../comms/enum/message.dart';
 import '../global/tokenStorage.dart';
 import '../models/chat_item_model.dart';
@@ -52,6 +53,7 @@ class ChatController extends GetxController {
     }else{
       fetchMessage(receiverId);
     }
+    initSocket(userId: Global.userId??'', roomId: roomId);
     _registerSocketListeners();
   }
 
@@ -59,7 +61,7 @@ class ChatController extends GetxController {
   void onClose() {
     if (socketService.socket != null) {
       socketService.socket!.off("chat_message");
-      socketService.socket?.off("group_message");
+      // socketService.socket?.off("group_message");
     }
     super.onClose();
   }
@@ -73,11 +75,11 @@ class ChatController extends GetxController {
       ..listenForSeenMessages(_onMessageSeen)
       ..listenForDeliveredMessages(_onMessageDelivered)
       ..listenForSeenGroupMessages(_onGroupMessageSeen)
-      ..listenForDeliveredGroupMessages(_onGroupMessageDelivered)
-      ..listenToReceivedMessages(receiveMessage)
-      ..listenToNewMessages(newMessage)
-      ..listenToGroupMessages(receiveGroupMessage);
-    //  ..onReceiveNotification(_onReceiveNotification);
+      ..listenForDeliveredGroupMessages(_onGroupMessageDelivered);
+      //..listenToReceivedMessages(receiveMessage)
+     // ..listenToNewMessages(newMessage)
+     //  ..listenToGroupMessages(receiveGroupMessage);
+    // ..onReceiveNotification(_onReceiveNotification);
       // ..setupMessageListeners(
       // //   onNewMessage: (data) {
       // //   final msg = GroupMessageModel.fromJson(data);
@@ -128,29 +130,83 @@ class ChatController extends GetxController {
     if(roomId != null){
       socketService.joinRoom(userId, roomId);
     }
-    // socketService.joinRoom(userId, roomId!);
 
-    // Listen for chat messages
-    socketService.on('chat_message', (data) {
-      print('📩 New message: $data');
+    socketService.on('chat_message', (data) async{
+      print('📩 Received message: $data');
+      print("Raw socket data received: ${jsonEncode(data)}");
      // messages.add(data);
       try {
-        final message = MessageModel.fromJson(data);
-          messages.add(message);
+       if(roomId != null){
+         final message = GroupMessageModel.fromJson(data);
+         print('Before group senderDetails ::: ${message.senderDetails}');
+         if (message.senderDetails == null || message.senderDetails!.isEmpty) {
+           final user = await fetchUserDetails(message.senderId??'');
+           if (user != null){
+             message.senderDetails = [user];
+             print('After group senderDetails ::: ${message.senderDetails}');
+           }else {
+             print("⚠️ User details not found for ID: ${message.senderId}");
+           }
+         }
+         //messages.add(message);
+         groupMessages.insert(0, message);
+         update();
 
+       }else{
+         final message = MessageModel.fromJson(data);
+         print('Before chat senderDetails ::: ${message.senderDetails}');
+         if (message.senderDetails == null || message.senderDetails!.isEmpty) {
+           final user = await fetchUserDetails(message.senderId??'');
+           if (user != null){
+             message.senderDetails = [user];
+             print('After chat senderDetails ::: ${message.senderDetails}');
+           }else {
+             print("⚠️ User details not found for ID: ${message.senderId}");
+           }
+
+         }
+         //messages.add(message);
+         messages.insert(0, message);
+         update();
+       }
       } catch (e, stack) {
         print("❌ Failed to parse message: $e");
         print(stack);
       }
     });
 
+    socketService.on('new_message', (data) async {
+      print('🆕 Received new_message event: $data');
+      try {
+        final message = MessageModel.fromJson(data);
+
+        if (message.senderDetails == null || message.senderDetails!.isEmpty) {
+          final user = await fetchUserDetails(message.senderId ?? '');
+          if (user != null) {
+            message.senderDetails = [user];
+          } else {
+            print("⚠️ User details not found for ID: ${message.senderId}");
+          }
+        }
+
+        messages.insert(0, message);
+        update();
+      } catch (e, stack) {
+        print("❌ Failed to parse new_message: $e");
+        print(stack);
+      }
+    });
+
+
     // Listen for notifications
     socketService.on('receiveNotification', (data) {
       print('🔔 Notification: $data');
       try{
         final mapData = Map<String, dynamic>.from(data);
-        final notification = MessageModel.fromJson(data);
-        final groupNotification = GroupMessageModel.fromJson(data);
+        print('🔍 Map Parsed Notification: $mapData');
+        print('📎 Attachments: ${mapData['attachmentDetails']}');
+        final notification = MessageModel.fromJson(mapData);
+        final groupNotification = GroupMessageModel.fromJson(mapData);
         if(mapData['isGroup'] == true){
           handleGroupMessageNotification(groupNotification);
         }else{
@@ -161,7 +217,6 @@ class ChatController extends GetxController {
         print(stack);
       }
      // notifications.add(Map<String, dynamic>.from(data));
-
     });
 
     // Listen for delivery confirmations
@@ -258,7 +313,6 @@ class ChatController extends GetxController {
         final message = MessageModel(
           senderId: Global.userId!,
           receiverId: receiverId,
-          message: "",
           attachmentId: uploadedFile.id != null ? [uploadedFile.id!] : null,
           messageType: uploadedFile.fileType,
           createdAt: DateTime.now(),
@@ -290,19 +344,20 @@ class ChatController extends GetxController {
         socketService.sendMessage(message);
         clearReplyToMessage();
 
-        // Map<String, dynamic> messageData = {
-        //   "senderId": message.senderId,
-        //   "receiverId": message.receiverId,
-        //   "message": message.message,
-        //   "attachmentId": message.attachmentId ?? "",
-        //   "messageType": message.messageType,
-        // };
-
-      //  print("Sending message to socket: $messageData");
-
-        // socketService.socket!.emit("chat_message", message.toJson());
-        // socketService.socket?.emit("new_message", message.toJson());
-        // messages.add(message);
+       //  Map<String, dynamic> messageData = {
+       //    "senderId": message.senderId,
+       //    "receiverId": message.receiverId,
+       //    "message": message.message,
+       //    "attachmentId": message.attachmentId ?? "",
+       //    "messageType": message.messageType,
+       //    "attachmentDetails": message.attachmentDetails?.map((e) => e.toJson()).toList()
+       //  };
+       //
+       // print("Sending message to socket: $messageData");
+       //
+       //  socketService.socket!.emit("chat_message", message.toJson());
+       //  socketService.socket?.emit("new_message", message.toJson());
+       //  messages.add(message);
       }
     }
   }
@@ -334,13 +389,19 @@ class ChatController extends GetxController {
     socketService.sendMessage(message);
     clearReplyToMessage();
 
-    // socketService.socket!.emit("chat_message", message.toJson());
+    //!.ocketService.socket!.emit("chat_message", message.toJson());
     // socketService.socket?.emit("new_message", message.toJson());
     // messages.add(message);
   }
 
-  void receiveMessage(Map<String, dynamic> data) {
+  void receiveMessage(Map<String, dynamic> data) async{
     final newMessage = MessageModel.fromJson(data);
+    print('Before new messsage sender details ===> ${newMessage.senderDetails}');
+    if(newMessage.senderDetails == null || newMessage.senderDetails!.isEmpty){
+      final user = await fetchUserDetails(newMessage.senderId??'');
+      newMessage.senderDetails = [user!];
+      print('After new messsage sender details ===> ${newMessage.senderDetails}');
+    }
   //  messages.add(MessageModel.fromJson(data));
     messages.insert(0, newMessage); // Show instantly at top (because reverse: true)
     _scrollToBottom();
@@ -765,12 +826,18 @@ class ChatController extends GetxController {
     final attachments = notification.attachmentDetails;
 
     if(notification.messageType == 'image'){
-      notificationService.showNotification(
-        id: DateTime.now().millisecondsSinceEpoch ~/ 1000,
-        title: 'New Image Message',
-        body: notification.message ?? 'You received an image!',
-        imageUrl: notification.attachmentDetails?.first.url, // Pass the URL of the image
-      );
+      if (attachments != null && attachments.isNotEmpty) {
+        notificationService.showNotification(
+          id: DateTime
+              .now()
+              .millisecondsSinceEpoch ~/ 1000,
+          title: 'New Image Message',
+          body: notification.message ?? 'You received an image!',
+          imageUrl: attachments?.first.url, // Pass the URL of the image
+        );
+      }else {
+        print('⚠️ Image message received but attachments are empty or null.');
+      }
     }
     else if(notification.messageType == 'document'){
       notificationService.showNotification(
@@ -884,7 +951,11 @@ class ChatController extends GetxController {
   // }
   Future<String?> downloadFileToLocal(UploadFile file) async {
     try {
-      final dir = await getApplicationDocumentsDirectory();
+      //final dir = await getApplicationDocumentsDirectory();
+      final dir = Directory('/storage/emulated/0/Download');
+      if (!await dir.exists()) {
+        await dir.create(recursive: true);
+      }
       final filePath = '${dir.path}/${file.name}';
       final httpClient = HttpClient();
 
@@ -909,6 +980,42 @@ class ChatController extends GetxController {
     } catch (e) {
       print('Download error: $e');
       return null;
+    }
+  }
+
+  Future<void> downloadAndSaveFile(String url, String fileType) async {
+    // Request storage permission
+    // final status = await Permission.storage.request();
+    // if (!status.isGranted) return;
+
+    // Download the file
+    final fileName = url.split('/').last;
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      // Write to a temp file
+      final tempDir = await getTemporaryDirectory();
+      final tempPath = '${tempDir.path}/$fileName';
+      final tempFile = File(tempPath);
+      await tempFile.writeAsBytes(response.bodyBytes);
+
+      // Get external storage directory for saving
+      final externalDir = await getExternalStorageDirectory();
+      if (externalDir == null) return;
+
+      // Save to appropriate subfolder
+      final savePath = '${externalDir.path}/$fileType';
+      final saveDir = Directory(savePath);
+      if (!await saveDir.exists()) {
+        await saveDir.create(recursive: true);
+      }
+
+      final finalPath = '$savePath/$fileName';
+      await tempFile.copy(finalPath);
+
+      print('$fileType saved to: $finalPath');
+    } else {
+      print('Failed to download file: ${response.statusCode}');
     }
   }
 

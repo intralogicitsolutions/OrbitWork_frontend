@@ -30,6 +30,8 @@ class ChatItem {
   DateTime? lastSeen;
   bool isOnline;
 
+  final bool isUnread;
+
   ChatItem({
     required this.isRoom,
     required this.name,
@@ -40,6 +42,7 @@ class ChatItem {
     this.roomId,
     this.lastSeen,
     this.isOnline = false,
+    this.isUnread = false,
   });
 
   void updateOnlineStatus(bool online) {
@@ -72,6 +75,7 @@ class ChatItem {
     String? roomId,
     DateTime? lastSeen,
     bool? isOnline,
+    bool? isUnread
   }) {
     return ChatItem(
       isRoom: isRoom ?? this.isRoom,
@@ -83,6 +87,7 @@ class ChatItem {
       roomId: roomId ?? this.roomId,
       lastSeen: lastSeen ?? this.lastSeen,
       isOnline: isOnline ?? this.isOnline,
+      isUnread: isUnread ?? this.isUnread,
     );
   }
 }

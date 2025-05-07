@@ -15,6 +15,8 @@ class ChatListController extends GetxController {
   final isLoading = false.obs;
   final socketService = Get.put(SocketService());
 
+  RxInt selectedFilter = 0.obs;
+
   //final RxList<ChatItem> filteredChatList = <ChatItem>[].obs;
   final Map<String, bool> onlineUsers = {};
   final onlineUserIds = <String>{}.obs;
@@ -30,16 +32,36 @@ class ChatListController extends GetxController {
     startStatusTimer();
     debounce(searchText, (_) => filterChatList(),
         time: Duration(milliseconds: 300));
-    socketService.listenToGroupMessages((data) {
-      print("Real-time message received in ChatListController: $data");
-      _handleNewMessage(data);
-    });
   }
 
   @override
   void onClose() {
     onlineStatusTimer?.cancel();
     super.onClose();
+  }
+
+  void setSelectedFilter(int filter) {
+    selectedFilter.value = filter;
+    applyFilters();
+  }
+
+  void applyFilters() {
+    var result = chatList;
+
+    if (selectedFilter.value == 1) {
+      result = result.where((item) => item.isUnread).toList().obs;
+    }
+
+    if (searchText.value.isNotEmpty) {
+      result = result
+          .where((item) => item.name
+          .toLowerCase()
+          .contains(searchText.value.toLowerCase()))
+          .toList()
+          .obs;
+    }
+
+    filteredChatList.value = result;
   }
 
   Future<void> fetchChatList() async {

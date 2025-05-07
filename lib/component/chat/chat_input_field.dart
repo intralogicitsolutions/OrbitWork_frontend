@@ -249,7 +249,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
                 Get.back();
                 File? file = await _pickImage(ImageSource.camera);
                 if (file != null) {
-                  print('file ==> ${file}');
+                  print('camera file ==> ${file}');
                   if (widget.receiverId != null) {
                     chatController.uploadAndSendFile(widget.receiverId!, file: [file]);
                     chatController.fetchMessage(widget.receiverId!);
@@ -265,7 +265,9 @@ class _ChatInputFieldState extends State<ChatInputField> {
               title: const Text('Gallery'),
               onTap: () async {
                 Get.back();
+                print('Opening gallery picker...');
                 List<File> file = await _pickMultipleImages();
+                print('Picked file ==> ${file}');
                 if (file.isNotEmpty) {
                   print('gallery image path ==> ${file}');
                   if(widget.receiverId != null){

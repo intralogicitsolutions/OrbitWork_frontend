@@ -31,7 +31,7 @@ class MessageModel {
   final String? message;
   final List<String>? attachmentId;
   final List<UploadFile>? attachmentDetails;
-  final List<UserDetails>? senderDetails;
+  List<UserDetails>? senderDetails;
   final List<UserDetails>? receiverDetails;
   final String? roomId;
   final String? messageType;
@@ -86,6 +86,15 @@ class MessageModel {
       attachmentId: json["attechment_id"] is String
           ? [json["attechment_id"]]
           : (json["attechment_id"] as List<dynamic>?)?.map((id) => id.toString()).toList(),
+
+      // attachmentDetails: (() {
+      //   final data = json["attachment_details"];
+      //   if (data == null) return null;
+      //   if (data is Map<String, dynamic>) return [UploadFile.fromJson(data)];
+      //   if (data is List) return data.map((e) => UploadFile.fromJson(e)).toList();
+      //   return null;
+      // })(),
+
 
       attachmentDetails: json["attechment_details"] is Map<String, dynamic>
           ? [UploadFile.fromJson(json["attechment_details"])]

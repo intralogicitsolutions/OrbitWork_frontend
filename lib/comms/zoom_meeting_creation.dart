@@ -8,11 +8,22 @@ class ZoomMeetingHelper {
     required BuildContext context,
     required ChatController? chatController,
   }) async {
+    final ThemeData datePickerTheme = ThemeData(
+      colorScheme: ColorScheme.light(
+        primary: Colors.green, // header background & selected date
+        onPrimary: Colors.white, // text color on selected date
+        onSurface: Colors.black, // default text color
+      ),
+      dialogBackgroundColor: Colors.white,
+    );
     final DateTime? selectedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
+      builder: (context, child){
+        return Theme(data: datePickerTheme, child: child!);
+      }
     );
 
     if (selectedDate == null) return;
@@ -20,6 +31,26 @@ class ZoomMeetingHelper {
     final TimeOfDay? selectedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
+      builder: (context, child){
+        return Theme(data: ThemeData(
+          colorScheme: ColorScheme.light(
+            primary: Colors.green,
+            onPrimary: Colors.white,
+            onSurface: Colors.black,
+          ),
+          timePickerTheme: TimePickerThemeData(
+            backgroundColor: Colors.white,
+            hourMinuteTextColor: Colors.green,
+            hourMinuteColor: Colors.green.shade50,
+           // dialHandColor: Colors.green,
+           dialBackgroundColor: Colors.green.shade50,
+            entryModeIconColor: Colors.green,
+            dayPeriodColor: Colors.green.shade50,
+            helpTextStyle: TextStyle(color: Colors.green)
+          )
+        ),
+            child: child!);
+      }
     );
 
     if (selectedTime == null) return;
