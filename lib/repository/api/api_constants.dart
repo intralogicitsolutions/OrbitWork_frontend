@@ -1,6 +1,6 @@
 class ApiConstants {
   static const String BASE_URL = "https://orbitwork-backend.onrender.com/api";
-  static const String TEMP_URL = "https://009e-2405-f600-8-799f-49fe-aa5c-2437-8c3d.ngrok-free.app/api";
+  static const String TEMP_URL = "https://c470-2405-f600-8-d7a2-bd6d-5272-db81-eb77.ngrok-free.app/api";
 
   // AUTH ROUTES
   static const String SIGNUP = "$BASE_URL/auth/signup";   //done
@@ -49,5 +49,9 @@ class ApiConstants {
   static const String GET_ROOM_MEMBERS = "$TEMP_URL/room/members";//done
 
   // CREATE ZOOM MEETING
-  static const String CREATE_ZOOM_MEETING = "$TEMP_URL/zoom/create-meeting";
+  static const String CREATE_ZOOM_MEETING = "$TEMP_URL/zoom/create-meeting";//done
+
+  // PAYMENT ROUTES
+  static const String SAVE_PAYMENTCARD = "$TEMP_URL/payment/save";
+  static const String CREATE_SUBSCRIPTION = "$TEMP_URL/create-subscription";
 }

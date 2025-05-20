@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import '../comms/global/string_utils.dart';
 import '../comms/utills/date_utils.dart';
 import '../component/new_room_bottomsheet.dart';
@@ -165,9 +168,29 @@ class _MessagesPageState extends State<MessagesPage> {
     );
 
     if (selectedValue != null) {
-      controller.setSelectedFilter(selectedValue);
+      //controller.setSelectedFilter(selectedValue);
+      chatController.setSelectedFilter(selectedValue);
     }
   }
+
+  Timer? refreshTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    chatController.fetchChatList(); // initial call
+
+    refreshTimer = Timer.periodic(Duration(seconds: 5), (timer) {
+      chatController.fetchChatList(); // auto refresh every 5 seconds
+    });
+  }
+
+  @override
+  void dispose() {
+    refreshTimer?.cancel();
+    super.dispose();
+  }
+
 
   // @override
   // void initState() {
@@ -182,7 +205,7 @@ class _MessagesPageState extends State<MessagesPage> {
     chatController.fetchChatList(); // Re-fetch when coming back
     // final socketService = Get.find<SocketService>();
     // socketService.emitUserOnline(Global.userId??'');
-    chatController.setupSocketListeners();
+   // chatController.setupSocketListeners();
   }
 
 
@@ -257,15 +280,66 @@ class _MessagesPageState extends State<MessagesPage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: GestureDetector(
-                      onTapDown: (TapDownDetails details) => _showPopupMenu(context, details),
-                      child: Icon(Icons.filter_list, color: Colors.green),
+                    child: Obx(() {
+                        return GestureDetector(
+                          onTapDown: (TapDownDetails details) => _showPopupMenu(context, details),
+                          child: Image.asset(
+                            chatController.selectedFilter.value == 0
+                            ? 'assets/icon/filter_list.png'
+                                : 'assets/icon/filter.png',
+                            height: 30,
+                            width: 30,
+                            color: Colors.green,
+                          ),
+                        //  Icon(Icons.filter_list, color: Colors.green),
+                        );
+                      }
                     ),
                   ),
                 ],
               ),
             ],
           ),
+
+        //  if (chatController.selectedFilter.value != 0)
+            Obx(() {
+              if (chatController.selectedFilter.value != 0)
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(8),
+                    //  border: Border.all(color: Colors.grey.shade300),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(children: [
+                          Icon(Icons.mail_outline_rounded, size: 18, color: Colors.white,),
+                          SizedBox(width: 6),
+                          Text(
+                            chatController.selectedFilter.value == 1
+                                ? "Unread"
+                                : "Filtered", // Expandable logic
+                            style: TextStyle(fontWeight: FontWeight.w500,color: Colors.white),
+                          ),
+                        ]),
+                        InkWell(
+                          onTap: () {
+                            chatController.clearFilter();
+                          } ,
+                          child: Icon(Icons.close, size: 18, color: Colors.white,),
+                        ),
+                      ],
+                    ),
+                  ),
+                ); else
+                return SizedBox.shrink();
+              }
+            ),
+
 
           Expanded(
             child: Obx(() {

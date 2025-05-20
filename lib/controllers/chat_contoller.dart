@@ -21,6 +21,7 @@ import '../socket/socket_service/socket_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'chat_list_controller.dart';
 import 'download_controller.dart';
 
 class ChatController extends GetxController {
@@ -42,6 +43,8 @@ class ChatController extends GetxController {
 
   final ScrollController _scrollController = ScrollController();
   final notificationService = Get.find<NotificationService>();
+
+  final ChatListController chatController = Get.put(ChatListController());
 
   ChatController({this.roomId, this.receiverId});
 
@@ -132,6 +135,7 @@ class ChatController extends GetxController {
     }
 
     socketService.on('chat_message', (data) async{
+      chatController.fetchChatList();
       print('📩 Received message: $data');
       print("Raw socket data received: ${jsonEncode(data)}");
      // messages.add(data);
@@ -175,27 +179,31 @@ class ChatController extends GetxController {
       }
     });
 
-    socketService.on('new_message', (data) async {
-      print('🆕 Received new_message event: $data');
-      try {
-        final message = MessageModel.fromJson(data);
 
-        if (message.senderDetails == null || message.senderDetails!.isEmpty) {
-          final user = await fetchUserDetails(message.senderId ?? '');
-          if (user != null) {
-            message.senderDetails = [user];
-          } else {
-            print("⚠️ User details not found for ID: ${message.senderId}");
-          }
-        }
 
-        messages.insert(0, message);
-        update();
-      } catch (e, stack) {
-        print("❌ Failed to parse new_message: $e");
-        print(stack);
-      }
-    });
+
+
+    // socketService.on('new_message', (data) async {
+    //   print('🆕 Received new_message event: $data');
+    //   try {
+    //     final message = MessageModel.fromJson(data);
+    //
+    //     if (message.senderDetails == null || message.senderDetails!.isEmpty) {
+    //       final user = await fetchUserDetails(message.senderId ?? '');
+    //       if (user != null) {
+    //         message.senderDetails = [user];
+    //       } else {
+    //         print("⚠️ User details not found for ID: ${message.senderId}");
+    //       }
+    //     }
+    //
+    //     messages.insert(0, message);
+    //     update();
+    //   } catch (e, stack) {
+    //     print("❌ Failed to parse new_message: $e");
+    //     print(stack);
+    //   }
+    // });
 
 
     // Listen for notifications
@@ -227,7 +235,6 @@ class ChatController extends GetxController {
       }else{
         _onMessageDelivered(data);
       }
-
     });
 
     // Optional
@@ -299,9 +306,10 @@ class ChatController extends GetxController {
       socketService.sendMessage(message);
 
       selectedMeetingTime.value = null;
-
+      chatController.fetchChatList();
       messageText.value = "";
       clearReplyToMessage();
+
     }
   }
 
@@ -408,11 +416,11 @@ class ChatController extends GetxController {
     update();
   }
 
-  void newMessage(Map<String, dynamic> data) {
-    final msg = GroupMessageModel.fromJson(data);
-    groupMessages.insert(0, msg);
-    update();
-  }
+  // void newMessage(Map<String, dynamic> data) {
+  //   final msg = GroupMessageModel.fromJson(data);
+  //   groupMessages.insert(0, msg);
+  //   update();
+  // }
 
   Future<UserDetails?> fetchUserDetails(String receiverId) async {
     String? token = await TokenStorage.getToken();
@@ -640,6 +648,7 @@ class ChatController extends GetxController {
       //   'message_type': type.toString().split('.').last,
       //   //'type': roomId != null ? 'group-message' : 'message',
       // });
+      chatController.fetchChatList();
 
       messageText.value = "";
       clearReplyToGroupMessage();

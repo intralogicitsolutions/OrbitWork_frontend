@@ -1,4 +1,5 @@
   import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
   import 'package:get/get.dart';
   import 'package:orbitwork/routes/app_page.dart';
   import 'package:orbitwork/routes/app_routes.dart';
@@ -13,6 +14,8 @@ import 'controllers/theme_controller.dart';
     WidgetsFlutterBinding.ensureInitialized();
    // await NotificationService().init();
     await Get.putAsync(() => NotificationService().init());
+    Stripe.publishableKey = 'pk_test_51RBCKHFyOk7VHYFBqI6GpHJrJtkYEZXO19LJlPdzs4tVhVWwq4eESguKYGvKqI0pgx3kIdPfLxaRjUxqlOhqnJo400PcoB55JS';
+    await Stripe.instance.applySettings();
     runApp(const MyApp());
   }
 

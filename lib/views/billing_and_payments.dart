@@ -150,7 +150,8 @@ class BillingAndPayments extends StatelessWidget {
   Widget _buildAddBillingButton() {
     return TextButton.icon(
       onPressed: () {
-        Get.toNamed(AppRoutes.addBillingMethod);
+       Get.toNamed(AppRoutes.addBillingMethod);
+       //  Get.toNamed(AppRoutes.paymentPage); // only for testing //////
       },
       style: TextButton.styleFrom(
         padding: EdgeInsets.zero,

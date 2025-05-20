@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:orbitwork/controllers/get_paid_controller.dart';
 
 import '../component/withdrawal_method_bottomsheet.dart';
+import '../routes/app_routes.dart';
 
 class GetPaidPage extends StatelessWidget {
   final GetPaidController controller = Get.put(GetPaidController());
@@ -150,6 +151,30 @@ class GetPaidPage extends StatelessWidget {
                                 ),
                                 child: Text(
                                   'Add a method',
+                                  style: TextStyle(color: Colors.white),
+                                )),
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Center(
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  Get.toNamed(AppRoutes.paymentPage);
+                                  // Get.bottomSheet(WithdrawalMethodBottomSheet(),
+                                  //     isScrollControlled: true,
+                                  //     isDismissible: true);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.green,
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 24),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                child: Text(
+                                  'Add a subscription',
                                   style: TextStyle(color: Colors.white),
                                 )),
                           )

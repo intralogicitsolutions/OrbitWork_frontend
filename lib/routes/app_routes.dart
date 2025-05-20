@@ -18,6 +18,7 @@ class AppRoutes{
   static const String groupChat = '/groupChat';
   static const String billingAndPayments = '/billingandpayments';
   static const String addBillingMethod = '/addbillingmethod';
+  static const String paymentPage = '/paymentPage';     // only for test /////////////
   static const String membershipAndConnects = '/membershipandconnects';
   static const String contactInfo = '/contactinfo';
   static const String taxForm = '/taxForm';

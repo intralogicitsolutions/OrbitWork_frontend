@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import '../global/tokenStorage.dart';
@@ -15,7 +14,8 @@ class ChatListController extends GetxController {
   final isLoading = false.obs;
   final socketService = Get.put(SocketService());
 
-  RxInt selectedFilter = 0.obs;
+  //RxInt selectedFilter = 0.obs;
+  final selectedFilter = 0.obs;
 
   //final RxList<ChatItem> filteredChatList = <ChatItem>[].obs;
   final Map<String, bool> onlineUsers = {};
@@ -29,7 +29,6 @@ class ChatListController extends GetxController {
     fetchChatList();
     //setupPresenceListener();
     setupSocketListeners();
-    startStatusTimer();
     debounce(searchText, (_) => filterChatList(),
         time: Duration(milliseconds: 300));
   }
@@ -38,30 +37,6 @@ class ChatListController extends GetxController {
   void onClose() {
     onlineStatusTimer?.cancel();
     super.onClose();
-  }
-
-  void setSelectedFilter(int filter) {
-    selectedFilter.value = filter;
-    applyFilters();
-  }
-
-  void applyFilters() {
-    var result = chatList;
-
-    if (selectedFilter.value == 1) {
-      result = result.where((item) => item.isUnread).toList().obs;
-    }
-
-    if (searchText.value.isNotEmpty) {
-      result = result
-          .where((item) => item.name
-          .toLowerCase()
-          .contains(searchText.value.toLowerCase()))
-          .toList()
-          .obs;
-    }
-
-    filteredChatList.value = result;
   }
 
   Future<void> fetchChatList() async {
@@ -82,7 +57,8 @@ class ChatListController extends GetxController {
       if (response.statusCode == 200) {
         final List<dynamic> body = json.decode(response.body);
         chatList.value = body.map((item) => ChatItem.fromJson(item)).toList();
-        filterChatList();
+       // filterChatList();
+        applyFilters();
 
         chatList.value = body.map((item) => ChatItem.fromJson(item)).toList();
       } else {
@@ -104,52 +80,56 @@ class ChatListController extends GetxController {
     }
   }
 
-  void _handleNewMessage(dynamic data) {
-    // Assuming `data` contains room_id and message text
-    final message = data['message'] ?? '';
-    final roomId = data['room_id'] ?? '';
-    final timestamp = data['created_at']; // Optional
+  void applyFilters() {
+    List<ChatItem> list = [...chatList];
 
-    final index = chatList.indexWhere((chat) => chat.roomId == roomId);
-    if (index != -1) {
-      final updatedChat = chatList[index].copyWith(
-        roomId: roomId,
-        messageWithPrefix: message,
-        createdAt: timestamp ?? DateTime.now().toString(),
-      );
-      chatList[index] = updatedChat;
-      chatList.refresh(); // Notify UI
-      filterChatList();
-    } else {
-      // Optionally refetch or add new chat item
-      fetchChatList();
+    // Apply switch-case filter
+    switch (selectedFilter.value) {
+      case 1: // Unread
+       // filteredChatList.assignAll(chatList.where((item) => item.unread == true));
+        list = list.where((item) => item.unread == true).toList();
+        break;
+      // case 2: // Favorite (if you support favorites)
+      //   filteredChatList.assignAll(chatList.where((item) => item.isFavorite == true));
+      //   break;
+      // case 3: // All Contracts (example)
+      //   filteredChatList.assignAll(chatList.where((item) => item.isContract == true));
+      //   break;
+      default:
+      // Show all if no filter
+        //filteredChatList.assignAll(chatList);
+        break;
     }
+
+    // Apply search filter
+    if (searchText.isNotEmpty) {
+      list = list
+          .where((item) =>
+          item.name.toLowerCase().contains(searchText.value.toLowerCase()))
+          .toList();
+    }
+
+    filteredChatList.assignAll(list);
+    //filteredChatList.value = list;
   }
 
-  // void setupPresenceListener() {
-  //   socketService.listenForUserPresence((userId, isOnline) {
-  //     final index = filteredChatList.indexWhere((chat) => chat.userId == userId);
-  //     if (index != -1) {
-  //       filteredChatList[index].isOnline = isOnline;
-  //       filteredChatList.refresh();
-  //     }
-  //   });
-  // }
+
+  void setSelectedFilter(int value) {
+    selectedFilter.value = value;
+    applyFilters();
+  }
+
+  void clearFilter() {
+    selectedFilter.value = 0;
+    applyFilters();
+  }
+
+
+
+
 
   void setupSocketListeners() {
     final socketService = Get.find<SocketService>();
-
-    // socketService.socket?.on('user_online', (data) {
-    //   final userId = data.toString();
-    //   onlineUserIds.add(userId);
-    //   _updateUserStatus(userId, true);
-    // });
-    //
-    // socketService.socket?.on('user_left_message_page', (data) {
-    //   final userId = data.toString();
-    //   onlineUserIds.remove(userId);
-    //   _updateUserStatus(userId, false);
-    // });
     socketService.listenForPresenceUpdates((userId, isOnline) {
       if (isOnline) {
         onlineUserIds.add(userId);
@@ -174,38 +154,4 @@ class ChatListController extends GetxController {
       print("User not found in filteredChatList: $userId");
     }
   }
-
-  void startStatusTimer() {
-    onlineStatusTimer = Timer.periodic(Duration(seconds: 30), (_) {
-      final now = DateTime.now();
-      for (var user in filteredChatList) {
-        if (user.lastSeen != null) {
-          final difference = now.difference(user.lastSeen!);
-          user.isOnline = difference.inMinutes < 2;
-        }
-      }
-      filteredChatList.refresh();
-    });
-  }
-
-  // void startStatusTimer() {
-  //   onlineStatusTimer?.cancel(); // ensure not duplicated
-  //   onlineStatusTimer = Timer.periodic(Duration(seconds: 30), (_) {
-  //     final now = DateTime.now();
-  //     for (int i = 0; i < filteredChatList.length; i++) {
-  //       final user = filteredChatList[i];
-  //       if (user.lastSeen != null) {
-  //         final diff = now.difference(user.lastSeen!);
-  //         final isStillOnline = diff.inMinutes < 2;
-  //
-  //         if (user.isOnline != isStillOnline) {
-  //           filteredChatList[i] = user.copyWith(
-  //             isOnline: isStillOnline,
-  //             lastSeen: user.lastSeen,
-  //           );
-  //         }
-  //       }
-  //     }
-  //   });
-  // }
 }

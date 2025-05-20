@@ -26,11 +26,12 @@ class ChatItem {
   final String? email;
   final String? userId;
   final String? roomId;
+  final bool unread;
 
   DateTime? lastSeen;
   bool isOnline;
 
-  final bool isUnread;
+  //final bool isUnread;
 
   ChatItem({
     required this.isRoom,
@@ -40,9 +41,10 @@ class ChatItem {
     this.email,
     this.userId,
     this.roomId,
+    required this.unread,
     this.lastSeen,
     this.isOnline = false,
-    this.isUnread = false,
+   // this.isUnread = false,
   });
 
   void updateOnlineStatus(bool online) {
@@ -61,6 +63,7 @@ class ChatItem {
       email: json['email'],
       userId: json['user_id'],
       roomId: json['room_id'],
+      unread: json['unread'] ?? false,
     );
   }
 
@@ -73,9 +76,10 @@ class ChatItem {
     String? email,
     String? userId,
     String? roomId,
+    bool? unread,
     DateTime? lastSeen,
     bool? isOnline,
-    bool? isUnread
+   // bool? isUnread
   }) {
     return ChatItem(
       isRoom: isRoom ?? this.isRoom,
@@ -85,9 +89,10 @@ class ChatItem {
       email: email ?? this.email,
       userId: userId ?? this.userId,
       roomId: roomId ?? this.roomId,
+      unread: unread ?? this.unread,
       lastSeen: lastSeen ?? this.lastSeen,
       isOnline: isOnline ?? this.isOnline,
-      isUnread: isUnread ?? this.isUnread,
+     // isUnread: isUnread ?? this.isUnread,
     );
   }
 }

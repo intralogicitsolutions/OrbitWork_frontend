@@ -62,9 +62,11 @@ import 'package:orbitwork/views/workroom_timesheet.dart';
 import 'package:orbitwork/widgets/create_profile_container.dart';
 import 'package:orbitwork/widgets/profile_setup_container.dart';
 
+import '../repository/api/helper/payment_api_helper.dart';
 import '../views/group_chat_page.dart';
 import '../views/group_edit_page.dart';
 import '../views/overview_tab.dart';
+import '../views/payment_page.dart';
 import '../widgets/specialized_profile_container.dart';
 
 class AppPages {
@@ -85,6 +87,7 @@ class AppPages {
     GetPage(name: AppRoutes.groupChat, page: () => GroupChatPage(name: Get.arguments['name'], roomId: Get.arguments['roomId'],)),
     GetPage(name: AppRoutes.billingAndPayments, page: () => BillingAndPayments()),
     GetPage(name: AppRoutes.addBillingMethod, page: () => AddBillingMethod()),
+    GetPage(name: AppRoutes.paymentPage, page: () => Subscriptionpage()), // only for testing ///////////
     GetPage(name: AppRoutes.membershipAndConnects, page: () => MembershipAndConnects()),
     GetPage(name: AppRoutes.contactInfo, page: () => ContactInfoPage()),
     GetPage(name: AppRoutes.taxForm, page: () => TaxFormsPage()),
