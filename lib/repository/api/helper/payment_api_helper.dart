@@ -65,13 +65,13 @@ class Subscriptionpage extends StatelessWidget {
 
       if (response.statusCode == 200) {
         final body = jsonDecode(response.body);
-        final url = body['url'];
-
-        // if (url != null && await canLaunchUrl(Uri.parse(url))) {
-        //   await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-        // }
-        if (url != null) {
-          // Navigate to WebView page using GetX
+        final responseBody = body['body'];
+        final message = responseBody['message'];
+        final url = responseBody['url'];
+        //final url = body['url'];
+        if (message != null && url == null) {
+          Get.snackbar('Info', message);
+        } else if (url != null) {
           Get.to(() => WebViewPage(url: url));
         }
         else {
@@ -103,10 +103,10 @@ class Subscriptionpage extends StatelessWidget {
               Navigator.pop(ctx);
               createSubscriptionSession('premium');
             }),
-            SubscriptionOption(title: 'Pro', plan: 'pro', onSelected: () {
-              Navigator.pop(ctx);
-              createSubscriptionSession('pro');
-            }),
+            // SubscriptionOption(title: 'Pro', plan: 'pro', onSelected: () {
+            //   Navigator.pop(ctx);
+            //   createSubscriptionSession('pro');
+            // }),
           ],
         ),
       ),

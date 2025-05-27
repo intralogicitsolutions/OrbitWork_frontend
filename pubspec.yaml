@@ -47,7 +47,7 @@ dependencies:
   audioplayers: ^6.4.0
 #  just_audio: ^0.9.46
   open_filex: ^4.7.0
-  pdfx: ^2.8.0
+#  pdfx: ^2.9.1
 #  chewie: ^1.11.0
   ffmpeg_kit_flutter_full_gpl: ^6.0.3
   swipe_to: ^1.0.6

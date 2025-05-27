@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pdfx/pdfx.dart';
+// import 'package:pdfx/pdfx.dart';
 import 'package:open_filex/open_filex.dart';
 
 class PdfViewerPage extends StatefulWidget {
@@ -12,17 +12,17 @@ class PdfViewerPage extends StatefulWidget {
 }
 
 class _PdfViewerPageState extends State<PdfViewerPage> {
-  late PdfControllerPinch pdfController;
+//  late PdfControllerPinch pdfController;
 
   @override
   void initState() {
     super.initState();
-    pdfController = PdfControllerPinch(document: PdfDocument.openFile(widget.pdfPath));
+    //pdfController = PdfControllerPinch(document: PdfDocument.openFile(widget.pdfPath));
   }
 
   @override
   void dispose() {
-    pdfController.dispose();
+   // pdfController.dispose();
     super.dispose();
   }
 
@@ -30,7 +30,7 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("PDF Viewer")),
-      body: PdfViewPinch(controller: pdfController),
+     // body: PdfViewPinch(controller: pdfController),
     );
   }
 }

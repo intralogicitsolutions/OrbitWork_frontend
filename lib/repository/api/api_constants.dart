@@ -1,10 +1,10 @@
 class ApiConstants {
   static const String BASE_URL = "https://orbitwork-backend.onrender.com/api";
-  static const String TEMP_URL = "https://c470-2405-f600-8-d7a2-bd6d-5272-db81-eb77.ngrok-free.app/api";
+  static const String TEMP_URL = "https://317b-2405-f600-8-42f1-44bd-8921-b790-13dc.ngrok-free.app/api";
 
   // AUTH ROUTES
   static const String SIGNUP = "$BASE_URL/auth/signup";   //done
-  static const String SIGNIN = "$BASE_URL/auth/signin";   //done
+  static const String SIGNIN = "$TEMP_URL/auth/signin";   //done
   static const String FORGOT_PASSWORD = "$BASE_URL/auth/forgot-password";
   static const String RESET_PASSWORD = "$BASE_URL/auth/reset-password";
 
@@ -21,17 +21,17 @@ class ApiConstants {
 
   // JOB ROUTES
   static const String CREATE_JOB = "$BASE_URL/job/create";
-  static const String GET_JOB = "$BASE_URL/job/get";  //done
+  static const String GET_JOB = "$TEMP_URL/job/get";  //done
   static const String UPDATE_JOB = "$BASE_URL/job/update/:_id";
   static const String DELETE_JOB = "$BASE_URL/job/delete/:_id";
   static const String GET_JOB_DETAIL = "$BASE_URL/job/get/:_id";
 
   // JOB_PROPOSAL ROUTES
-  static const String CREATE_JOB_PROPOSAL = "$BASE_URL/job-proposal/create";  //done
-  static const String GET_JOB_PROPOSAL = "$BASE_URL/job-proposal/get";  //done
-  static const String UPDATE_JOB_PROPOSAL = "$BASE_URL/job-proposal/update/:_id";  //done
-  static const String DELETE_JOB_PROPOSAL = "$BASE_URL/job-proposal/delete/:_id";
-  static const String GET_JOB_PROPOSAL_DETAIL = "$BASE_URL/job-proposal/get/"; //done
+  static const String CREATE_JOB_PROPOSAL = "$TEMP_URL/job-proposal/create";  //done
+  static const String GET_JOB_PROPOSAL = "$TEMP_URL/job-proposal/get";  //done
+  static const String UPDATE_JOB_PROPOSAL = "$TEMP_URL/job-proposal/update";  //done
+  static const String DELETE_JOB_PROPOSAL = "$TEMP_URL/job-proposal/delete/:_id";
+  static const String GET_JOB_PROPOSAL_DETAIL = "$TEMP_URL/job-proposal/get"; //done
 
   // MESSAGE ROUTES
   static const String GET_MESSAGE_LIST = "$TEMP_URL/message/list"; //done
@@ -52,6 +52,6 @@ class ApiConstants {
   static const String CREATE_ZOOM_MEETING = "$TEMP_URL/zoom/create-meeting";//done
 
   // PAYMENT ROUTES
-  static const String SAVE_PAYMENTCARD = "$TEMP_URL/payment/save";
-  static const String CREATE_SUBSCRIPTION = "$TEMP_URL/create-subscription";
+  static const String SAVE_PAYMENTCARD = "$TEMP_URL/payment/save";//done
+  static const String CREATE_SUBSCRIPTION = "$TEMP_URL/create-subscription";//done
 }

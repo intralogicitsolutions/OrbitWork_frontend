@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orbitwork/models/job_proposal_model.dart';
 import '../controllers/submit_proposal_controller.dart';
 import '../models/job_model.dart';
 import '../models/submit_proposal_models.dart';
@@ -7,9 +8,15 @@ import '../widgets/custom_shimmer.dart';
 
 class SubmitProposalPage extends StatelessWidget {
   final Job job;
-  final SubmitProposalController controller = Get.put(SubmitProposalController());
+  //final SubmitProposalController controller = Get.put(SubmitProposalController());
+ late final SubmitProposalController controller;
 
-  SubmitProposalPage({Key? key, required this.job}) : super(key: key);
+  //SubmitProposalPage({Key? key, required this.job}) : super(key: key);
+
+  SubmitProposalPage({Key? key, required this.job}) : super(key: key) {
+    controller = Get.put(SubmitProposalController(jobId: job.id));
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -22,28 +29,34 @@ class SubmitProposalPage extends StatelessWidget {
         title: Text('Submit proposal'),
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Submit a proposal',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return Center(child: CircularProgressIndicator());
+        }
+          return SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Submit a proposal',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 24),
+                  _buildProposalSettings(context),
+                  SizedBox(height: 24),
+                  _buildJobDetails(context),
+                  SizedBox(height: 24),
+                  _buildTerms(context),
+                ],
               ),
-              SizedBox(height: 24),
-              _buildProposalSettings(context),
-              SizedBox(height: 24),
-              _buildJobDetails(context),
-              SizedBox(height: 24),
-              _buildTerms(context),
-            ],
-          ),
-        ),
+            ),
+          );
+        }
       ),
     );
   }
@@ -273,7 +286,7 @@ class SubmitProposalPage extends StatelessWidget {
               ),
               child:
                 Text(
-                  '\$${(controller.jobProposal.value?.finalAmount)?.toStringAsFixed(2)}',
+                  '\$${(controller.jobProposal.value?.finalAmount??0.00).toStringAsFixed(2)}',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
             );
@@ -315,24 +328,6 @@ class SubmitProposalPage extends StatelessWidget {
             ),
           ),
         )),
-        // DropdownButtonFormField<String>(
-        //   decoration: InputDecoration(
-        //     border: OutlineInputBorder(),
-        //     hintText: 'Select a duration',
-        //   ),
-        //   items: [
-        //     'Less than 1 month',
-        //     '1 to 3 months',
-        //     '3 to 6 months',
-        //     'More than 6 months',
-        //   ].map((String value) {
-        //     return DropdownMenuItem<String>(
-        //       value: value,
-        //       child: Text(value),
-        //     );
-        //   }).toList(),
-        //   onChanged: (value) => controller.updateDuration(value ?? ''),
-        // ),
         SizedBox(height: 24),
         Text(
           'Additional details',
@@ -351,7 +346,8 @@ class SubmitProposalPage extends StatelessWidget {
         ),
         SizedBox(height: 8),
         TextField(
-          controller: TextEditingController(text: controller.coverLetter.value),
+          //controller: TextEditingController(text: controller.coverLetter.value),
+          controller: controller.coverLetterController,
           decoration: InputDecoration(
             border: OutlineInputBorder(),
             hintText: 'Write your cover letter...',
@@ -464,45 +460,62 @@ class SubmitProposalPage extends StatelessWidget {
               },
             )),
         SizedBox(height: 24),
-        Row(
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                if(controller.jobProposalId.value.isEmpty){
-                  controller.submitProposal(job.id);
-                }
-                else{
-                  controller.updateProposal();
-                }
-
-                // Implement submit proposal
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                padding: EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4),
+        Obx(() {
+            return Row(
+              children: [
+                ElevatedButton(
+                  onPressed: controller.isLoading.value ? null : () => controller.submitProposal(),
+                  // onPressed: () {
+                  //   print('jobProposalId :::::::: ${controller.jobProposalId.value}');
+                  //   print('job proposal id => ${controller.jobProposal.value?.id}');
+                  //   if(controller.jobProposalId.value.isEmpty){
+                  //     controller.submitProposal(job.id);
+                  //   }
+                  //   else{
+                  //     controller.updateProposal(controller.jobProposalId.value);
+                  //   }
+                  //
+                  //   // Implement submit proposal
+                  // },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: controller.isLoading.value
+                        ? SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    )
+                        : Text(
+                      controller.jobProposalId.value.isEmpty
+                          ? 'Submit proposal'
+                          : 'Update proposal',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Text(
-                  'Submit proposal',
-                  style: TextStyle(color: Colors.white),
+                SizedBox(width: 12),
+                TextButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(color: Colors.green),
+                  ),
                 ),
-              ),
-            ),
-            SizedBox(width: 12),
-            TextButton(
-              onPressed: () {
-                Get.back();
-              },
-              child: Text(
-                'Cancel',
-                style: TextStyle(color: Colors.green),
-              ),
-            ),
-          ],
+              ],
+            );
+          }
         ),
       ],
     );

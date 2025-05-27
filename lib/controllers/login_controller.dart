@@ -4,10 +4,10 @@
 //   var username = ''.obs;
 // }
 
-
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:orbitwork/enum/user_role_enum.dart';
 import 'package:orbitwork/global/tokenStorage.dart';
 import 'dart:convert';
 
@@ -22,7 +22,6 @@ class LoginController extends GetxController {
   var isLoading = false.obs;
 
   final storage = GetStorage(); // For global token storage
-
 
   // Perform Login
   Future<void> login() async {
@@ -47,12 +46,25 @@ class LoginController extends GetxController {
         Global.userFirstname = data["body"]["firstname"];
         Global.userLastname = data["body"]["lastname"];
         Global.email = data["body"]["email"];
+
+        Global.role = int.tryParse(data["body"]["role"].toString()) ?? 1;
+
         print('userId ===> ${Global.userId}');
+        print('role ===> ${Global.role}');
+
         String token = data["body"]["token"];
         await TokenStorage.saveToken(token);
         print('token ==> ${token}');
-       // storage.write('auth_token', token); // Store token globally
-        Get.offNamed(AppRoutes.homeScreen); // Navigate to home page
+
+       Get.offNamed(AppRoutes.homeScreen); // Navigate to home page
+
+        // if (Global.role == 2) {
+        //   Get.offNamed(AppRoutes.dashboard); // CLIENT
+        // } else if (Global.role == 1) {
+        //   Get.offNamed(AppRoutes.homeScreen); // FREELANCER
+        // } else {
+        //   Get.snackbar('Error', 'Unknown role. Cannot continue.');
+        // }
       } else {
         Get.snackbar('Error', data["msg"]);
       }

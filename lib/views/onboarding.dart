@@ -77,7 +77,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: GestureDetector(
               onTap: () {
-                Get.toNamed(AppRoutes.signup); // Navigate to Signup Page
+                Get.toNamed(AppRoutes.selectProfile);
+                //Get.toNamed(AppRoutes.signup); // Navigate to Signup Page
               },
               child: RichText(
                 text: TextSpan(

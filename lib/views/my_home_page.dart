@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orbitwork/client_profile_views/dashboard.dart';
 import 'package:orbitwork/controllers/homescreen_controller.dart';
 import 'package:orbitwork/views/proposals_page.dart';
 
+import '../client_profile_views/Talent.dart';
+import '../client_profile_views/catalog.dart';
 import '../controllers/drawer_controller.dart';
+import '../global/global.dart';
 import 'alerts_page.dart';
 import 'contracts_page.dart';
 import 'jobs_page.dart';
@@ -19,11 +23,11 @@ class MyHomePage extends StatelessWidget {
       body: Obx(() {
         switch (controller.selectedIndex.value) {
           case 0:
-            return JobsPage();
+            return Global.role == 2 ? DashboardPage() : JobsPage();
           case 1:
-            return ProposalsPage();
+            return Global.role == 2 ? TalentPage() : ProposalsPage();
           case 2:
-            return ContractsPage();
+            return Global.role == 2 ? CatalogPage() : ContractsPage();
           case 3:
             return MessagesPage();
           case 4:
@@ -52,18 +56,18 @@ class MyHomePage extends StatelessWidget {
                 iconSize: 20.0,
                 selectedFontSize: 10.0,
                 unselectedFontSize: 10.0,
-                items: const [
+                items:  [
                   BottomNavigationBarItem(
                     icon: Icon(Icons.work),
-                    label: "Jobs",
+                    label: Global.role == 2 ? "Dashboard" : "Jobs",
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.description),
-                    label: "Proposals",
+                    label: Global.role == 2 ? "Talent" : "Proposals",
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.event_note),
-                    label: "Contracts",
+                    label: Global.role == 2 ? "Catalog" : "Contracts",
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.message_outlined),

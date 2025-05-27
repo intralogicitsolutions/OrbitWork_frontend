@@ -1,4 +1,7 @@
 import 'package:get/get.dart';
+import 'package:orbitwork/client_profile_views/dashboard.dart';
+import 'package:orbitwork/client_profile_views/view_all_contracts.dart';
+import 'package:orbitwork/client_profile_views/view_all_job_posts.dart';
 import 'package:orbitwork/routes/app_routes.dart';
 import 'package:orbitwork/views/add_bank_account.dart';
 import 'package:orbitwork/views/add_billing_method_page.dart';
@@ -67,6 +70,7 @@ import '../views/group_chat_page.dart';
 import '../views/group_edit_page.dart';
 import '../views/overview_tab.dart';
 import '../views/payment_page.dart';
+import '../views/select_profile_page.dart';
 import '../widgets/specialized_profile_container.dart';
 
 class AppPages {
@@ -122,6 +126,7 @@ class AppPages {
     GetPage(name: AppRoutes.jobSearch, page: () => JobSearch(),),
     GetPage(name: AppRoutes.savedJob, page: () => SavedJobPage(),),
     GetPage(name: AppRoutes.groupEdit, page: () => GroupEditPage(roomId: Get.arguments['roomId'],),),
+    GetPage(name: AppRoutes.selectProfile, page: () => SelectProfilePage()),
 
 
     /// Create User Profile ///
@@ -142,6 +147,11 @@ class AppPages {
     GetPage(name: AppRoutes.previewProfile, page: () => PreviewProfile(),),
     GetPage(name: AppRoutes.specializedProfile, page: () => SpecializedProfileContainer(),),
 
-    GetPage(name: AppRoutes.createProfileContainer, page: () => CreateProfileContainer(),)
+    GetPage(name: AppRoutes.createProfileContainer, page: () => CreateProfileContainer(),),
+
+    /// Client Profile ///
+    GetPage(name: AppRoutes.dashboard, page: () => DashboardPage()),
+    GetPage(name: AppRoutes.viewAllJobPost, page: () => ViewAllJobPost()),
+    GetPage(name: AppRoutes.viewAllContracts, page: () => ViewAllContracts()),
   ];
 }

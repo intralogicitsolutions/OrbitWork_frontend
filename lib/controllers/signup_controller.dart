@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:get/get.dart';
 
+import '../enum/user_role_enum.dart';
 import '../repository/api/api_constants.dart';
 import '../routes/app_routes.dart';
 
@@ -11,11 +12,21 @@ class SignUpController extends GetxController{
   var lastName = ''.obs;
   var email = ''.obs;
   var password = ''.obs;
-  var role = "1";
+  var role = ''.obs;
   var country = 'India'.obs;
   var sendEmails = false.obs;
   var agreeToTerms = false.obs;
   var isLoading = false.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    final UserRole? selectedRole = Get.arguments;
+    if (selectedRole != null) {
+      role.value = selectedRole == UserRole.FREELANCER ? "1" : "2";
+    }
+    print('user role ====> ${role.value}');
+  }
 
   bool _validateFields() {
     if (firstName.value.trim().isEmpty ||
@@ -61,7 +72,7 @@ class SignUpController extends GetxController{
           "lastname": lastName.value,
           "email": email.value,
           "password": password.value,
-          "role": "1",
+          "role": role.value,
         }),
       );
 

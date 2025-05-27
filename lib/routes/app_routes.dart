@@ -53,6 +53,7 @@ class AppRoutes{
   static const String jobSearch = '/jobSearch';
   static const String savedJob = '/savedJob';
   static const String groupEdit = '/groupEdit';
+  static const String selectProfile = '/selectProfile';
 
   ///Create User Profile///
 
@@ -73,4 +74,12 @@ class AppRoutes{
   static const String specializedProfile = '/specializedProfile';
 
   static const String createProfileContainer = '/createProfileContainer';
+
+  ///Client Profile///
+
+  static const String dashboard = '/dashboard';
+  static const String viewAllJobPost = '/viewAllJobPost';
+  static const String viewAllContracts = '/viewAllContracts';
+
+
 }
