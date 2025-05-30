@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 
+enum DashboardActionType {
+  bottomSheet,
+  navigate,
+}
+
 class DashboardItem {
   final String title;
   final String subtitle;
   final String requirement;
   final IconData icon;
+  final DashboardActionType actionType;
 
   DashboardItem({
     required this.title,
     required this.subtitle,
     required this.requirement,
     required this.icon,
+    required this.actionType,
   });
 }
 

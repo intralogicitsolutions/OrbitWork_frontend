@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orbitwork/global/global.dart';
 import 'package:orbitwork/routes/app_routes.dart';
 
 import '../controllers/drawer_controller.dart';
@@ -63,7 +64,7 @@ class CustomDrawer extends StatelessWidget {
                               // ),
                             ),
                             Text(
-                              "Freelancer",
+                              Global.role == 2 ? "Orbitwork Client":"Freelancer",
                               style:
                                   TextStyle(fontSize: 14, color: Colors.grey),
                             ),
@@ -82,7 +83,41 @@ class CustomDrawer extends StatelessWidget {
                           // List of drawer options
                           final options = isProfilePage ? [
                             {'icon': Icons.apps, 'title': 'Apps and Offers', 'trailingIcon': Icons.keyboard_arrow_right},
-                          ]:[
+                          ]:
+                          Global.role == 2
+                              ? [
+                            {
+                              'icon': Icons.business,
+                              'title': 'Company Profile',
+                              'trailingIcon': Icons.keyboard_arrow_right,
+                            },
+                            {
+                              'icon': Icons.receipt_long,
+                              'title': 'Reports',
+                              'trailingIcon': Icons.keyboard_arrow_right,
+                            },
+                            {
+                              'icon': Icons.request_page,
+                              'title': 'My Requests',
+                              'trailingIcon': Icons.open_in_new,
+                            },
+                            {
+                              'icon': Icons.settings,
+                              'title': 'Settings',
+                              'trailingIcon': Icons.keyboard_arrow_right,
+                            },
+                            {
+                              'icon': Icons.help,
+                              'title': 'Help & Support',
+                              'trailingIcon': Icons.keyboard_arrow_right,
+                            },
+                            {
+                              'icon': Icons.brightness_6,
+                              'title': 'Theme: ${_getThemeLabel()}',
+                              'trailingIcon': Icons.expand_more,
+                            },
+                          ]
+                              :[
                             {'icon': Icons.person, 'title': 'Profile', 'trailingIcon': Icons.keyboard_arrow_right},
                             {'icon': Icons.bar_chart, 'title': 'My stats', 'trailingIcon': Icons.keyboard_arrow_right},
                             {'icon': Icons.receipt_long, 'title': 'Reports', 'trailingIcon': Icons.keyboard_arrow_right,},
@@ -115,7 +150,7 @@ class CustomDrawer extends StatelessWidget {
                                   Get.back();
                                   Get.find<Drawercontroller>().openBottomSheet(context);
                                 } else if (option['title'] == 'Reports') {
-                                  Get.toNamed(AppRoutes.reports);
+                                  Global.role == 2 ? Get.toNamed(AppRoutes.clientReport) : Get.toNamed(AppRoutes.reports);
                                 }else if (option['title'] == 'Settings') {
                                   Get.toNamed(AppRoutes.setting);
                                 }else if (option['title'] == 'Help & Support') {
@@ -124,6 +159,8 @@ class CustomDrawer extends StatelessWidget {
                                   Get.toNamed(AppRoutes.myStats);
                                 }else if (option['title'] == 'Profile') {
                                   Get.toNamed(AppRoutes.profilePage);
+                                }else if (option['title'] == 'Company Profile') {
+                                  Get.toNamed(AppRoutes.companyProfile);
                                 }
                                 else {
                                   // Handle other options

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orbitwork/global/global.dart';
 
 import '../component/add_extra_layres_security_bottomsheet.dart';
 import '../routes/app_routes.dart';
@@ -27,6 +28,13 @@ class SettingPage extends StatelessWidget {
 
             // User Settings Section
             SectionTitle(title: "User settings"),
+            if(Global.role == 2)
+            SettingsTile(
+              icon: Icons.display_settings_outlined,
+              title: "Membership Settings",
+              onTap: () {
+                  Get.toNamed(AppRoutes.membershipSettings);
+                },),
             SettingsTile(
               icon: Icons.card_membership,
               title: "Membership & Connects",
@@ -71,7 +79,11 @@ class SettingPage extends StatelessWidget {
               title: "Get paid",
               onTap: () =>  Get.toNamed(AppRoutes.getPaid),
             ),
-            SettingsTile(
+            Global.role == 2 ? SettingsTile(
+              icon: Icons.group,
+              title: "Teams",
+              onTap: () => Get.toNamed(AppRoutes.clientTeamsPage),
+            ) : SettingsTile(
               icon: Icons.group,
               title: "My teams",
               onTap: () => Get.toNamed(AppRoutes.myTeams),

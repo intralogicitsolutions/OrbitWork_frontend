@@ -19,18 +19,21 @@ class DashboardController extends GetxController {
       subtitle: 'Confirm it\'s you and establish trust with freelancers.',
       requirement: 'Required to hire',
       icon: Icons.email_outlined,
+      actionType: DashboardActionType.bottomSheet,
     ),
     DashboardItem(
       title: 'Verify your phone number',
       subtitle: 'Confirm it\'s you, to be able to publish your first job post.',
       requirement: 'Required to publish a job',
       icon: Icons.phone_outlined,
+      actionType: DashboardActionType.bottomSheet,
     ),
     DashboardItem(
       title: 'Add a billing method',
       subtitle: 'This can increase your hiring speed by up to 3x. There\'s no cost until you hire.',
       requirement: 'Required to hire',
       icon: Icons.payment_outlined,
+      actionType: DashboardActionType.navigate,
     ),
   ];
 
@@ -58,7 +61,15 @@ class DashboardController extends GetxController {
   }
 
   void completeItem(int index) {
-    // Logic to handle item completion
+    final item = dashboardItem[index];
+    switch (item.actionType) {
+      case DashboardActionType.bottomSheet:
+       // _openBottomSheet(item.title); // define this function
+        break;
+      case DashboardActionType.navigate:
+        Get.toNamed(AppRoutes.clientBillingAndPayments);
+        break;
+    }
     print('Completing item: ${dashboardItem[index].title}');
   }
 

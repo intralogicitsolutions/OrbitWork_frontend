@@ -18,6 +18,7 @@ class AddBillingController extends GetxController {
   final cardDetails = Rx<CardFieldInputDetails?>(null);
 
   var savedCard = Rxn<PaymentcardModel>();
+  var showAddBillingMethod = false.obs;
   // final cardFormFieldController = CardFormEditController();
   // final cardFormDetails = Rx<CardFieldInputDetails?>(null);
   //
@@ -477,5 +478,13 @@ class AddBillingController extends GetxController {
   void removePrimaryMethod() {
     primaryMethod.value = '';
     Get.snackbar("Removed", "Primary billing method removed");
+  }
+
+  void toggleBillingMethod(){
+    showAddBillingMethod.value = !showAddBillingMethod.value;
+  }
+
+  void cancelEdit() {
+    showAddBillingMethod.value = false;
   }
 }

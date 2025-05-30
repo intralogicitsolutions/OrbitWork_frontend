@@ -80,6 +80,11 @@ class AppRoutes{
   static const String dashboard = '/dashboard';
   static const String viewAllJobPost = '/viewAllJobPost';
   static const String viewAllContracts = '/viewAllContracts';
-
+  static const String companyProfile = '/companyProfile';
+  static const String clientReport = '/clientReport';
+  static const String membershipSettings = '/membershipSettings';
+  static const String clientMembershipPlan = '/clientMembershipPlan';
+  static const String clientBillingAndPayments = '/clientBillingAndPayment';
+  static const String clientTeamsPage = '/clientTeamsPage';
 
 }

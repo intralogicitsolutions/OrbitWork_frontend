@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../comms/url_launcher_helper.dart';
@@ -40,20 +41,40 @@ class ChangePreferenceBottomsheet extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Circular Design
-              Center(
-                child: CustomPaint(
-                  size: Size(200, 200),
-                  painter: CircularDesignPainter(),
-                ),
+              // Center(
+              //   child: CustomPaint(
+              //     size: Size(200, 200),
+              //     painter: CircularDesignPainter(),
+              //   ),
+              // ),
+              // SizedBox(height: 40),
+
+              Stack(
+                children: [
+                  Center(
+                    child: SvgPicture.asset(
+                      'assets/images/ai-consent-modal.svg',
+                      height: 250,
+                      width: 250,
+                    ),
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: IconButton(onPressed: () {
+                      Get.back();
+                    }, icon: Icon(Icons.close)),
+                  )
+                ],
               ),
               SizedBox(height: 40),
 
               // Title
               Text(
-                'Update your AI\npreferences',
+                'Update your AI preferences',
                 style: TextStyle(
                   fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w500,
                   height: 1.2,
                 ),
               ),
@@ -127,33 +148,4 @@ class ChangePreferenceBottomsheet extends StatelessWidget {
       ),
     );
   }
-}
-
-// Custom Painter for the circular design
-class CircularDesignPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
-      ..color = Colors.grey[300]!
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
-
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = size.width * 0.4;
-
-    // Draw multiple offset circles to create the spiral effect
-    for (var i = 0; i < 12; i++) {
-      final path = Path();
-      path.addOval(
-        Rect.fromCircle(
-          center: center,
-          radius: radius + (i * 2),
-        ),
-      );
-      canvas.drawPath(path, paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

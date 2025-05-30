@@ -46,7 +46,7 @@ class SocketService extends GetxService {
   // }
 
   Future<void> connectSocket(String userId) async {
-    socket = IO.io('https://317b-2405-f600-8-42f1-44bd-8921-b790-13dc.ngrok-free.app', <String, dynamic>{
+    socket = IO.io('https://8505-2405-f600-8-57e7-41e2-827c-d0fc-da26.ngrok-free.app', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });

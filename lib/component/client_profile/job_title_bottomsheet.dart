@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orbitwork/component/client_profile/verify_phone_number_bottomsheet.dart';
 
 import '../../client_profile_controller/job_title_controller.dart';
 
@@ -46,7 +47,15 @@ class JobTitleBottomsheet extends StatelessWidget{
                             'Just a reminder to publish your job post, you\'ll need to',
                             style: TextStyle(color: Colors.blue.shade700),
                           ),
-                          Text('verify your phone number', style: TextStyle(color: Get.theme.primaryColor))
+                          GestureDetector(
+                            onTap: () {
+                              Get.bottomSheet(
+                                VerifyPhoneNumberBottomsheet(),
+                                // isScrollControlled: true,
+                                // ignoreSafeArea: false,
+                              );
+                            },
+                              child: Text('verify your phone number', style: TextStyle(color: Get.theme.primaryColor)))
                         ],
                       ),
                     ),
