@@ -69,8 +69,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               }
             },
             child: CircleAvatar(
-              radius: 24,
-              child: const Icon(Icons.account_circle, size: 48),
+              backgroundColor: Get.theme.dividerColor,
+              radius: 20,
+              child: const Icon(Icons.account_circle_outlined, size: 32, color: Colors.white,),
             ),
           ),
           const SizedBox(width: 16),
@@ -85,7 +86,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           if (rightIcon != null) rightIcon!, // Display right icon if provided
         ],
       ),
-      backgroundColor: theme.appBarTheme.backgroundColor,
+      //backgroundColor: theme.appBarTheme.backgroundColor,
+      backgroundColor: Get.theme.scaffoldBackgroundColor,
       elevation: 0,
       centerTitle: false,
     );

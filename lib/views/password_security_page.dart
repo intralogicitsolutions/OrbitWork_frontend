@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../component/client_profile/change_password_bottomsheet.dart';
 import '../component/set_question_answer_bottomsheet.dart';
 import '../component/setup_password_bottomsheet.dart';
 import '../component/setup_verification_bottomsheet.dart';
 import '../controllers/password_and_security_controller.dart';
+import '../global/global.dart';
 
 class PasswordAndSecurity extends StatelessWidget {
   final PasswordAndSecurityController controller =
@@ -49,6 +51,7 @@ class PasswordAndSecurity extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () {
                           Get.bottomSheet(
+                            Global.role == 2 ? ChangePasswordBottomsheet() :
                             SetupPasswordBottomSheet(),
                             isScrollControlled: true,
                             ignoreSafeArea: false

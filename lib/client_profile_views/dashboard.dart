@@ -15,7 +15,13 @@ class DashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(Drawercontroller());
     return Scaffold(
-      appBar: CustomAppBar(title: 'Your dashboard'),
+      appBar: CustomAppBar(
+        title: 'Your dashboard',
+        rightIcon: IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.more_vert)
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -86,5 +86,7 @@ class AppRoutes{
   static const String clientMembershipPlan = '/clientMembershipPlan';
   static const String clientBillingAndPayments = '/clientBillingAndPayment';
   static const String clientTeamsPage = '/clientTeamsPage';
+  static const String talentSearchScreen = '/talentSearchScreen';
+  static const String clientProfilePage = '/clientProfilePage';
 
 }

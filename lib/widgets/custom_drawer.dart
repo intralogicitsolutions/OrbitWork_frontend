@@ -43,11 +43,12 @@ class CustomDrawer extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        const CircleAvatar(
-                          radius: 30,
+                        CircleAvatar(
+                          backgroundColor: Get.theme.dividerColor,
+                          radius: 25,
                           // backgroundImage:
                           // NetworkImage("https://via.placeholder.com/150"),
-                          child: const Icon(Icons.account_circle, size: 48),
+                          child: const Icon(Icons.account_circle_outlined, size: 32, color: Colors.white,),
                         ),
                         const SizedBox(width: 16),
                         Column(

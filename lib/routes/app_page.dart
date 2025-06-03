@@ -1,10 +1,12 @@
 import 'package:get/get.dart';
 import 'package:orbitwork/client_profile_views/client_billing_and_payment.dart';
 import 'package:orbitwork/client_profile_views/client_membership_plan.dart';
+import 'package:orbitwork/client_profile_views/client_profile.dart';
 import 'package:orbitwork/client_profile_views/client_reports.dart';
 import 'package:orbitwork/client_profile_views/company_profile.dart';
 import 'package:orbitwork/client_profile_views/dashboard.dart';
 import 'package:orbitwork/client_profile_views/membership_setting.dart';
+import 'package:orbitwork/client_profile_views/talent_search_screen.dart';
 import 'package:orbitwork/client_profile_views/teams_page.dart';
 import 'package:orbitwork/client_profile_views/view_all_contracts.dart';
 import 'package:orbitwork/client_profile_views/view_all_job_posts.dart';
@@ -165,5 +167,7 @@ class AppPages {
     GetPage(name: AppRoutes.clientMembershipPlan, page: () => ClientMembershipPlans(),),
     GetPage(name: AppRoutes.clientBillingAndPayments, page: () => ClientBillingAndPayments()),
     GetPage(name: AppRoutes.clientTeamsPage, page: () => TeamsPage()),
+    GetPage(name: AppRoutes.talentSearchScreen, page: () => TalentSearchScreen(),),
+    GetPage(name: AppRoutes.clientProfilePage, page: () => ClientProfilePage(),),
   ];
 }

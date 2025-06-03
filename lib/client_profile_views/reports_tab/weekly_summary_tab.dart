@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:orbitwork/client_profile_controller/week_selector_controller.dart';
 
 import '../../client_profile_controller/weekly_summary_controller.dart';
+import '../../component/client_profile/week_selector_bottomsheet.dart';
 
 class WeeklySummaryTab extends StatelessWidget{
   final WeeklySummaryController controller = Get.put(WeeklySummaryController());
+  final WeekSelectorController weekSelectorController = Get.put(WeekSelectorController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +24,7 @@ class WeeklySummaryTab extends StatelessWidget{
               SizedBox(height: 24,),
 
 
-              _buildWeekSelector(),
+              _buildWeekSelector(context),
               SizedBox(height: 32),
 
               // Totals Section
@@ -74,6 +77,7 @@ class WeeklySummaryTab extends StatelessWidget{
                 fontSize: 18, fontWeight: FontWeight.w500
               ),
               ),
+              SizedBox(height: 12,),
               Container(padding: EdgeInsets.all(40),
                 decoration: BoxDecoration(
                     color: Colors.grey.shade100,
@@ -103,51 +107,51 @@ class WeeklySummaryTab extends StatelessWidget{
     );
   }
 
-  Widget _buildWeekSelector() {
+  Widget _buildWeekSelector(BuildContext context) {
     return Row(
       children: [
         GestureDetector(
-          onTap: () => controller.changeWeek(false),
+        onTap: () {
+          weekSelectorController.previousWeek();
+        },
           child: Icon(Icons.chevron_left, color: Colors.grey[600]),
         ),
         Expanded(
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey[300]!),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              children: [
-                // GestureDetector(
-                //   onTap: () => controller.changeWeek(false),
-                //   child: Icon(Icons.chevron_left, color: Colors.grey[600]),
-                // ),
-                // SizedBox(width: 12),
-                Icon(Icons.calendar_today_outlined, size: 20),
-                SizedBox(width: 12),
-                Expanded(
-                  child: Obx(() => Text(
-                    controller.selectedWeek.value,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black,
-                    ),
-                  )),
-                ),
-                Icon(Icons.keyboard_arrow_down, color: Colors.grey[600]),
-                // SizedBox(width: 12),
-                // GestureDetector(
-                //   onTap: () => controller.changeWeek(true),
-                //   child: Icon(Icons.chevron_right, color: Colors.grey[600]),
-                // ),
-              ],
+          child: GestureDetector(
+            onTap: () => _showWeekSelector(context),
+            child: Obx(() {
+                return Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey[300]!),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.calendar_today_outlined, size: 20),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          weekSelectorController.getSelectedWeekString(),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      Icon(Icons.keyboard_arrow_down, color: Colors.grey[600]),
+                    ],
+                  ),
+                );
+              }
             ),
           ),
         ),
         GestureDetector(
-          onTap: () => controller.changeWeek(true),
+         onTap: () {
+           weekSelectorController.nextWeek();
+         },
           child: Icon(Icons.chevron_right, color: Colors.grey[600]),
         ),
       ],
@@ -261,6 +265,15 @@ class WeeklySummaryTab extends StatelessWidget{
           ],
         ),
       ),
+    );
+  }
+
+  void _showWeekSelector(BuildContext context){
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => WeekSelectorBottomSheet(),
     );
   }
 }

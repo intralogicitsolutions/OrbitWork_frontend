@@ -6,6 +6,7 @@ import 'package:orbitwork/views/proposals_page.dart';
 
 import '../client_profile_views/Talent.dart';
 import '../client_profile_views/catalog.dart';
+import '../client_profile_views/client_alerts.dart';
 import '../controllers/drawer_controller.dart';
 import '../global/global.dart';
 import 'alerts_page.dart';
@@ -31,7 +32,7 @@ class MyHomePage extends StatelessWidget {
           case 3:
             return MessagesPage();
           case 4:
-            return AlertsPage();
+            return Global.role == 2 ? ClientAlertsPage() : AlertsPage();
           default:
             return JobsPage();
         }

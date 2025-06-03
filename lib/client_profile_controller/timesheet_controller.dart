@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../component/client_profile/display_setting_bottomsheet.dart';
+import '../component/select_date_bottom_sheet.dart';
 
 class TimesheetController extends GetxController {
   var selectedTab = 1.obs; // Timesheet tab is selected (index 1)
@@ -20,7 +21,16 @@ class TimesheetController extends GetxController {
   void openDatePicker() {
     // Logic to open date picker
     // For demo purposes, just updating the string
-    selectedDateRange.value = 'Jun 1, 2025 - Jun 5, 2025';
+    //selectedDateRange.value = 'Jun 1, 2025 - Jun 5, 2025';
+    Get.bottomSheet(
+      SelectDateBottomSheet(),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+            top: Radius.circular(16)),
+      ),
+    );
   }
 
   void openFilters() {

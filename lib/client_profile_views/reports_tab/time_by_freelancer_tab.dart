@@ -3,9 +3,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../client_profile_controller/timesheet_controller.dart';
+import '../../controllers/dateselector_controller.dart';
 
 class TimeByFreelanserTab extends StatelessWidget{
   final TimesheetController controller = Get.put(TimesheetController());
+  final dateSelectController = Get.put(DateSelectorController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +79,8 @@ class TimeByFreelanserTab extends StatelessWidget{
           children: [
             Expanded(
               child: Obx(() => Text(
-                controller.selectedDateRange.value,
+               // controller.selectedDateRange.value,
+                dateSelectController.selectedDateRange,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
