@@ -1,13 +1,8 @@
-// import 'package:get/get.dart';
-//
-// class LoginController extends GetxController {
-//   var username = ''.obs;
-// }
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:orbitwork/enum/user_role_enum.dart';
+
 import 'package:orbitwork/global/tokenStorage.dart';
 import 'dart:convert';
 

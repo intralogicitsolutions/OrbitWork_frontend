@@ -24,10 +24,10 @@ class ViewAllJobPost extends StatelessWidget{
               children: [
                 Expanded(
                   child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(width: 1, color: Get.theme.secondaryHeaderColor)
-                    ),
+                    // decoration: BoxDecoration(
+                    //   borderRadius: BorderRadius.circular(12),
+                    //   border: Border.all(width: 1, color: Get.theme.secondaryHeaderColor)
+                    // ),
                     child: TextField(
                       decoration: InputDecoration(
                         hintText: 'Search job postings',
@@ -38,7 +38,7 @@ class ViewAllJobPost extends StatelessWidget{
                         prefixIcon: Icon(Icons.search),
                         contentPadding: EdgeInsets.symmetric(vertical: 10),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
                     ),

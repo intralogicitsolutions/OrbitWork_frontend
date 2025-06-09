@@ -428,46 +428,72 @@ class TalentFiltersBottomSheet extends StatelessWidget {
         ),
         if (controller.isLocationExpanded.value) ...[
           SizedBox(height: 16),
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey[300]!),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                value: controller.selectedLocation.value,
-                isExpanded: true,
-                icon: Icon(Icons.keyboard_arrow_down, color: Colors.grey[600]),
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey[700],
+          InkWell(
+            onTap: () {
+              Get.bottomSheet(
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            "Select Location",
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Divider(height: 1),
+                        ...[
+                          'Location',
+                          'United States',
+                          'United Kingdom',
+                          'Canada',
+                          'Australia',
+                          'India',
+                          'Germany',
+                          'France',
+                        ].map((location) {
+                          return ListTile(
+                            title: Text(location),
+                            onTap: () {
+                              controller.setLocation(location);
+                              Get.back(); // Close bottom sheet
+                            },
+                          );
+                        }).toList(),
+                        SizedBox(height: 8),
+                      ],
+                    ),
+                  ),
                 ),
-                items: [
-                  'Location',
-                  'United States',
-                  'United Kingdom',
-                  'Canada',
-                  'Australia',
-                  'India',
-                  'Germany',
-                  'France',
-                ].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  if (newValue != null) {
-                    controller.setLocation(newValue);
-                  }
-                },
+              );
+            },
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey[300]!),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Obx(() => Text(
+                    controller.selectedLocation.value,
+                    style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                  )),
+                  Icon(Icons.keyboard_arrow_down, color: Colors.grey[600]),
+                ],
               ),
             ),
           ),
         ],
+
       ],
     ));
   }
@@ -500,60 +526,82 @@ class TalentFiltersBottomSheet extends StatelessWidget {
         ),
         if (controller.isTalentTimeZonesExpanded.value) ...[
           SizedBox(height: 16),
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey[300]!),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                value: controller.selectedTimeZone.value.isEmpty
-                    ? null
-                    : controller.selectedTimeZone.value,
-                hint: Text(
-                  'Select time zone',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey[700],
+          InkWell(
+            onTap: () {
+              Get.bottomSheet(
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            "Select Time Zone",
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Divider(height: 1),
+                        ...[
+                          'UTC-12:00 (Baker Island)',
+                          'UTC-11:00 (Hawaii)',
+                          'UTC-10:00 (Alaska)',
+                          'UTC-9:00 (Pacific)',
+                          'UTC-8:00 (Mountain)',
+                          'UTC-7:00 (Central)',
+                          'UTC-6:00 (Eastern)',
+                          'UTC-5:00 (Atlantic)',
+                          'UTC+0:00 (GMT)',
+                          'UTC+1:00 (CET)',
+                          'UTC+5:30 (IST)',
+                          'UTC+8:00 (CST)',
+                          'UTC+9:00 (JST)',
+                        ].map((timeZone) {
+                          return ListTile(
+                            title: Text(timeZone),
+                            onTap: () {
+                              controller.setTimeZone(timeZone);
+                              Get.back(); // close bottom sheet
+                            },
+                          );
+                        }).toList(),
+                        SizedBox(height: 8),
+                      ],
+                    ),
                   ),
                 ),
-                isExpanded: true,
-                icon: Icon(Icons.keyboard_arrow_down, color: Colors.grey[600]),
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey[700],
-                ),
-                items: [
-                  'UTC-12:00 (Baker Island)',
-                  'UTC-11:00 (Hawaii)',
-                  'UTC-10:00 (Alaska)',
-                  'UTC-9:00 (Pacific)',
-                  'UTC-8:00 (Mountain)',
-                  'UTC-7:00 (Central)',
-                  'UTC-6:00 (Eastern)',
-                  'UTC-5:00 (Atlantic)',
-                  'UTC+0:00 (GMT)',
-                  'UTC+1:00 (CET)',
-                  'UTC+5:30 (IST)',
-                  'UTC+8:00 (CST)',
-                  'UTC+9:00 (JST)',
-                ].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  if (newValue != null) {
-                    controller.setTimeZone(newValue);
-                  }
-                },
+              );
+            },
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey[300]!),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Obx(() => Text(
+                    controller.selectedTimeZone.value.isEmpty
+                        ? 'Select time zone'
+                        : controller.selectedTimeZone.value,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey[700],
+                    ),
+                  )),
+                  Icon(Icons.keyboard_arrow_down, color: Colors.grey[600]),
+                ],
               ),
             ),
           ),
         ],
+
       ],
     ));
   }

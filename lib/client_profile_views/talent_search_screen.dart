@@ -4,6 +4,7 @@ import 'package:orbitwork/component/client_profile/advanced_search_bottomsheet.d
 
 import '../client_profile_controller/freelancer_controller.dart';
 import '../client_profile_controller/talent_filters_controller.dart';
+import '../component/client_profile/select_like_bottomsheet.dart';
 import '../component/client_profile/talent_filters_bottomsheet.dart';
 import '../routes/app_routes.dart';
 
@@ -182,13 +183,18 @@ class TalentSearchScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 15),
-                      Container(
-                        padding: EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Get.theme.primaryColor, width: 2)
-                          ),
-                          child: Icon(Icons.favorite_border, color: Get.theme.primaryColor, size: 20,)),
+                      GestureDetector(
+                        onTap: () {
+                          Get.bottomSheet(SelectLikeBottomsheet());
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Get.theme.primaryColor, width: 2)
+                            ),
+                            child: Icon(Icons.favorite_border, color: Get.theme.primaryColor, size: 20,)),
+                      ),
                     ],
                   ),
                   SizedBox(height: 10),

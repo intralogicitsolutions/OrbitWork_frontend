@@ -24,10 +24,10 @@ class ViewAllContracts extends StatelessWidget{
               children: [
                 Expanded(
                   child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(width: 1, color: Get.theme.secondaryHeaderColor)
-                    ),
+                    // decoration: BoxDecoration(
+                    //   borderRadius: BorderRadius.circular(16),
+                    //   border: Border.all(width: 1, color: Get.theme.secondaryHeaderColor)
+                    // ),
                     child: TextField(
                       decoration: InputDecoration(
                         hintText: 'Search all contracts',

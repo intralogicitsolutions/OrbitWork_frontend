@@ -376,8 +376,9 @@ class ClientBillingAndPayments extends StatelessWidget{
             ),
             SizedBox(width: 8),
             GlobalTooltip(
-                text:
-                'The 3-digit number located on the back right side of your card.'),
+              content: Text('The 3-digit number located on the back right side of your card.'),
+                //text: 'The 3-digit number located on the back right side of your card.'
+            ),
           ],
         ),
         SizedBox(height: 8),

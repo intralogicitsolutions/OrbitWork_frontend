@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../client_profile_model/dashboard_model.dart';
+import '../component/client_profile/post_job_bottomsheet.dart';
 import '../routes/app_routes.dart';
 
 
@@ -75,6 +76,12 @@ class DashboardController extends GetxController {
 
   void postJob() {
     print('Post a job clicked');
+    Get.bottomSheet(
+      PostJobBottomsheet(),
+      isScrollControlled: true,
+      ignoreSafeArea: false,
+    );
+
   }
 
   void viewJobPosts() {
@@ -89,6 +96,7 @@ class DashboardController extends GetxController {
 
   void browseConsultations() {
     print('Browse consultations clicked');
+    Get.toNamed(AppRoutes.talentSearchScreen);
   }
 
   void bookConsultation() {

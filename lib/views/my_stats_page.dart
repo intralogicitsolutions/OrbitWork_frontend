@@ -1,10 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:orbitwork/views/tabs/impressions_tab.dart';
-import 'package:orbitwork/views/tabs/invites_tab.dart';
 import 'package:orbitwork/views/tabs/profile_view_tab.dart';
-import 'package:path/path.dart';
 import '../component/Explore_work_bottomsheet.dart';
 import '../component/badges_bottomsheet.dart';
 import '../component/complete_your_profile_bottomsheet.dart';

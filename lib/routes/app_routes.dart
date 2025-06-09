@@ -88,5 +88,9 @@ class AppRoutes{
   static const String clientTeamsPage = '/clientTeamsPage';
   static const String talentSearchScreen = '/talentSearchScreen';
   static const String clientProfilePage = '/clientProfilePage';
+  static const String consultationPage = '/consultationPage';
+  static const String clientFreelancerProfile = '/clientFreelancerProfile';
+  static const String projectDetails = '/projectDetails';
+  static const String sendOfferPage = '/sendOfferPage';
 
 }

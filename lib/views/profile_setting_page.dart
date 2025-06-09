@@ -157,7 +157,9 @@ class ProfileSetting extends StatelessWidget {
                   SizedBox(
                     width: 5,
                   ),
-                  GlobalTooltip(text: 'Don\'t worry, your selection won\'t affect how or when we display your profile to clients.',
+                  GlobalTooltip(
+                    content: Text('Don\'t worry, your selection won\'t affect how or when we display your profile to clients.'),
+                    //text: 'Don\'t worry, your selection won\'t affect how or when we display your profile to clients.',
                   iconSize: 16,
                   ),
                 ],
@@ -206,7 +208,9 @@ class ProfileSetting extends StatelessWidget {
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                   ),
                   SizedBox(width: 5),
-                  GlobalTooltip(text: 'Please note that by checking this option, you will not show up in search results if a client chooses to filter the results by earnings.',
+                  GlobalTooltip(
+                    content: Text('Please note that by checking this option, you will not show up in search results if a client chooses to filter the results by earnings.'),
+                   // text: 'Please note that by checking this option, you will not show up in search results if a client chooses to filter the results by earnings.',
                   iconSize: 16,
                   ),
                 ],

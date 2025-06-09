@@ -382,7 +382,9 @@ class JobDetailsView extends StatelessWidget {
                                 Text('Proposals: '),
                                 Row(
                                   children: [
-                                    GlobalTooltip(text: 'This range includes relevant proposals, but does not include proposals, but does not include proposals that are withdrawn, declined or archived. Please note that all proposals are accessible to clients on their applicants page.',
+                                    GlobalTooltip(
+                                      content: Text('This range includes relevant proposals, but does not include proposals, but does not include proposals that are withdrawn, declined or archived. Please note that all proposals are accessible to clients on their applicants page.'),
+                                      //text: 'This range includes relevant proposals, but does not include proposals, but does not include proposals that are withdrawn, declined or archived. Please note that all proposals are accessible to clients on their applicants page.',
                                     iconColor: Get.theme.primaryColor,
                                     iconSize: 16,
                                     ),
@@ -400,7 +402,9 @@ class JobDetailsView extends StatelessWidget {
                                 Text('Last viewed by client: '),
                                 Row(
                                   children: [
-                                    GlobalTooltip(text: 'This is when the client last reviewed or interacted with the applicants for this job.',
+                                    GlobalTooltip(
+                                      content: Text('This is when the client last reviewed or interacted with the applicants for this job.'),
+                                      //text: 'This is when the client last reviewed or interacted with the applicants for this job.',
                                     iconSize: 16,
                                       iconColor: Get.theme.primaryColor,
                                     ),

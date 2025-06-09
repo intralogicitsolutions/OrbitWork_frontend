@@ -38,7 +38,10 @@ class TalentPage extends StatelessWidget{
                   SizedBox(height: 24,),
 
 
-                  _buildTitleSearch('Talent to check out', 'See more like this'),
+                  _buildTitleSearch('Talent to check out', 'See more like this', onTap: () {
+
+                    Get.toNamed(AppRoutes.talentSearchScreen);
+                  },),
 
                   _buildTalentToCheckOutSection(),
                   SizedBox(height: 24,),

@@ -258,8 +258,9 @@ class BoostProfileBottomsheet extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GlobalTooltip(
-                        text:
-                            'Bids help you reach the top of search results, and higher bids increase your chances.'),
+                      content: Text('Bids help you reach the top of search results, and higher bids increase your chances.'),
+                      //  text: 'Bids help you reach the top of search results, and higher bids increase your chances.'
+                       ),
                   ),
                 ],
               ),
@@ -285,8 +286,9 @@ class BoostProfileBottomsheet extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GlobalTooltip(
-                        text:
-                            'Set a daily or total limit for spending on bids.'),
+                      content: Text('Set a daily or total limit for spending on bids.'),
+                        //text: 'Set a daily or total limit for spending on bids.'
+                    ),
                   ),
                 ],
               ),

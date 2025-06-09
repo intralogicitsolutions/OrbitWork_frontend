@@ -36,10 +36,10 @@ class FreelancerController extends GetxController {
         jobSuccess: 95,
         isAvailable: true,
         profileImage: "https://example.com/rahul.jpg", // Replace with real URL
-        skills: [],
+        skills: ["Learn Generation", "Data Entry", "Data Mining", "Data Scraping"],
         isBoosted: false,
-        agencyName: "",
-        agencyEarnings: 0,
+        agencyName: "Miami-dade Solutions",
+        agencyEarnings: 700000,
       ),
     ];
   }

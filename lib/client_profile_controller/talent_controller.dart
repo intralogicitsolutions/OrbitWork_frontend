@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../client_profile_model/talent_model.dart';
+import '../component/client_profile/create_list_bottomsheet.dart';
+import '../component/client_profile/select_like_bottomsheet.dart';
 
 class TalentController extends GetxController {
   var recentlyViewed = <TalentModel>[].obs;
@@ -266,12 +268,7 @@ class TalentController extends GetxController {
 
   void addToFavorites(String talentId) {
     // Handle favorite functionality
-    Get.snackbar(
-      'Added to Favorites',
-      'Talent added to your favorites list',
-      snackPosition: SnackPosition.BOTTOM,
-      duration: Duration(seconds: 2),
-    );
+    Get.bottomSheet(SelectLikeBottomsheet());
   }
 
   void viewTalentProfile(TalentModel talent) {
