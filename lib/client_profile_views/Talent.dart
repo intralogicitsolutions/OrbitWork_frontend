@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orbitwork/client_profile_views/recently_viewed.dart';
+import 'package:orbitwork/client_profile_views/your_hire_page.dart';
 import '../client_profile_controller/browse_category_controller.dart';
 import '../client_profile_controller/talent_controller.dart';
 import '../client_profile_model/category_model.dart';
@@ -7,6 +9,7 @@ import '../client_profile_model/talent_model.dart';
 import '../component/client_profile/talent_list_bottomsheet.dart';
 import '../routes/app_routes.dart';
 import '../widgets/custom_appbar.dart';
+import 'company_hire_page.dart';
 
 class TalentPage extends StatelessWidget{
   final TalentController controller = Get.put(TalentController());
@@ -20,66 +23,27 @@ class TalentPage extends StatelessWidget{
         rightIcon: IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
       ),
 
-      body: Obx(() {
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildSearchbar(),
-                  SizedBox(height: 12,),
-                  _buildList(context),
-                  Divider(height: 40,),
-                  _buildTitleSearch('Recently viewed', 'See all recently viewed'),
-
-                  if (controller.recentlyViewed.isNotEmpty)
-                  _buildRecentlyViewedSection(),
-                  SizedBox(height: 24,),
-
-
-                  _buildTitleSearch('Talent to check out', 'See more like this', onTap: () {
-
-                    Get.toNamed(AppRoutes.talentSearchScreen);
-                  },),
-
-                  _buildTalentToCheckOutSection(),
-                  SizedBox(height: 24,),
-
-
-                  _buildTitleSearch('Talent in India', 'See more from this area'),
-
-                  _buildSeeMoreFromAreaSection(),
-                  SizedBox(height: 24),
-
-
-                  _buildTitleSearch('Projects you may like', 'Find more projects'),
-
-                  _buildProjectsYouMayLikeSection(),
-                  SizedBox(height: 24),
-
-                  Text('Browse by category', style: TextStyle(
-                    fontSize: 22, fontWeight: FontWeight.w500
-                  ),),
-
-                  SizedBox(height: 24,),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: browseController.categories.length,
-                    itemBuilder: (context, index) {
-                      return _buildCategoryItem(browseController.categories[index]);
-                    },
-                  ),
-
-                ],
+        body: Obx(() {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildSearchbar(),
+                    SizedBox(height: 12,),
+                    _buildList(context),
+                    Divider(height: 40,),
+                    //_buildDiscover(),
+                    _getSelectedWidget(),
+                  ],
+                ),
               ),
-            ),
-          );
-        }
-      ),
-    );
-  }
+            );
+          }
+        ),
+      );
+    }
 
   Widget _buildSearchbar(){
     return  Container(
@@ -147,6 +111,79 @@ class TalentPage extends StatelessWidget{
           ),
         ),
       ),
+    );
+  }
+
+  Widget _getSelectedWidget() {
+    final selected = controller.selectedListName.value;
+
+    switch (selected) {
+      case 'Discover':
+        return _buildDiscover();
+      case 'Your hires':
+        return YourHirePage();
+      case 'Recently viewed':
+        return RecentlyViewedPage();
+      case 'Company hires':
+        return CompanyHirePage();
+      default:
+        return SizedBox.shrink();
+    }
+  }
+
+
+  Widget _buildDiscover(){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildTitleSearch('Recently viewed', 'See all recently viewed', onTap: () {
+          Get.toNamed(AppRoutes.findTalent);
+        },),
+
+        if (controller.recentlyViewed.isNotEmpty)
+          _buildRecentlyViewedSection(),
+        SizedBox(height: 24,),
+
+
+        _buildTitleSearch('Talent to check out', 'See more like this', onTap: () {
+
+          Get.toNamed(AppRoutes.talentSearchScreen);
+        },),
+
+        _buildTalentToCheckOutSection(),
+        SizedBox(height: 24,),
+
+
+        _buildTitleSearch('Talent in India', 'See more from this area', onTap: () {
+          Get.toNamed(AppRoutes.talentSearchScreen);
+        },),
+
+        _buildSeeMoreFromAreaSection(),
+        SizedBox(height: 24),
+
+
+        _buildTitleSearch('Projects you may like', 'Find more projects', onTap: () {
+          Get.toNamed(AppRoutes.browseProjectCatalog);
+        },),
+
+        _buildProjectsYouMayLikeSection(),
+        SizedBox(height: 24),
+
+        Text('Browse by category', style: TextStyle(
+            fontSize: 22, fontWeight: FontWeight.w500
+        ),),
+
+        SizedBox(height: 24,),
+        ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: browseController.categories.length,
+          itemBuilder: (context, index) {
+            return _buildCategoryItem(browseController.categories[index]);
+          },
+        ),
+
+      ],
     );
   }
 

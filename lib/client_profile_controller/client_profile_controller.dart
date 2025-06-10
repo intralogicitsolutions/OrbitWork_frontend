@@ -73,7 +73,7 @@ class ClientProfileController extends GetxController{
   void onInit() {
     super.onInit();
     scrollController.addListener(_onScroll);
-    initializeVideoPlayer();
+    // initializeVideoPlayer();
   }
 
 
@@ -144,20 +144,20 @@ class ClientProfileController extends GetxController{
     selectedTab.value = index;
   }
 
-  void initializeVideoPlayer() {
-    videoPlayerController = VideoPlayerController.network(
-      'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
-    );
-
-    videoPlayerController!.initialize().then((_) {
-      isVideoInitialized.value = true;
-      update();
-    });
-
-    videoPlayerController!.addListener(() {
-      isPlaying.value = videoPlayerController!.value.isPlaying;
-    });
-  }
+  // void initializeVideoPlayer() {
+  //   videoPlayerController = VideoPlayerController.network(
+  //     'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
+  //   );
+  //
+  //   videoPlayerController!.initialize().then((_) {
+  //     isVideoInitialized.value = true;
+  //     update();
+  //   });
+  //
+  //   videoPlayerController!.addListener(() {
+  //     isPlaying.value = videoPlayerController!.value.isPlaying;
+  //   });
+  // }
 
   void toggleVideoPlayback() {
     if (videoPlayerController!.value.isPlaying) {

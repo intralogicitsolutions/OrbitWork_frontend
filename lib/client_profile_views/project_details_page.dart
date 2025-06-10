@@ -139,8 +139,9 @@ class ProjectDetailsPage extends StatelessWidget {
                             onPageChanged: controller.onPageChanged,
                             itemBuilder: (context, index) {
                               return ClipRRect(
-                                borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(12)),
+                                // borderRadius: BorderRadius.vertical(
+                                //     top: Radius.circular(12)),
+                                borderRadius: BorderRadius.circular(12),
                                 child: Image.asset(
                                   controller.images[index],
                                   fit: BoxFit.cover,
@@ -149,26 +150,26 @@ class ProjectDetailsPage extends StatelessWidget {
                             },
                           ),
                         ),
-                        SizedBox(height: 8),
-                        Obx(() => Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: List.generate(controller.images.length,
-                                  (index) {
-                                bool isSelected =
-                                    controller.currentPage.value == index;
-                                return Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 4),
-                                  width: isSelected ? 12 : 8,
-                                  height: isSelected ? 12 : 8,
-                                  decoration: BoxDecoration(
-                                    color:
-                                        isSelected ? Colors.green : Colors.grey,
-                                    shape: BoxShape.circle,
-                                  ),
-                                );
-                              }),
-                            )),
-                        SizedBox(height: 12),
+                        // SizedBox(height: 8),
+                        // Obx(() => Row(
+                        //       mainAxisAlignment: MainAxisAlignment.center,
+                        //       children: List.generate(controller.images.length,
+                        //           (index) {
+                        //         bool isSelected =
+                        //             controller.currentPage.value == index;
+                        //         return Container(
+                        //           margin: EdgeInsets.symmetric(horizontal: 4),
+                        //           width: isSelected ? 12 : 8,
+                        //           height: isSelected ? 12 : 8,
+                        //           decoration: BoxDecoration(
+                        //             color:
+                        //                 isSelected ? Colors.green : Colors.grey,
+                        //             shape: BoxShape.circle,
+                        //           ),
+                        //         );
+                        //       }),
+                        //     )),
+                        // SizedBox(height: 12),
                       ],
                     ),
                     Positioned(
@@ -219,7 +220,30 @@ class ProjectDetailsPage extends StatelessWidget {
                               }
                             ),
                           ],
-                        ))
+                        )),
+                    Obx(() => Positioned(
+                      bottom: 10,
+                      left: 0,
+                      right: 0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(controller.images.length,
+                                (index) {
+                              bool isSelected =
+                                  controller.currentPage.value == index;
+                              return Container(
+                                margin: EdgeInsets.symmetric(horizontal: 4),
+                                width: isSelected ? 12 : 8,
+                                height: isSelected ? 12 : 8,
+                                decoration: BoxDecoration(
+                                  color:
+                                  isSelected ? Colors.green : Colors.grey,
+                                  shape: BoxShape.circle,
+                                ),
+                              );
+                            }),
+                      ),
+                    )),
                   ],
                 ),
               ),

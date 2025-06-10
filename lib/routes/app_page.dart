@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:orbitwork/client_profile_views/browse_project_catalog.dart';
 import 'package:orbitwork/client_profile_views/client_billing_and_payment.dart';
 import 'package:orbitwork/client_profile_views/client_freelancer_profile.dart';
 import 'package:orbitwork/client_profile_views/client_membership_plan.dart';
@@ -7,6 +8,7 @@ import 'package:orbitwork/client_profile_views/client_reports.dart';
 import 'package:orbitwork/client_profile_views/company_profile.dart';
 import 'package:orbitwork/client_profile_views/consultation_page.dart';
 import 'package:orbitwork/client_profile_views/dashboard.dart';
+import 'package:orbitwork/client_profile_views/find_talent.dart';
 import 'package:orbitwork/client_profile_views/membership_setting.dart';
 import 'package:orbitwork/client_profile_views/project_details_page.dart';
 import 'package:orbitwork/client_profile_views/send_an_offer.dart';
@@ -14,6 +16,7 @@ import 'package:orbitwork/client_profile_views/talent_search_screen.dart';
 import 'package:orbitwork/client_profile_views/teams_page.dart';
 import 'package:orbitwork/client_profile_views/view_all_contracts.dart';
 import 'package:orbitwork/client_profile_views/view_all_job_posts.dart';
+import 'package:orbitwork/component/client_profile/client_agency_profile.dart';
 import 'package:orbitwork/routes/app_routes.dart';
 import 'package:orbitwork/views/add_bank_account.dart';
 import 'package:orbitwork/views/add_billing_method_page.dart';
@@ -176,6 +179,9 @@ class AppPages {
     GetPage(name: AppRoutes.consultationPage, page: () => Consultationpage()),
     GetPage(name: AppRoutes.clientFreelancerProfile, page: () => ClientFreelancerProfile(),),
     GetPage(name: AppRoutes.projectDetails, page: () => ProjectDetailsPage(),),
-    GetPage(name: AppRoutes.sendOfferPage, page: () => SendOfferPage(),)
+    GetPage(name: AppRoutes.sendOfferPage, page: () => SendOfferPage(),),
+    GetPage(name: AppRoutes.clientAgencyProfile, page: () => ClientAgencyProfile(),),
+    GetPage(name: AppRoutes.browseProjectCatalog, page: () => BrowseProjectCatalog(),),
+    GetPage(name: AppRoutes.findTalent, page: () => FindTalent(),),
   ];
 }

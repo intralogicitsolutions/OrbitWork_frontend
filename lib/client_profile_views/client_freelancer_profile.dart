@@ -626,18 +626,24 @@ class ClientFreelancerProfile extends StatelessWidget{
           Text('Associated with', style: TextStyle(
               fontSize: 18, fontWeight: FontWeight.w500
           ),),
-          Row(
-            children: [
-              Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.grey.shade100
-                  ),
-                  child: Icon(Icons.home_work_outlined, color: Colors.grey,)),
-              Text('MarDesignStudio', style: TextStyle(
-                  color: Get.theme.primaryColor
-              ),),
-            ],
+          GestureDetector(
+            onTap: () {
+              Get.toNamed(AppRoutes.clientAgencyProfile);
+            },
+            child: Row(
+              children: [
+                Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey.shade100
+                    ),
+                    child: Icon(Icons.home_work_outlined, color: Colors.grey,)),
+                SizedBox(width: 8.0,),
+                Text('MarDesignStudio', style: TextStyle(
+                    color: Get.theme.primaryColor
+                ),),
+              ],
+            ),
           )
         ],
       ),

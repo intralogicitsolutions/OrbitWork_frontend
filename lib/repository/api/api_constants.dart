@@ -1,10 +1,10 @@
 class ApiConstants {
   static const String BASE_URL = "https://orbitwork-backend.onrender.com/api";
-  static const String TEMP_URL = "https://bf8c-2405-f600-8-b5c0-559f-9cc5-781-f8b4.ngrok-free.app/api";
+  static const String TEMP_URL = "https://0a13-2405-f600-8-be93-99d4-a7d7-537e-9b32.ngrok-free.app/api";
 
   // AUTH ROUTES
   static const String SIGNUP = "$BASE_URL/auth/signup";   //done
-  static const String SIGNIN = "$BASE_URL/auth/signin";   //done
+  static const String SIGNIN = "$TEMP_URL/auth/signin";   //done
   static const String FORGOT_PASSWORD = "$BASE_URL/auth/forgot-password";
   static const String RESET_PASSWORD = "$BASE_URL/auth/reset-password";
 

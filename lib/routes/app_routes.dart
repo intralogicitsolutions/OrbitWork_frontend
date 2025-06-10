@@ -92,5 +92,8 @@ class AppRoutes{
   static const String clientFreelancerProfile = '/clientFreelancerProfile';
   static const String projectDetails = '/projectDetails';
   static const String sendOfferPage = '/sendOfferPage';
+  static const String clientAgencyProfile = '/clientAgencyProfile';
+  static const String browseProjectCatalog = '/browseProjectCatalog';
+  static const String findTalent = '/findTalent';
 
 }

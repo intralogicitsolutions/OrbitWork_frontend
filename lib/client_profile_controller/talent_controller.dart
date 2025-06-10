@@ -42,6 +42,7 @@ class TalentController extends GetxController {
           jobSuccessRate: 97,
           isTopRated: true,
           isOnline: true,
+          discription: 'Discover the Winning Strategies of Top E-Commerce Sellers: Dominate Amazon, Etsy, eMag, Bol.com, eBay, TikTok Shop, and More! Boost Your Sales and Stand Out Everywhere.**Well-researched images with a High Emotional Impact that CONVERT**Refined Process:Research Phase: I dive deep into your niche, studying your top 5-10 competitors to understand what drives success in your market.'
         ),
         TalentModel(
           id: '2',
@@ -53,6 +54,7 @@ class TalentController extends GetxController {
           jobSuccessRate: 95,
           isTopRated: true,
           isOnline: true,
+          discription: '💲𝙎𝙖𝙫𝙚 𝟭𝟬𝟬 💲𝘿𝙤𝙡𝙡𝙖𝙧𝙨 🎁🎉𝑭𝒓𝒆𝒆 𝑨𝒖𝒅𝒊𝒕 𝒇𝒐𝒓 𝑨𝒅𝑾𝒐𝒓𝒅𝒔/𝑴𝒆𝒕𝒂 𝐀𝐝 𝑨𝒄𝒄𝒐𝒖𝒏𝒕 at No Cost 𝑻𝒐𝒅𝒂𝒚⭐🔝 Top 1% on Upwork🕒 70,000+ hours on Upwor 🎯 15+ years of experience✅Google Certified Partner🔔Facebook /Meta Ads SpecialistAre you also struggling to generate leads you were expecting from Google or Meta ads?☎️ 𝗝𝘂𝘀𝘁 𝗶𝗻𝘃𝗶𝘁𝗲 𝗺𝗲 𝘁𝗼 𝘆𝗼𝘂𝗿 𝗷𝗼𝗯'
         ),
         TalentModel(
           id: '3',
@@ -64,6 +66,7 @@ class TalentController extends GetxController {
           jobSuccessRate: 92,
           isTopRated: false,
           isOnline: false,
+          discription: 'With over 9 years of mobile development experience, my passion for Flutter remains a driving force in my work. I am committed to creating high-quality mobile applications that make a mark in today\'s competitive landscape.Key Accomplishments:- 🚀 Published more than 30 apps on both the App Store and Google Play, along with 70+ updates.- 📈 Reached over 5 million app downloads, maintaining an outstanding 4.8-star average rating.Core Strengths:- 🌟 Successfully led development teams,'
         ),
       ];
 

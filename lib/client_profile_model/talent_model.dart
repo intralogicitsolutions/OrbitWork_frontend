@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 class TalentModel {
   final String id;
   final String name;
@@ -8,6 +10,10 @@ class TalentModel {
   final int jobSuccessRate;
   final bool isTopRated;
   final bool isOnline;
+  final String? discription;
+
+  RxBool isExpanded = false.obs;
+
 
   TalentModel({
     required this.id,
@@ -19,6 +25,7 @@ class TalentModel {
     required this.jobSuccessRate,
     required this.isTopRated,
     required this.isOnline,
+    this.discription,
   });
 }
 
