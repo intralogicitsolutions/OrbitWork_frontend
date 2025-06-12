@@ -10,6 +10,7 @@ import 'package:orbitwork/client_profile_views/consultation_page.dart';
 import 'package:orbitwork/client_profile_views/dashboard.dart';
 import 'package:orbitwork/client_profile_views/find_talent.dart';
 import 'package:orbitwork/client_profile_views/membership_setting.dart';
+import 'package:orbitwork/client_profile_views/popular_subcategories.dart';
 import 'package:orbitwork/client_profile_views/project_details_page.dart';
 import 'package:orbitwork/client_profile_views/send_an_offer.dart';
 import 'package:orbitwork/client_profile_views/talent_search_screen.dart';
@@ -183,5 +184,6 @@ class AppPages {
     GetPage(name: AppRoutes.clientAgencyProfile, page: () => ClientAgencyProfile(),),
     GetPage(name: AppRoutes.browseProjectCatalog, page: () => BrowseProjectCatalog(),),
     GetPage(name: AppRoutes.findTalent, page: () => FindTalent(),),
+    GetPage(name: AppRoutes.subCategories, page: () => PopularSubcategories(name: Get.arguments['name']),)
   ];
 }

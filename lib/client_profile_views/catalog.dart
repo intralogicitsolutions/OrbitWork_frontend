@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 
 import '../client_profile_controller/catalog_controller.dart';
 import '../client_profile_model/catalog_model.dart';
+import '../component/client_profile/browse_project_categories_bottomsheet.dart';
+import '../routes/app_routes.dart';
 
 class CatalogPage extends StatelessWidget{
   final CatalogController controller = Get.put(CatalogController());
@@ -120,7 +122,12 @@ class CatalogPage extends StatelessWidget{
                       margin: const EdgeInsets.symmetric(horizontal: 20),
                       child: OutlinedButton(
                         onPressed: () {
-
+                          Get.bottomSheet(
+                            const BrowseProjectCategoriesBottomSheet(),
+                            isScrollControlled: true,
+                            ignoreSafeArea: false,
+                            backgroundColor: Colors.transparent,
+                          );
                         },
                         style: OutlinedButton.styleFrom(
                           side: const BorderSide(
@@ -168,7 +175,12 @@ class CatalogPage extends StatelessWidget{
         ],
       ),
       child: ListTile(
-        onTap: () => controller.onCategoryTap(category.title),
+        onTap: () {
+          controller.onCategoryTap(category.title);
+          Get.toNamed(AppRoutes.subCategories, arguments: {
+            'name': category.title,
+          } );
+        },
       // contentPadding: const EdgeInsets.all(12),
         contentPadding: const EdgeInsets.only(right: 12),
         leading: Container(
@@ -194,11 +206,6 @@ class CatalogPage extends StatelessWidget{
             fontWeight: FontWeight.w600,
           ),
         ),
-        // trailing: const Icon(
-        //   Icons.arrow_forward_ios,
-        //   color: Colors.grey,
-        //   size: 16,
-        // ),
       ),
     );
   }

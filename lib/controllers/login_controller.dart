@@ -51,7 +51,8 @@ class LoginController extends GetxController {
         await TokenStorage.saveToken(token);
         print('token ==> ${token}');
 
-       Get.offNamed(AppRoutes.homeScreen); // Navigate to home page
+      // Get.offNamed(AppRoutes.homeScreen); // Navigate to home page
+        Get.offNamed(AppRoutes.getStarted);
 
         // if (Global.role == 2) {
         //   Get.offNamed(AppRoutes.dashboard); // CLIENT

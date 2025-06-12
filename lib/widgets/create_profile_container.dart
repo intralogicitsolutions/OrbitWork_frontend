@@ -76,7 +76,6 @@ class CreateProfileContainer extends StatelessWidget{
                  () {
                   return controller.currentProfileStep.value != 0 ? Row(
                     children: [
-
                       Obx(() => controller.currentProfileStep.value == 5 || controller.currentProfileStep.value == 6
                           ? TextButton(
                         child: const Text('Skip', style: TextStyle(color: Colors.green)),

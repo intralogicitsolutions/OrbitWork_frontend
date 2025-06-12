@@ -19,8 +19,6 @@ class ProjectDetailsPage extends StatelessWidget {
   final ConsultationController consultationController = ConsultationController();
 
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
