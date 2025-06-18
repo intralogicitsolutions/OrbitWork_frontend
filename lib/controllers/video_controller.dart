@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:ffmpeg_kit_flutter_full_gpl/ffmpeg_kit.dart';
+// import 'package:ffmpeg_kit_flutter_full_gpl/ffmpeg_kit.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
@@ -33,7 +33,7 @@ class VideoController extends GetxController{
       final path = '${tempDir.path}/thumb_${DateTime.now().millisecondsSinceEpoch}.jpg';
 
       /// **Extracts frame at 1 second from the video**
-      await FFmpegKit.execute('-i "$videoUrl" -ss 00:00:01 -vframes 1 "$path"');
+    //  await FFmpegKit.execute('-i "$videoUrl" -ss 00:00:01 -vframes 1 "$path"');
 
       /// **Check if the thumbnail was generated**
       if (File(path).existsSync()) {

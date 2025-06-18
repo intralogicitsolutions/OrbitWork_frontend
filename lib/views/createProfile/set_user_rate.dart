@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../controllers/profile/set_user_rate_controller.dart';
 import '../../routes/app_routes.dart';
 
 class SetUserRate extends StatelessWidget {
+  final SetUserRateController controller = Get.put(SetUserRateController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Create Your Profile'),
-      // ),
       body: Column(
         children: [
           Expanded(
@@ -60,6 +59,9 @@ class SetUserRate extends StatelessWidget {
                           child: SizedBox(
                             height: 40,
                             child: TextField(
+                              controller: controller.hourlyRateController,
+                              keyboardType: TextInputType.number,
+                              onChanged: controller.calculateFee,
                               decoration: InputDecoration(
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 12, vertical: 0),
@@ -108,20 +110,21 @@ class SetUserRate extends StatelessWidget {
                                 color: Colors.grey[300], // Background color
                                 borderRadius: BorderRadius.circular(8), // Rounded corners
                               ),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  filled: true,
-                                    fillColor: Colors.transparent,
-                                    contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 12, vertical: 0),
-                                    // border: OutlineInputBorder(
-                                    //   borderRadius: BorderRadius.circular(8),
-                                    // ),
-                                    border: InputBorder.none,
-                                    hintText: '\$0.00',
-                                    hintStyle: TextStyle(color: Colors.grey),
-                                    hintTextDirection: TextDirection.rtl),
-                              ),
+                              // child: TextField(
+                              //   decoration: InputDecoration(
+                              //     filled: true,
+                              //       fillColor: Colors.transparent,
+                              //       contentPadding: EdgeInsets.symmetric(
+                              //           horizontal: 12, vertical: 0),
+                              //       border: InputBorder.none,
+                              //       hintText: '\$0.00',
+                              //       hintStyle: TextStyle(color: Colors.grey),
+                              //       hintTextDirection: TextDirection.rtl),
+                              // ),
+                              child: Obx(() => Text(
+                                '-\$${controller.serviceFee.value.toStringAsFixed(2)} /hr',
+                                style: TextStyle(fontSize: 16, color: Colors.redAccent),
+                              )),
                             ),
                           ),
                         ),
@@ -156,16 +159,20 @@ class SetUserRate extends StatelessWidget {
                         Expanded(
                           child: SizedBox(
                             height: 40,
-                            child: TextField(
-                              decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 0),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8)),
-                                  hintText: '\$0.00',
-                                  hintStyle: TextStyle(color: Colors.grey),
-                                  hintTextDirection: TextDirection.rtl),
-                            ),
+                            // child: TextField(
+                            //   decoration: InputDecoration(
+                            //       contentPadding: EdgeInsets.symmetric(
+                            //           horizontal: 12, vertical: 0),
+                            //       border: OutlineInputBorder(
+                            //           borderRadius: BorderRadius.circular(8)),
+                            //       hintText: '\$0.00',
+                            //       hintStyle: TextStyle(color: Colors.grey),
+                            //       hintTextDirection: TextDirection.rtl),
+                            // ),
+                            child:  Obx(() => Text(
+                              '\$${controller.receiveAmount.value.toStringAsFixed(2)} /hr',
+                              style: TextStyle(fontSize: 18, color: Colors.green),
+                            )),
                           ),
                         ),
                         Expanded(
@@ -181,45 +188,6 @@ class SetUserRate extends StatelessWidget {
               ),
             ),
           ),
-          // Container(
-          //   padding: const EdgeInsets.all(16),
-          //   decoration: const BoxDecoration(
-          //     border: Border(
-          //       top: BorderSide(color: Colors.grey, width: 0.5),
-          //     ),
-          //   ),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: [
-          //       IconButton(
-          //         icon: const Icon(Icons.arrow_back_ios, color: Colors.green),
-          //         onPressed: () => Get.back(),
-          //       ),
-          //       ElevatedButton(
-          //         onPressed: () {
-          //           Get.toNamed(AppRoutes.photoAndLocation);
-          //         },
-          //         style: ElevatedButton.styleFrom(
-          //           backgroundColor: Colors.green,
-          //           padding: const EdgeInsets.symmetric(
-          //             horizontal: 32,
-          //             vertical: 16,
-          //           ),
-          //           shape: RoundedRectangleBorder(
-          //             borderRadius: BorderRadius.circular(8),
-          //           ),
-          //         ),
-          //         child: const Text(
-          //           'Photo and Location',
-          //           style: TextStyle(
-          //             fontSize: 16,
-          //             color: Colors.white,
-          //           ),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
         ],
       ),
     );

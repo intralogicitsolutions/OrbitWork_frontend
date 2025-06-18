@@ -373,7 +373,7 @@ class SubmitProposalController extends GetxController {
 
   Future<void> getJobProposal() async {
     String? token = await TokenStorage.getToken(); // Replace with your token retrieval method
-    String url = "${ApiConstants.GET_JOB_PROPOSAL_DETAIL}/${jobProposalId.value}";
+    String url = "${ApiConstants.GET_JOB_PROPOSAL_DETAIL}";
 
     try {
       final response = await http.get(

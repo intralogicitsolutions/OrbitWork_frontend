@@ -1,12 +1,14 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orbitwork/controllers/freelancer_profile_controller.dart';
 import 'package:orbitwork/routes/app_routes.dart';
 
 import '../component/resume_upload_bottomsheet.dart';
 import '../models/category_model.dart';
 import '../models/user_profile_model.dart';
 import '../models/work_preference.dart';
+
 
 
 class ProfilesController extends GetxController {
@@ -24,6 +26,8 @@ class ProfilesController extends GetxController {
   final RxBool showWarningMessage = false.obs;
   final RxString openedCategory = ''.obs;
   final RxBool attemptedMoreThanThree = false.obs;
+
+  final FreelancerProfileController controller = Get.put(FreelancerProfileController());
 
   final categories = [
     Category(
@@ -83,6 +87,7 @@ class ProfilesController extends GetxController {
       ),
       // Add more preferences as needed
     ]);
+    controller.getFreelancerProfile();
   }
 
   void togglePreference(int index) {
@@ -107,14 +112,17 @@ class ProfilesController extends GetxController {
       currentStep.value++;
     }else {
       //Get.toNamed(AppRoutes.profileCreation);
+      //controller.getFreelancerProfile();
       Get.toNamed(AppRoutes.createProfileContainer);
     }
   }
 
-  void nextProfileStep() {
+
+  void nextProfileStep() async{
     if (currentProfileStep.value < totalProfileSteps - 1) {
       currentProfileStep.value++;
     }else {
+      await controller.createFreelancerProfile();
       Get.toNamed(AppRoutes.previewProfile);
     }
   }

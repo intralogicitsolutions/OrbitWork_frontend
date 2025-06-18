@@ -7,7 +7,6 @@ import 'skill_search_view.dart';
 
 class ProfileSkillView extends GetView<ProfileSkillController> {
   final ProfileSkillController controller = Get.put(ProfileSkillController());
-  //const ProfileSkillView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,32 +18,7 @@ class ProfileSkillView extends GetView<ProfileSkillController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Profile Header
-                // Row(
-                //   children: [
-                //     const CircleAvatar(
-                //       backgroundColor: Colors.grey,
-                //       child: Icon(Icons.person_outline, color: Colors.white),
-                //     ),
-                //     const SizedBox(width: 16),
-                //     const Text(
-                //       'Create Your Profile',
-                //       style: TextStyle(
-                //         fontSize: 24,
-                //         fontWeight: FontWeight.bold,
-                //       ),
-                //     ),
-                //    // const Spacer(),
-                //     IconButton(
-                //       icon: const Icon(Icons.more_vert),
-                //       onPressed: () {},
-                //     ),
-                //   ],
-                // ),
-
                 const SizedBox(height: 32),
-
-                // Main Content
                 const Text(
                   'Nearly there! What work are you here to do?',
                   style: TextStyle(
@@ -128,16 +102,6 @@ class ProfileSkillView extends GetView<ProfileSkillController> {
                     onDeleted: () => controller.removeSkill(skill),
                   )).toList(),
                 )),
-
-                // Text Field for new skills
-                // TextField(
-                //   decoration: InputDecoration(
-                //     hintText: 'Enter skills here',
-                //     border: OutlineInputBorder(
-                //       borderRadius: BorderRadius.circular(8),
-                //     ),
-                //   ),
-                // ),
                 SizedBox(height: 10,),
                 Container(
                   height: 40,
@@ -191,30 +155,6 @@ class ProfileSkillView extends GetView<ProfileSkillController> {
                     onPressed: () => controller.addSkill(skill),
                   )).toList(),
                 )),
-
-               // const Spacer(),
-
-                // Add Profile Title Button
-                // SizedBox(
-                //   width: double.infinity,
-                //   child: ElevatedButton(
-                //     onPressed: () {Get.toNamed(AppRoutes.profileTitle);},
-                //     style: ElevatedButton.styleFrom(
-                //       backgroundColor: Colors.green,
-                //       padding: const EdgeInsets.symmetric(vertical: 10),
-                //       shape: RoundedRectangleBorder(
-                //         borderRadius: BorderRadius.circular(8),
-                //       ),
-                //     ),
-                //     child: const Text(
-                //       'Add Profile Title',
-                //       style: TextStyle(
-                //         color: Colors.white,
-                //         fontSize: 16,
-                //       ),
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),

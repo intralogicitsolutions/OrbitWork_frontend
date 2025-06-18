@@ -11,15 +11,6 @@ class PhotoAndLocation extends GetView<PhotoAndLocationController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Create Your Profile'),
-      //   actions: [
-      //     IconButton(
-      //       icon: const Icon(Icons.more_vert),
-      //       onPressed: () {},
-      //     ),
-      //   ],
-      // ),
       body: Column(
         children: [
           Expanded(
@@ -48,18 +39,6 @@ class PhotoAndLocation extends GetView<PhotoAndLocationController> {
                     Center(
                       child: Column(
                         children: [
-                          // Obx(() => CircleAvatar(
-                          //       radius: 50,
-                          //       backgroundColor: Colors.grey[200],
-                          //       backgroundImage:
-                          //           controller.profile.value.photoUrl != null
-                          //               ? FileImage(File(
-                          //                   controller.profile.value.photoUrl!))
-                          //               : null,
-                          //       child: controller.profile.value.photoUrl == null
-                          //           ? const Icon(Icons.person, size: 50)
-                          //           : null,
-                          //     )),
                           Obx(() => CircleAvatar(
                             radius: 50,
                             backgroundColor: Colors.grey[200],
@@ -127,10 +106,11 @@ class PhotoAndLocation extends GetView<PhotoAndLocationController> {
                             const Icon(Icons.calendar_today),
                             const SizedBox(width: 8),
                             Obx(() => Text(
-                                  controller.profile.value.dateOfBirth
-                                          ?.toString()
-                                          .split(' ')[0] ??
-                                      'yyyy-mm-dd',
+                              controller.portfolio.value.dob?.split('T')[0] ?? 'yyyy-mm-dd',
+                                  // controller.portfolio.value.dob
+                                  //         ?.toString()
+                                  //         .split(' ')[0] ??
+                                  //     'yyyy-mm-dd',
                                 )),
                             const Spacer(),
                             const Icon(Icons.arrow_drop_down),
@@ -161,43 +141,6 @@ class PhotoAndLocation extends GetView<PhotoAndLocationController> {
               ),
             ),
           ),
-          // Container(
-          //   padding: const EdgeInsets.all(16),
-          //   decoration: const BoxDecoration(
-          //     border: Border(
-          //       top: BorderSide(color: Colors.grey, width: 0.5),
-          //     ),
-          //   ),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: [
-          //       IconButton(
-          //         icon: const Icon(Icons.arrow_back_ios, color: Colors.green),
-          //         onPressed: () => Get.back(),
-          //       ),
-          //       ElevatedButton(
-          //         onPressed: controller.submitProfile,
-          //         style: ElevatedButton.styleFrom(
-          //           backgroundColor: Colors.green,
-          //           padding: const EdgeInsets.symmetric(
-          //             horizontal: 32,
-          //             vertical: 16,
-          //           ),
-          //           shape: RoundedRectangleBorder(
-          //             borderRadius: BorderRadius.circular(8),
-          //           ),
-          //         ),
-          //         child: const Text(
-          //           'Review your profile',
-          //           style: TextStyle(
-          //             fontSize: 16,
-          //             color: Colors.white,
-          //           ),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
         ],
       ),
     );
@@ -218,7 +161,8 @@ class PhotoAndLocation extends GetView<PhotoAndLocationController> {
         _buildTextField(
           label: 'Apt/Suite',
           hintText: 'Apt/Suite (Optional)',
-          onChanged: controller.setAptSuite,
+         onChanged:
+         controller.setAptSuite,
         ),
         const SizedBox(height: 16),
         Row(

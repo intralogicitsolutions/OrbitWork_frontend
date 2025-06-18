@@ -6,8 +6,6 @@ import '../../routes/app_routes.dart';
 
 class ProfileTitleView extends GetView<ProfileTitleController> {
   final ProfileTitleController controller = Get.put(ProfileTitleController());
-  //const ProfileTitleView({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,40 +20,7 @@ class ProfileTitleView extends GetView<ProfileTitleController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Header
-                      // Row(
-                      //   children: [
-                      //     Container(
-                      //       width: 40,
-                      //       height: 40,
-                      //       decoration: const BoxDecoration(
-                      //         shape: BoxShape.circle,
-                      //         color: Colors.grey,
-                      //       ),
-                      //       child: const Icon(
-                      //         Icons.person_outline,
-                      //         color: Colors.white,
-                      //       ),
-                      //     ),
-                      //     const SizedBox(width: 12),
-                      //     const Text(
-                      //       'Create Your Profile',
-                      //       style: TextStyle(
-                      //         fontSize: 20,
-                      //         fontWeight: FontWeight.bold,
-                      //       ),
-                      //     ),
-                      //     const Spacer(),
-                      //     IconButton(
-                      //       icon: const Icon(Icons.more_vert),
-                      //       onPressed: () {},
-                      //     ),
-                      //   ],
-                      // ),
-
                       const SizedBox(height: 32),
-
-                      // Main Title
                       const Text(
                         'Got it. Now, add a title to tell the world what you do.',
                         style: TextStyle(
@@ -121,79 +86,11 @@ class ProfileTitleView extends GetView<ProfileTitleController> {
                           ],
                         ),
                       ),
-
-                      // Error Message
-                      // Obx(() => controller.showError.value
-                      //     ? const Padding(
-                      //   padding: EdgeInsets.only(top: 8),
-                      //   child: Row(
-                      //     children: [
-                      //       Icon(
-                      //         Icons.error_outline,
-                      //         color: Colors.red,
-                      //         size: 16,
-                      //       ),
-                      //       SizedBox(width: 4),
-                      //       Text(
-                      //         'A descriptive title must have at least 4 letters.',
-                      //         style: TextStyle(
-                      //           color: Colors.red,
-                      //           fontSize: 14,
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // )
-                      //     : const SizedBox.shrink(),
-                      // ),
                     ],
                   ),
                 ),
               ),
             ),
-
-            // Bottom Navigation
-            // Container(
-            //   padding: const EdgeInsets.all(16),
-            //   decoration: const BoxDecoration(
-            //     border: Border(
-            //       top: BorderSide(color: Colors.grey, width: 0.5),
-            //     ),
-            //   ),
-              // child: Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     IconButton(
-              //       icon: const Icon(Icons.arrow_back_ios, color: Colors.green),
-              //       onPressed: () => Get.back(),
-              //     ),
-              //     ElevatedButton(
-              //       onPressed: () {
-              //         if (controller.canProceed()) {
-              //           Get.toNamed(AppRoutes.addExperience);
-              //         }
-              //       },
-              //       style: ElevatedButton.styleFrom(
-              //         backgroundColor: Colors.green,
-              //         padding: const EdgeInsets.symmetric(
-              //           horizontal: 32,
-              //           vertical: 16,
-              //         ),
-              //         shape: RoundedRectangleBorder(
-              //           borderRadius: BorderRadius.circular(8),
-              //         ),
-              //       ),
-              //       child: const Text(
-              //         'Add experience',
-              //         style: TextStyle(
-              //           fontSize: 16,
-              //           color: Colors.white,
-              //         ),
-              //       ),
-              //     ),
-              //   ],
-              // ),
-           // ),
           ],
         ),
       ),

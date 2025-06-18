@@ -158,6 +158,7 @@ class WorkExperienceSheet extends GetView<WorkExperienceController> {
                   // Location Field
                   _buildLabel('Location'),
                   TextField(
+                    controller: controller.locationController,
                     onChanged: (value) => controller.location.value = value,
                     decoration: const InputDecoration(
                       hintText: 'Ex: London',
@@ -289,12 +290,14 @@ class WorkExperienceSheet extends GetView<WorkExperienceController> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              Get.bottomSheet(
-                                Container(
-                                  height: Get.height * 0.9,
-                                    child: SelectYearBottomsheet()),
-                                isScrollControlled: true,
-                              );
+                              controller.showStartYearPicker();
+                              // Get.bottomSheet(
+                              //   Container(
+                              //     height: Get.height * 0.9,
+                              //       child: SelectYearBottomsheet()
+                              //   ),
+                              //   isScrollControlled: true,
+                              // );
                               // Implement month selection
                             },
                             child: Padding(
@@ -306,7 +309,8 @@ class WorkExperienceSheet extends GetView<WorkExperienceController> {
                                     () {
                                       return Text(
                                        // 'Year',
-                                        controller.selectedYear.value.toString() ,
+                                       // controller.selectedYear.value.toString() ,
+                                        controller.startYear.value.toString(),
                                         style: TextStyle(fontSize: 14),
                                       );
                                     }
@@ -377,12 +381,13 @@ class WorkExperienceSheet extends GetView<WorkExperienceController> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              Get.bottomSheet(
-                                Container(
-                                    height: Get.height * 0.9,
-                                    child: SelectYearBottomsheet()),
-                                isScrollControlled: true,
-                              );
+                              controller.showEndYearPicker();
+                              // Get.bottomSheet(
+                              //   Container(
+                              //       height: Get.height * 0.9,
+                              //       child: SelectYearBottomsheet()),
+                              //   isScrollControlled: true,
+                              // );
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -393,7 +398,8 @@ class WorkExperienceSheet extends GetView<WorkExperienceController> {
                                      () {
                                       return Text(
                                         //'Year',
-                                        controller.selectedYear.value.toString(),
+                                       // controller.selectedYear.value.toString(),
+                                        controller.endYear.value.toString(),
                                         style: TextStyle(fontSize: 14),
                                       );
                                     }
@@ -414,6 +420,7 @@ class WorkExperienceSheet extends GetView<WorkExperienceController> {
                   // Location Field
                   _buildLabel('Description'),
                   TextField(
+                    controller: controller.descriptionController,
                     onChanged: (value) => controller.description.value = value,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(

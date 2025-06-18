@@ -11,15 +11,6 @@ class SkillsSelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Create Your Profile'),
-      //   actions: [
-      //     IconButton(
-      //       icon: const Icon(Icons.more_vert),
-      //       onPressed: () {},
-      //     ),
-      //   ],
-      // ),
       body: Column(
         children: [
           Expanded(
@@ -96,21 +87,6 @@ class SkillsSelectionScreen extends StatelessWidget {
                       ? controller.clearSelections
                       : null,
                 )),
-                // const Spacer(),
-                // ElevatedButton(
-                //   style: ElevatedButton.styleFrom(
-                //     backgroundColor: Colors.green,
-                //     padding: const EdgeInsets.symmetric(
-                //       horizontal: 32,
-                //       vertical: 16,
-                //     ),
-                //   ),
-                //   onPressed: () {Get.toNamed(AppRoutes.profileSkill);},
-                //   child: const Text(
-                //     'Add skills',
-                //     style: TextStyle(color: Colors.white),
-                //   ),
-                // ),
               ],
             ),
           ),

@@ -4,42 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../component/photo_upload_bottomsheet.dart';
+import '../models/freelancer_profile_model.dart';
 import '../models/photo_and_location_model.dart';
 import '../routes/app_routes.dart';
 
-// class PhotoAndLocationController extends GetxController {
-//   final profile = PhotoAndLocationModel().obs;
-//   final ImagePicker imagePicker = ImagePicker();
-//
-//   void setDateOfBirth(DateTime date) {
-//     profile.update((val) {
-//       val?.dateOfBirth = date;
-//     });
-//   }
-//
-//   void setCountry(String country) {
-//     profile.update((val) {
-//       val?.country = country;
-//     });
-//   }
-//
-//   Future<void> pickImage() async {
-//     final XFile? image = await imagePicker.pickImage(source: ImageSource.gallery);
-//     if (image != null) {
-//       profile.update((val) {
-//         val?.photoUrl = image.path;
-//       });
-//     }
-//   }
-//
-//   void submitProfile() {
-//     // Implement your submit logic here
-//     print(profile.value);
-//   }
-// }
-
 class PhotoAndLocationController extends GetxController {
-  final profile = PhotoAndLocationModel().obs;
+ // final profile = PhotoAndLocationModel().obs;
+
+  final portfolio = Portfolio().obs;
+
+
   final ImagePicker imagePicker = ImagePicker();
   final formErrors = <String>[].obs;
 
@@ -53,7 +27,6 @@ class PhotoAndLocationController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // Listen to zoom changes and update matrix
     ever(zoomLevel, (_) {
       matrix.value = Matrix4.diagonal3Values(zoomLevel.value, zoomLevel.value, 1.0);
     });
@@ -93,79 +66,78 @@ class PhotoAndLocationController extends GetxController {
 
 
 
+  // void setDateOfBirth(DateTime date) {
+  //   profile.update((val) {
+  //     val?.dateOfBirth = date;
+  //   });
+  // }
+
   void setDateOfBirth(DateTime date) {
-    profile.update((val) {
-      val?.dateOfBirth = date;
+    portfolio.update((val) {
+      val?.dob = date.toIso8601String();
     });
   }
+
+
 
   void setCountry(String country) {
-    profile.update((val) {
-      val?.country = country;
+    portfolio.update((val) {
+      val?.city = country;
     });
   }
-
-  // Future<void> pickImage() async {
-  //   final XFile? image = await imagePicker.pickImage(source: ImageSource.gallery);
-  //   if (image != null) {
-  //     profile.update((val) {
-  //       val?.photoUrl = image.path;
-  //     });
-  //   }
-  // }
 
   void submitProfile() {
     // Implement your submit logic here
-    print(profile.value);
+   // print(profile.value);
     Get.toNamed(AppRoutes.previewProfile);
   }
 
-  void setStreetAddress(String value) {
-    profile.update((val) {
-      val?.streetAddress = value;
-    });
-    validateStreetAddress();
-  }
+  // void setStreetAddress(String value) {
+  //   profile.update((val) {
+  //     val?.streetAddress = value;
+  //   });
+  //   validateStreetAddress();
+  // }
 
   void setAptSuite(String value) {
-    profile.update((val) {
+    /*profile.update((val) {
       val?.aptSuite = value;
-    });
+    });*/
   }
 
-  void setCity(String value) {
-    profile.update((val) {
-      val?.city = value;
-    });
-    validateCity();
-  }
+  // void setCity(String value) {
+  //   profile.update((val) {
+  //     val?.city = value;
+  //   });
+  //   validateCity();
+  // }
 
-  void setStateProvince(String value) {
-    profile.update((val) {
-      val?.stateProvince = value;
-    });
-  }
+  // void setStateProvince(String value) {
+  //   profile.update((val) {
+  //     val?.stateProvince = value;
+  //   });
+  // }
 
-  void setZipCode(String value) {
-    profile.update((val) {
-      val?.zipCode = value;
-    });
-  }
+  // void setZipCode(String value) {
+  //   profile.update((val) {
+  //     val?.zipCode = value;
+  //   });
+  // }
 
-  void setPhoneNumber(String value) {
-    profile.update((val) {
-      val?.phoneNumber = value;
-    });
-  }
+  // void setPhoneNumber(String value) {
+  //   profile.update((val) {
+  //     val?.phoneNumber = value;
+  //   });
+  // }
 
-  void setPhoneCountryCode(String value) {
-    profile.update((val) {
-      val?.phoneCountryCode = value;
-    });
-  }
+  // void setPhoneCountryCode(String value) {
+  //   profile.update((val) {
+  //     val?.phoneCountryCode = value;
+  //   });
+  // }
 
   void validateStreetAddress() {
-    if (profile.value.streetAddress?.isEmpty ?? true) {
+    if (portfolio.value.streetAddress?.isEmpty ?? true) {
       if (!formErrors.contains('street_address')) {
         formErrors.add('street_address');
       }
@@ -175,7 +147,7 @@ class PhotoAndLocationController extends GetxController {
   }
 
   void validateCity() {
-    if (profile.value.city?.isEmpty ?? true) {
+    if (portfolio.value.city?.isEmpty ?? true) {
       if (!formErrors.contains('city')) {
         formErrors.add('city');
       }
@@ -191,4 +163,47 @@ class PhotoAndLocationController extends GetxController {
       isScrollControlled: true,
     );
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  void setStreetAddress(String value) {
+    portfolio.update((val) => val?.streetAddress = value);
+    validateStreetAddress();
+  }
+
+  void setCity(String value) {
+    portfolio.update((val) => val?.city = value);
+    validateCity();
+  }
+
+  void setStateProvince(String value) {
+    portfolio.update((val) => val?.state = value);
+  }
+
+  void setZipCode(String value) {
+    portfolio.update((val) => val?.zip = value);
+  }
+
+  void setPhoneNumber(String value) {
+    portfolio.update((val) => val?.phone = '+91 $value'); // Combine with country code
+  }
+
+  void setProfilePhoto(String url) {
+    portfolio.update((val) => val?.profilePhoto = url);
+  }
+
 }

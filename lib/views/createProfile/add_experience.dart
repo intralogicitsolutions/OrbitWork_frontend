@@ -10,9 +10,6 @@ class AddExperience extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Create Your Profile'),
-      // ),
       body: SafeArea(
         child: Column(
           children: [

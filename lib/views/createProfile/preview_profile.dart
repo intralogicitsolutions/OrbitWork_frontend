@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../component/add_education_history_bottomsheet.dart';
+import '../../component/add_work_experience_bottomsheet.dart';
+import '../../component/profile/change_hourly_rate_bottomsheet.dart';
+import '../../component/profile/edit_title_bottomsheet.dart';
+import '../../component/profile/profile_overview_bottomsheet.dart';
 import '../../controllers/preview_profile_controller.dart';
 import '../../routes/app_routes.dart';
 import '../../widgets/custom_appbar.dart';
@@ -167,14 +172,30 @@ class PreviewProfile extends GetView<PreviewProfileController> {
                             child: const Icon(Icons.edit,
                                 color: Colors.green, size: 16),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.bottomSheet(
+                              Container(
+                                  height: Get.height * 0.5,
+                                  child: EditTitleBottomsheet()),
+                              isScrollControlled: true,
+                              ignoreSafeArea: false,
+                            );
+                          },
                         ),
                       ],
                     ),
                     const SizedBox(height: 16),
                     ProfileSection(
                       title: 'Expertise',
-                      onEdit: () {},
+                      onEdit: () {
+                        Get.bottomSheet(
+                          Container(
+                              height: Get.height * 0.8,
+                              child: PofileOverviewBottomsheet()),
+                          isScrollControlled: true,
+                          ignoreSafeArea: false,
+                        );
+                      },
                       child: Obx(() => Text(
                             controller.profile.value?.expertise ?? '',
                             style: const TextStyle(fontSize: 14),
@@ -184,7 +205,15 @@ class PreviewProfile extends GetView<PreviewProfileController> {
                     // Hourly Rate Section
                     ProfileSection(
                       title: 'Hourly rate',
-                      onEdit: () {},
+                      onEdit: () {
+                        Get.bottomSheet(
+                          Container(
+                              height: Get.height * 0.9,
+                              child: ChangeHourlyRateBottomsheet()),
+                          isScrollControlled: true,
+                          ignoreSafeArea: false,
+                        );
+                      },
                       child: Obx(() => Text(
                             '\$${controller.profile.value?.hourlyRate.toStringAsFixed(2)}',
                             style: const TextStyle(
@@ -222,7 +251,13 @@ class PreviewProfile extends GetView<PreviewProfileController> {
                     ProfileSection(
                       title: 'Work history',
                       onEdit: () {
-
+                        Get.bottomSheet(
+                          Container(
+                              height: Get.height * 0.8,
+                              child: WorkExperienceSheet()),
+                          isScrollControlled: true,
+                          ignoreSafeArea: false,
+                        );
                       },
                       isAdd: true,
                       child: Obx(() => Column(
@@ -281,7 +316,13 @@ class PreviewProfile extends GetView<PreviewProfileController> {
                     ProfileSection(
                       title: 'Education',
                       onEdit: () {
-                        // TODO: Implement add education dialog/page
+                        Get.bottomSheet(
+                          Container(
+                              height: Get.height * 0.8,
+                              child: EducationHistoryBottomsheet()),
+                          isScrollControlled: true,
+                          ignoreSafeArea: false,
+                        );
                       },
                       isAdd: true,
                       child: Obx(() => Column(

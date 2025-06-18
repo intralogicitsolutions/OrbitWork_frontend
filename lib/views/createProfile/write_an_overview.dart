@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orbitwork/controllers/freelancer_profile_controller.dart';
 
 import '../../routes/app_routes.dart';
 
 class WriteAnOverview extends StatelessWidget {
+  final FreelancerProfileController controller = Get.put(FreelancerProfileController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Create Your Profile'),
-      // ),
       body: Column(
         children: [
           Expanded(
@@ -36,6 +35,7 @@ class WriteAnOverview extends StatelessWidget {
                     ),
                     SizedBox(height: 24,),
                     TextField(
+                      controller: controller.bioController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -65,45 +65,6 @@ class WriteAnOverview extends StatelessWidget {
               ),
             ),
           ),
-          // Container(
-          //   padding: const EdgeInsets.all(16),
-          //   decoration: const BoxDecoration(
-          //     border: Border(
-          //       top: BorderSide(color: Colors.grey, width: 0.5),
-          //     ),
-          //   ),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: [
-          //       IconButton(
-          //         icon: const Icon(Icons.arrow_back_ios, color: Colors.green),
-          //         onPressed: () => Get.back(),
-          //       ),
-          //       ElevatedButton(
-          //         onPressed: () {
-          //           Get.toNamed(AppRoutes.setUserRate);
-          //         },
-          //         style: ElevatedButton.styleFrom(
-          //           backgroundColor: Colors.green,
-          //           padding: const EdgeInsets.symmetric(
-          //             horizontal: 32,
-          //             vertical: 16,
-          //           ),
-          //           shape: RoundedRectangleBorder(
-          //             borderRadius: BorderRadius.circular(8),
-          //           ),
-          //         ),
-          //         child: const Text(
-          //           'Set your rate',
-          //           style: TextStyle(
-          //             fontSize: 16,
-          //             color: Colors.white,
-          //           ),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
         ],
       ),
     );

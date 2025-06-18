@@ -34,7 +34,6 @@ dependencies:
   get_time_ago: ^2.3.0
   path_provider: ^2.1.5
 
-
   file_picker: ^8.1.7
   geolocator: ^13.0.3
   video_player: ^2.9.3

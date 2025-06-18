@@ -39,51 +39,66 @@ class EducationHistoryBottomsheet extends GetView<EducationHistoryController>{
                crossAxisAlignment: CrossAxisAlignment.start,
                children: [
                  _buildLabel('School', true),
-                 TextField(
-                   onChanged: (value) => controller.school.value = value,
-                   decoration: const InputDecoration(
-                     hintText: 'Ex: Northwestern University',
-                     border: OutlineInputBorder(
-                       borderRadius: BorderRadius.all(Radius.circular(8)),
-                     ),
-                     contentPadding: EdgeInsets.symmetric(
-                       horizontal: 16,
-                       vertical: 12,
-                     ),
-                   ),
-                 ),
+                 // TextField(
+                 //   onChanged: (value) => controller.school.value = value,
+                 //   decoration: const InputDecoration(
+                 //     hintText: 'Ex: Northwestern University',
+                 //     border: OutlineInputBorder(
+                 //       borderRadius: BorderRadius.all(Radius.circular(8)),
+                 //     ),
+                 //     contentPadding: EdgeInsets.symmetric(
+                 //       horizontal: 16,
+                 //       vertical: 12,
+                 //     ),
+                 //   ),
+                 // ),
+                 Obx(() => buildTappableSelector(
+                   label: 'School',
+                   value: controller.school.value,
+                   onTap: controller.showSchoolPicker,
+                 )),
                  const SizedBox(height: 20),
 
                  _buildLabel('Degree'),
-                 TextField(
-                   onChanged: (value) => controller.degree.value = value,
-                   decoration: const InputDecoration(
-                     hintText: 'Ex: Bachelors',
-                     border: OutlineInputBorder(
-                       borderRadius: BorderRadius.all(Radius.circular(8)),
-                     ),
-                     contentPadding: EdgeInsets.symmetric(
-                       horizontal: 16,
-                       vertical: 12,
-                     ),
-                   ),
-                 ),
+                 // TextField(
+                 //   onChanged: (value) => controller.degree.value = value,
+                 //   decoration: const InputDecoration(
+                 //     hintText: 'Ex: Bachelors',
+                 //     border: OutlineInputBorder(
+                 //       borderRadius: BorderRadius.all(Radius.circular(8)),
+                 //     ),
+                 //     contentPadding: EdgeInsets.symmetric(
+                 //       horizontal: 16,
+                 //       vertical: 12,
+                 //     ),
+                 //   ),
+                 // ),
+                 Obx(() => buildTappableSelector(
+                   label: 'Degree',
+                   value: controller.degree.value,
+                   onTap: controller.showDegreePicker,
+                 )),
 
                  const SizedBox(height: 20),
                  _buildLabel('Field of Study'),
-                 TextField(
-                   onChanged: (value) => controller.fieldOfStudy.value = value,
-                   decoration: const InputDecoration(
-                     hintText: 'Ex: Computer Science',
-                     border: OutlineInputBorder(
-                       borderRadius: BorderRadius.all(Radius.circular(8)),
-                     ),
-                     contentPadding: EdgeInsets.symmetric(
-                       horizontal: 16,
-                       vertical: 12,
-                     ),
-                   ),
-                 ),
+                 // TextField(
+                 //   onChanged: (value) => controller.fieldOfStudy.value = value,
+                 //   decoration: const InputDecoration(
+                 //     hintText: 'Ex: Computer Science',
+                 //     border: OutlineInputBorder(
+                 //       borderRadius: BorderRadius.all(Radius.circular(8)),
+                 //     ),
+                 //     contentPadding: EdgeInsets.symmetric(
+                 //       horizontal: 16,
+                 //       vertical: 12,
+                 //     ),
+                 //   ),
+                 // ),
+                 Obx(() => buildTappableSelector(
+                   label: 'Field of Study',
+                   value: controller.fieldOfStudy.value,
+                   onTap: controller.showFieldOfStudyPicker,
+                 )),
 
                  const SizedBox(height: 20),
 
@@ -96,16 +111,22 @@ class EducationHistoryBottomsheet extends GetView<EducationHistoryController>{
                    ),
                    child: InkWell(
                      onTap: () {
-                       // Implement from date selection
+                      controller.showStartYearPicker();
                      },
                      child: Padding(
                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
                        child: Row(
                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                          children: [
-                           Text(
-                             'From',
-                           ),
+                           // Text(
+                           //   'From',
+                           // ),
+                           Obx(() => Text(
+                             controller.startYear.value == 0
+                                 ? 'From'
+                                 : controller.startYear.value.toString(),
+                             style: const TextStyle(fontSize: 16),
+                           )),
                            const SizedBox(width: 5),
                            const Icon(Icons.keyboard_arrow_down, size: 20),
                          ],
@@ -123,16 +144,22 @@ class EducationHistoryBottomsheet extends GetView<EducationHistoryController>{
                    ),
                    child: InkWell(
                      onTap: () {
-                       // Implement from date selection
+                      controller.showEndYearPicker();
                      },
                      child: Padding(
                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
                        child: Row(
                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                          children: [
-                           Text(
-                             'To (or expected graduation year)',
-                           ),
+                           // Text(
+                           //   'To (or expected graduation year)',
+                           // ),
+                           Obx(() => Text(
+                             controller.endYear.value == 0
+                                 ? 'To (or expected graduation year)'
+                                 : controller.endYear.value.toString(),
+                             style: const TextStyle(fontSize: 16),
+                           )),
                            const SizedBox(width: 5),
                            const Icon(Icons.keyboard_arrow_down, size: 20),
                          ],
@@ -144,6 +171,7 @@ class EducationHistoryBottomsheet extends GetView<EducationHistoryController>{
                  const SizedBox(height: 20),
                  _buildLabel('Description'),
                  TextField(
+                   controller: controller.descriptionController,
                    onChanged: (value) => controller.description.value = value,
                    decoration: const InputDecoration(
                      border: OutlineInputBorder(
@@ -233,5 +261,30 @@ class EducationHistoryBottomsheet extends GetView<EducationHistoryController>{
       ),
     );
   }
+
+  Widget buildTappableSelector({
+    required String label,
+    required String value,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        decoration: BoxDecoration(
+          border: Border.all(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(value.isEmpty ? 'Select $label' : value),
+            const Icon(Icons.keyboard_arrow_down),
+          ],
+        ),
+      ),
+    );
+  }
+
 
 }

@@ -11,7 +11,7 @@ class SocketService extends GetxService {
   Future<SocketService> init() async {
     // Initialize socket connection
     socket = IO.io(
-      'https://23df-2405-f600-8-cf71-6d71-e581-623e-e8f7.ngrok-free.app', // Replace with your server URL
+      'https://fd02-2409-40c1-303f-337f-88c6-5c90-174a-7211.ngrok-free.app', // Replace with your server URL
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .enableAutoConnect()

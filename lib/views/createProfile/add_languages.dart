@@ -174,24 +174,6 @@ class AddLanguages extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // appBar: AppBar(
-      //   backgroundColor: Colors.white,
-      //   elevation: 0,
-      //   leading: IconButton(
-      //     icon: Icon(Icons.arrow_back, color: Colors.black),
-      //     onPressed: () => Get.back(),
-      //   ),
-      //   title: Text(
-      //     'Create Your Profile',
-      //     style: TextStyle(color: Colors.black),
-      //   ),
-      //   actions: [
-      //     IconButton(
-      //       icon: Icon(Icons.more_vert, color: Colors.black),
-      //       onPressed: () {},
-      //     ),
-      //   ],
-      // ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -244,149 +226,205 @@ class AddLanguages extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 16),
+                    // Obx(() => Column(
+                    //       children: [
+                    //         for (int i = 0;
+                    //             i < controller.languages.length;
+                    //             i++)
+                    //           Padding(
+                    //             padding: const EdgeInsets.only(bottom: 12.0),
+                    //             child: Row(
+                    //               children: [
+                    //                 Expanded(
+                    //                   child: controller.languages[i].isDefault
+                    //                       ? Container(
+                    //                           child: Padding(
+                    //                               padding: EdgeInsets.symmetric(
+                    //                                // horizontal: 12,
+                    //                                 vertical: 14,
+                    //                               ),
+                    //                               child: Text(
+                    //                                 'English (all profiles include this)',
+                    //                                 style: TextStyle(
+                    //                                     color:
+                    //                                         Colors.grey[600]),
+                    //                               )),
+                    //                         )
+                    //                       : GestureDetector(
+                    //                           onTap: () => showBottomSheet(
+                    //                               context,
+                    //                               controller.languageOptions,
+                    //                               (value) {
+                    //                             controller.updateLanguage(
+                    //                                 i, value);
+                    //                           }),
+                    //                           child: Container(
+                    //                             padding: EdgeInsets.symmetric(
+                    //                                // horizontal: 12,
+                    //                                 vertical: 14),
+                    //                             decoration: BoxDecoration(
+                    //                               border: Border.all(
+                    //                                   color: Colors.grey[300]!),
+                    //                               borderRadius:
+                    //                                   BorderRadius.circular(4),
+                    //                             ),
+                    //                             child: Row(
+                    //                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //                               mainAxisSize: MainAxisSize.min,
+                    //                               children: [
+                    //                                 Expanded(
+                    //                                   child: Text(
+                    //                                     controller.languages[i].name,
+                    //                                     overflow: TextOverflow.ellipsis,
+                    //                                     style: TextStyle(
+                    //                                         color: Colors.black),
+                    //                                   ),
+                    //                                 ),
+                    //                                 Icon(Icons.keyboard_arrow_down, size: 20,)
+                    //                               ],
+                    //                             ),
+                    //                           ),
+                    //                         ),
+                    //                 ),
+                    //                 SizedBox(width: 12),
+                    //                 Expanded(
+                    //                   child: GestureDetector(
+                    //                     onTap: () => showBottomSheet(context,
+                    //                         controller.proficiencyLevels,
+                    //                         (value) {
+                    //                       controller.updateProficiency(
+                    //                           i, value);
+                    //                     }),
+                    //                     child: Container(
+                    //                       padding: EdgeInsets.symmetric(
+                    //                           horizontal: 12, vertical: 14),
+                    //                       decoration: BoxDecoration(
+                    //                         border: Border.all(
+                    //                             color: Colors.grey[300]!),
+                    //                         borderRadius:
+                    //                             BorderRadius.circular(4),
+                    //                       ),
+                    //                       child: Row(
+                    //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //                         children: [
+                    //                           Expanded(
+                    //                             child: Text(
+                    //                               controller
+                    //                                       .languages[i].proficiency ??
+                    //                                   'Select Proficiency',
+                    //                               overflow: TextOverflow.ellipsis,
+                    //                               style:
+                    //                                   TextStyle(color: Colors.black),
+                    //                             ),
+                    //                           ),
+                    //                           Icon(Icons.keyboard_arrow_down, size: 20,)
+                    //                         ],
+                    //                       ),
+                    //                     ),
+                    //                   ),
+                    //                 ),
+                    //                 //SizedBox(width: 10),
+                    //                 if (!controller.languages[i].isDefault)
+                    //                   IconButton(
+                    //                     padding: EdgeInsets.zero,
+                    //                     constraints: BoxConstraints(),
+                    //                     icon: Icon(Icons.delete_outline,
+                    //                         color: Colors.green),
+                    //                     onPressed: () =>
+                    //                         controller.removeLanguage(i),
+                    //                   ),
+                    //               ],
+                    //             ),
+                    //           ),
+                    //       ],
+                    //     )),
+
                     Obx(() => Column(
-                          children: [
-                            for (int i = 0;
-                                i < controller.languages.length;
-                                i++)
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 12.0),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: controller.languages[i].isDefault
-                                          ? Container(
-                                              // decoration: BoxDecoration(
-                                              //   border: Border.all(
-                                              //       color: Colors.grey[300]!),
-                                              //   borderRadius:
-                                              //       BorderRadius.circular(4),
-                                              // ),
-                                              child: Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                   // horizontal: 12,
-                                                    vertical: 14,
-                                                  ),
-                                                  child: Text(
-                                                    'English (all profiles include this)',
-                                                    style: TextStyle(
-                                                        color:
-                                                            Colors.grey[600]),
-                                                  )),
-                                            )
-                                          : GestureDetector(
-                                              onTap: () => showBottomSheet(
-                                                  context,
-                                                  controller.languageOptions,
-                                                  (value) {
-                                                controller.updateLanguage(
-                                                    i, value);
-                                              }),
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                   // horizontal: 12,
-                                                    vertical: 14),
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: Colors.grey[300]!),
-                                                  borderRadius:
-                                                      BorderRadius.circular(4),
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    Expanded(
-                                                      child: Text(
-                                                        controller.languages[i].name,
-                                                        overflow: TextOverflow.ellipsis,
-                                                        style: TextStyle(
-                                                            color: Colors.black),
-                                                      ),
-                                                    ),
-                                                    Icon(Icons.keyboard_arrow_down, size: 20,)
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
+                      children: List.generate(controller.languages.length, (i) {
+                        final lang = controller.languages[i];
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 12.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: lang.language == 'English'
+                                    ? Container(
+                                  padding: EdgeInsets.symmetric(vertical: 14),
+                                  child: Text(
+                                    'English (all profiles include this)',
+                                    style: TextStyle(color: Colors.grey[600]),
+                                  ),
+                                )
+                                    : GestureDetector(
+                                  onTap: () => showBottomSheet(
+                                    context,
+                                    controller.languageOptions,
+                                        (value) => controller.updateLanguage(i, value),
+                                  ),
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(vertical: 14),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey[300]!),
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
-                                    SizedBox(width: 12),
-                                    // Expanded(
-                                    //   child: Container(
-                                    //     decoration: BoxDecoration(
-                                    //       border: Border.all(color: Colors.grey[300]!),
-                                    //       borderRadius: BorderRadius.circular(4),
-                                    //     ),
-                                    //     child: DropdownButton<String>(
-                                    //       value: controller.languages[i].proficiency,
-                                    //       isExpanded: true,
-                                    //       underline: SizedBox(),
-                                    //       padding: EdgeInsets.symmetric(horizontal: 12),
-                                    //       items: controller.proficiencyLevels
-                                    //           .map((String value) {
-                                    //         return DropdownMenuItem<String>(
-                                    //           value: value,
-                                    //           child: Text(value),
-                                    //         );
-                                    //       }).toList(),
-                                    //       onChanged: (newValue) {
-                                    //         controller.languages[i].proficiency = newValue!;
-                                    //         controller.languages.refresh();
-                                    //       },
-                                    //     ),
-                                    //   ),
-                                    // ),
-                                    Expanded(
-                                      child: GestureDetector(
-                                        onTap: () => showBottomSheet(context,
-                                            controller.proficiencyLevels,
-                                            (value) {
-                                          controller.updateProficiency(
-                                              i, value);
-                                        }),
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 12, vertical: 14),
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: Colors.grey[300]!),
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                  controller
-                                                          .languages[i].proficiency ??
-                                                      'Select Proficiency',
-                                                  overflow: TextOverflow.ellipsis,
-                                                  style:
-                                                      TextStyle(color: Colors.black),
-                                                ),
-                                              ),
-                                              Icon(Icons.keyboard_arrow_down, size: 20,)
-                                            ],
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            lang.language ?? 'Select Language',
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(color: Colors.black),
                                           ),
                                         ),
-                                      ),
+                                        Icon(Icons.keyboard_arrow_down, size: 20),
+                                      ],
                                     ),
-                                    //SizedBox(width: 10),
-                                    if (!controller.languages[i].isDefault)
-                                      IconButton(
-                                        padding: EdgeInsets.zero,
-                                        constraints: BoxConstraints(),
-                                        icon: Icon(Icons.delete_outline,
-                                            color: Colors.green),
-                                        onPressed: () =>
-                                            controller.removeLanguage(i),
-                                      ),
-                                  ],
+                                  ),
                                 ),
                               ),
-                          ],
-                        )),
+                              SizedBox(width: 12),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () => showBottomSheet(
+                                    context,
+                                    controller.proficiencyLevels,
+                                        (value) => controller.updateProficiency(i, value),
+                                  ),
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey[300]!),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            lang.level ?? 'Select Proficiency',
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(color: Colors.black),
+                                          ),
+                                        ),
+                                        Icon(Icons.keyboard_arrow_down, size: 20),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              if (lang.language != 'English')
+                                IconButton(
+                                  padding: EdgeInsets.zero,
+                                  constraints: BoxConstraints(),
+                                  icon: Icon(Icons.delete_outline, color: Colors.green),
+                                  onPressed: () => controller.removeLanguage(i),
+                                ),
+                            ],
+                          ),
+                        );
+                      }),
+                    )),
                     OutlinedButton.icon(
                       icon: Icon(Icons.add, color: Colors.green),
                       label: Text(
@@ -406,45 +444,6 @@ class AddLanguages extends StatelessWidget {
                 ),
               ),
             ),
-            // Container(
-            //   padding: const EdgeInsets.all(16),
-            //   decoration: const BoxDecoration(
-            //     border: Border(
-            //       top: BorderSide(color: Colors.grey, width: 0.5),
-            //     ),
-            //   ),
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: [
-            //       IconButton(
-            //         icon: const Icon(Icons.arrow_back_ios, color: Colors.green),
-            //         onPressed: () => Get.back(),
-            //       ),
-            //       ElevatedButton(
-            //         onPressed: () {
-            //           Get.toNamed(AppRoutes.writeAnOverview);
-            //         },
-            //         style: ElevatedButton.styleFrom(
-            //           backgroundColor: Colors.green,
-            //           padding: const EdgeInsets.symmetric(
-            //             horizontal: 32,
-            //             vertical: 16,
-            //           ),
-            //           shape: RoundedRectangleBorder(
-            //             borderRadius: BorderRadius.circular(8),
-            //           ),
-            //         ),
-            //         child: const Text(
-            //           'Write an overview',
-            //           style: TextStyle(
-            //             fontSize: 16,
-            //             color: Colors.white,
-            //           ),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       ),
@@ -478,53 +477,53 @@ class AddLanguages extends StatelessWidget {
     );
   }
 
-  void showLanguageBottomSheet(BuildContext context, int index) {
-    final controller = Get.find<LanguageController>();
-
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          padding: EdgeInsets.all(16),
-          child: Wrap(
-            children: controller.languageOptions.map((language) {
-              return ListTile(
-                title: Text(language),
-                onTap: () {
-                  controller.languages[index].name = language;
-                  controller.languages.refresh();
-                  Navigator.pop(context);
-                },
-              );
-            }).toList(),
-          ),
-        );
-      },
-    );
-  }
-
-  void showProficiencyBottomSheet(BuildContext context, int index) {
-    final controller = Get.find<LanguageController>();
-
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          padding: EdgeInsets.all(16),
-          child: Wrap(
-            children: controller.proficiencyLevels.map((level) {
-              return ListTile(
-                title: Text(level),
-                onTap: () {
-                  controller.languages[index].proficiency = level;
-                  controller.languages.refresh();
-                  Navigator.pop(context);
-                },
-              );
-            }).toList(),
-          ),
-        );
-      },
-    );
-  }
+  // void showLanguageBottomSheet(BuildContext context, int index) {
+  //   final controller = Get.find<LanguageController>();
+  //
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return Container(
+  //         padding: EdgeInsets.all(16),
+  //         child: Wrap(
+  //           children: controller.languageOptions.map((language) {
+  //             return ListTile(
+  //               title: Text(language),
+  //               onTap: () {
+  //                 controller.languages[index].name = language;
+  //                 controller.languages.refresh();
+  //                 Navigator.pop(context);
+  //               },
+  //             );
+  //           }).toList(),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+  //
+  // void showProficiencyBottomSheet(BuildContext context, int index) {
+  //   final controller = Get.find<LanguageController>();
+  //
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return Container(
+  //         padding: EdgeInsets.all(16),
+  //         child: Wrap(
+  //           children: controller.proficiencyLevels.map((level) {
+  //             return ListTile(
+  //               title: Text(level),
+  //               onTap: () {
+  //                 controller.languages[index].proficiency = level;
+  //                 controller.languages.refresh();
+  //                 Navigator.pop(context);
+  //               },
+  //             );
+  //           }).toList(),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 }

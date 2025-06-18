@@ -40,38 +40,6 @@ class ProfileCreationPage extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.grey[300],
-            ),
-            child: Icon(Icons.person_outline, color: Colors.grey[600]),
-          ),
-          const SizedBox(width: 12),
-          const Text(
-            'Create Your Profile',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const Spacer(),
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {},
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildTitle() {
     return const Text(
       'How would you like to tell us about yourself?',

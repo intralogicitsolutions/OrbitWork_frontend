@@ -1,6 +1,6 @@
 class ApiConstants {
   static const String BASE_URL = "https://orbitwork-backend.onrender.com/api";
-  static const String TEMP_URL = "https://23df-2405-f600-8-cf71-6d71-e581-623e-e8f7.ngrok-free.app/api";
+  static const String TEMP_URL = "https://28f4-2405-f600-8-fa43-7c5f-7c64-d94e-5262.ngrok-free.app/api";
 
   // AUTH ROUTES
   static const String SIGNUP = "$BASE_URL/auth/signup";   //done
@@ -14,10 +14,12 @@ class ApiConstants {
   static const String GET_USER_DETAILS = "$TEMP_URL/user/details"; //done
 
   // PROFILE ROUTES
-  static const String CREATE_FREELANCER_PROFILE = "$BASE_URL/profile/create-freelancer"; //work
+  static const String CREATE_FREELANCER_PROFILE = "$TEMP_URL/profile/create-freelancer"; //done
   static const String CREATE_CLIENT_PROFILE = "$BASE_URL/profile/create-client";
   static const String CREATE_AGENCY_PROFILE = "$BASE_URL/profile/create-agency";
   static const String FILTER_PROFILES = "$BASE_URL/profile/filter";
+  static const String GET_FREELANCER_PROFILE = "$TEMP_URL/profile/get-freelancer"; // work
+  static const String UPDATE_FREELANCER_PROFILE = "$TEMP_URL/profile/update-freelancer"; // work
 
   // JOB ROUTES
   static const String CREATE_JOB = "$BASE_URL/job/create";
